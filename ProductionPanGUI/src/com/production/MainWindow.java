@@ -2,7 +2,11 @@ package com.production;
 
 import com.production.util.Utils;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Vector;
 import javax.swing.JFileChooser;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -31,6 +35,12 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         statusLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        workOrderTable = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        selectedPrioritiesTable = new javax.swing.JTable();
+        moveToSelectedPrioritiesButton = new javax.swing.JButton();
+        testButton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFabLoadByWCMenuItem = new javax.swing.JMenuItem();
@@ -45,57 +55,129 @@ public class MainWindow extends javax.swing.JFrame {
         setResizable(false);
 
         statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        statusLabel.setText("File:");
+        statusLabel.setText("Status:");
 
-        fileMenu.setText("File");
+        workOrderTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
 
-        openFabLoadByWCMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_MASK));
-        openFabLoadByWCMenuItem.setText("Open \"FAB Load by WC\" file");
-        openFabLoadByWCMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openFabLoadByWCMenuItemActionPerformed(evt);
+            },
+            new String [] {
+                "#Part", "Run", "Other"
             }
-        });
-        fileMenu.add(openFabLoadByWCMenuItem);
-
-        openAgeByWCFileItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_MASK));
-        openAgeByWCFileItem.setText("Open \"Age  by WC\" file");
-        openAgeByWCFileItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openAgeByWCFileItemActionPerformed(evt);
+        )
+        {
+            @Override public boolean isCellEditable(final int row, final int column) {
+                return false;
             }
-        });
-        fileMenu.add(openAgeByWCFileItem);
+        }
 
-        menuBar.add(fileMenu);
+    );
+    jScrollPane1.setViewportView(workOrderTable);
 
-        editMenu.setText("Edit");
-        menuBar.add(editMenu);
+    selectedPrioritiesTable.setModel(new javax.swing.table.DefaultTableModel(
+        new Object [][] {
 
-        helpMenu.setMnemonic('H');
-        helpMenu.setText("Help");
-        menuBar.add(helpMenu);
+        },
+        new String [] {
+            "#Part", "Run", "Other"
+        }
+    )
+    {
+        @Override public boolean isCellEditable(final int row, final int column) {
+            return false;
+        }
+    }
+    );
+    jScrollPane2.setViewportView(selectedPrioritiesTable);
 
-        setJMenuBar(menuBar);
+    moveToSelectedPrioritiesButton.setMnemonic('n');
+    moveToSelectedPrioritiesButton.setText("=>");
+    moveToSelectedPrioritiesButton.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/next-icon.png"))); // NOI18N
+    moveToSelectedPrioritiesButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            moveToSelectedPrioritiesButtonActionPerformed(evt);
+        }
+    });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(statusLabel)
-                .addContainerGap(851, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(556, Short.MAX_VALUE)
-                .addComponent(statusLabel)
-                .addContainerGap())
-        );
+    testButton.setText("Test");
+    testButton.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            testButtonActionPerformed(evt);
+        }
+    });
 
-        pack();
+    fileMenu.setText("File");
+
+    openFabLoadByWCMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_MASK));
+    openFabLoadByWCMenuItem.setText("Open \"FAB Load by WC\" file");
+    openFabLoadByWCMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            openFabLoadByWCMenuItemActionPerformed(evt);
+        }
+    });
+    fileMenu.add(openFabLoadByWCMenuItem);
+
+    openAgeByWCFileItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_MASK));
+    openAgeByWCFileItem.setText("Open \"Age  by WC\" file");
+    openAgeByWCFileItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            openAgeByWCFileItemActionPerformed(evt);
+        }
+    });
+    fileMenu.add(openAgeByWCFileItem);
+
+    menuBar.add(fileMenu);
+
+    editMenu.setText("Edit");
+    menuBar.add(editMenu);
+
+    helpMenu.setMnemonic('H');
+    helpMenu.setText("Help");
+    menuBar.add(helpMenu);
+
+    setJMenuBar(menuBar);
+
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(111, 111, 111)
+                    .addComponent(moveToSelectedPrioritiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addContainerGap())
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(testButton)
+            .addGap(29, 29, 29))
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGap(21, 21, 21)
+            .addComponent(testButton)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(38, 38, 38)
+                    .addComponent(statusLabel)
+                    .addContainerGap())
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(186, 186, 186)
+                    .addComponent(moveToSelectedPrioritiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+    );
+
+    pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void openFabLoadByWCMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFabLoadByWCMenuItemActionPerformed
@@ -118,6 +200,57 @@ public class MainWindow extends javax.swing.JFrame {
             System.out.println(jfc.getSelectedFile().getPath());
         }
     }//GEN-LAST:event_openAgeByWCFileItemActionPerformed
+
+    private void testButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testButtonActionPerformed
+        
+        final Object[] contentToAdd = {
+            "4022.637.70102",
+            "ENC-0983-141-20",
+            "ENC-0983-129-00",
+        };
+        
+        final Object[] contentToAdd2 = {
+            "5022.637.70102",
+            "ENC-0983-141-20",
+            "ENC-0983-129-00",
+        };
+        
+        final Object[] contentToAdd3 = {
+            "6022.637.70102",
+            "ENC-0983-141-20",
+            "ENC-0983-129-00",
+        };
+        
+        final Object[] contentToAdd4 = {
+            "7022.637.70102",
+            "ENC-0983-141-20",
+            "ENC-0983-129-00",
+        };
+        
+        final DefaultTableModel workOrdersModel = (DefaultTableModel) workOrderTable.getModel();
+        final DefaultTableModel selectedPrioritiesModel = (DefaultTableModel) selectedPrioritiesTable.getModel();
+        
+        workOrdersModel.addRow(contentToAdd);
+        workOrdersModel.addRow(contentToAdd2);
+        workOrdersModel.addRow(contentToAdd3);
+        workOrdersModel.addRow(contentToAdd4);
+    }//GEN-LAST:event_testButtonActionPerformed
+
+    private void moveToSelectedPrioritiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToSelectedPrioritiesButtonActionPerformed
+        
+        final int[] selectedRowsIndexes = workOrderTable.getSelectedRows();
+        if (selectedRowsIndexes.length == 0) {
+            return;
+        }
+        
+        final DefaultTableModel selectedPrioritiesModel = (DefaultTableModel) selectedPrioritiesTable.getModel();
+        
+        for (int rowIndex : selectedRowsIndexes) {
+            final String[] dataFromModelAt = Utils.dataFromModelAt(workOrderTable.getModel(), rowIndex);
+            selectedPrioritiesModel.addRow(dataFromModelAt);
+        }
+        
+    }//GEN-LAST:event_moveToSelectedPrioritiesButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,9 +289,15 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JButton moveToSelectedPrioritiesButton;
     private javax.swing.JMenuItem openAgeByWCFileItem;
     private javax.swing.JMenuItem openFabLoadByWCMenuItem;
+    private javax.swing.JTable selectedPrioritiesTable;
     private javax.swing.JLabel statusLabel;
+    private javax.swing.JButton testButton;
+    private javax.swing.JTable workOrderTable;
     // End of variables declaration//GEN-END:variables
 }
