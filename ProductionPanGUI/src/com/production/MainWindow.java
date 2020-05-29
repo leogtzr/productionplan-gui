@@ -11,8 +11,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainWindow extends javax.swing.JFrame {
     
-    private File fabLoadFilePath;
-    private File ageByWCFilePath;
+    private File fabLoadFilePath = null;
+    private File ageByWCFilePath = null;
     
     /* TODO - need to think on a strategy to either try to open automatically the two needed files or
         use always two consistent FileChooser's.
@@ -20,6 +20,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     public MainWindow() {
         initComponents();
+        updateStatusBar();
     }
 
     /**
@@ -195,6 +196,18 @@ public class MainWindow extends javax.swing.JFrame {
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void updateStatusBar() {
+        if (fabLoadFilePath == null && ageByWCFilePath == null) {
+            this.statusLabel.setText("Please open the required files.");
+        } else if (fabLoadFilePath == null && ageByWCFilePath != null) {
+            this.statusLabel.setText("Please open the file containing the 'FAB Load by WC' information.");
+        } else if (fabLoadFilePath != null && ageByWCFilePath == null) {
+            this.statusLabel.setText("Please open the file containing the 'Age  by WC' information.");
+        } else if (fabLoadFilePath != null && ageByWCFilePath != null) {
+            this.statusLabel.setText("Files ready.");
+        }
+    }
+    
     private void openFabLoadByWCMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFabLoadByWCMenuItemActionPerformed
                 
         // Note, the following code can be changed to use something like:

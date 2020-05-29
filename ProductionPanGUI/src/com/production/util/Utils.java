@@ -6,7 +6,6 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.TableModel;
 
 /**
- *
  * @author lgutierr
  */
 public final class Utils {
