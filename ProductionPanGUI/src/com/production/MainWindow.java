@@ -2,6 +2,12 @@ package com.production;
 
 import com.production.util.Utils;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 
@@ -13,6 +19,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     private File fabLoadFilePath = null;
     private File ageByWCFilePath = null;
+    private String jarPath = null;
     
     /* TODO - need to think on a strategy to either try to open automatically the two needed files or
         use always two consistent FileChooser's.
@@ -44,6 +51,7 @@ public class MainWindow extends javax.swing.JFrame {
         fileMenu = new javax.swing.JMenu();
         openFabLoadByWCMenuItem = new javax.swing.JMenuItem();
         openAgeByWCFileItem = new javax.swing.JMenuItem();
+        findFilesInCurrentPathMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         helpMenu = new javax.swing.JMenu();
 
@@ -132,6 +140,15 @@ public class MainWindow extends javax.swing.JFrame {
         }
     });
     fileMenu.add(openAgeByWCFileItem);
+
+    findFilesInCurrentPathMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_3, java.awt.event.InputEvent.CTRL_MASK));
+    findFilesInCurrentPathMenuItem.setText("Find files");
+    findFilesInCurrentPathMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            findFilesInCurrentPathMenuItemActionPerformed(evt);
+        }
+    });
+    fileMenu.add(findFilesInCurrentPathMenuItem);
 
     menuBar.add(fileMenu);
 
@@ -288,6 +305,32 @@ public class MainWindow extends javax.swing.JFrame {
         workOrderTable.clearSelection();
     }//GEN-LAST:event_clearButtonActionPerformed
 
+    private void findFilesInCurrentPathMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findFilesInCurrentPathMenuItemActionPerformed
+        
+        try {
+            final String jarFilepath = MainWindow.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            final File jf = new File(jarFilepath);
+            this.jarPath = URLDecoder.decode(jf.getParent(), "UTF-8");
+            
+            // TODO: fix this ... the word "Leo" shouldn't be in the path
+            final Path fabLoadByWCPath = Paths.get(this.jarPath, "FAB Load by WC Leo.xls");
+            final File fabLoadByWCFile = fabLoadByWCPath.toFile();
+            if (fabLoadByWCFile.exists()) {
+                this.fabLoadFilePath = fabLoadByWCFile;
+            }
+            
+            final Path ageByWCPath = Paths.get(this.jarPath, "Age  by WC.xls");
+            final File ageByWCFile = ageByWCPath.toFile();
+            if (ageByWCFile.exists()) {
+                this.ageByWCFilePath = ageByWCFile;
+            }
+        } catch (final UnsupportedEncodingException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        updateStatusBar();
+    }//GEN-LAST:event_findFilesInCurrentPathMenuItemActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -321,6 +364,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton clearButton;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem findFilesInCurrentPathMenuItem;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
