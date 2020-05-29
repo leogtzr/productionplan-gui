@@ -1,14 +1,21 @@
 package com.production;
 
+import com.production.util.Utils;
+import java.io.File;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
 
 /**
  *
  * @author lgutierr <leogutierrezramirez@gmail.com>
  */
 public class MainWindow extends javax.swing.JFrame {
+    
+    private File fabLoadFilePath;
+    private File ageByWCFilePath;
+    
+    /* TODO - need to think on a strategy to either try to open automatically the two needed files or
+        use always two consistent FileChooser's.
+    */
     
     public MainWindow() {
         initComponents();
@@ -26,7 +33,8 @@ public class MainWindow extends javax.swing.JFrame {
         statusLabel = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        openFileMenuItem = new javax.swing.JMenuItem();
+        openFabLoadByWCMenuItem = new javax.swing.JMenuItem();
+        openAgeByWCFileItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         helpMenu = new javax.swing.JMenu();
 
@@ -41,14 +49,23 @@ public class MainWindow extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
-        openFileMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        openFileMenuItem.setText("Open");
-        openFileMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        openFabLoadByWCMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_MASK));
+        openFabLoadByWCMenuItem.setText("Open \"FAB Load by WC\" file");
+        openFabLoadByWCMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openFileMenuItemActionPerformed(evt);
+                openFabLoadByWCMenuItemActionPerformed(evt);
             }
         });
-        fileMenu.add(openFileMenuItem);
+        fileMenu.add(openFabLoadByWCMenuItem);
+
+        openAgeByWCFileItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_MASK));
+        openAgeByWCFileItem.setText("Open \"Age  by WC\" file");
+        openAgeByWCFileItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openAgeByWCFileItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(openAgeByWCFileItem);
 
         menuBar.add(fileMenu);
 
@@ -81,21 +98,26 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void openFileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileMenuItemActionPerformed
+    private void openFabLoadByWCMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFabLoadByWCMenuItemActionPerformed
                 
         // Note, the following code can be changed to use something like:
         // new JFileChooser(System.getProperty("user.home"))
-        final JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-        jfc.setDialogTitle("Select a .XLS file");
-        jfc.setAcceptAllFileFilterUsed(false);
-        final FileNameExtensionFilter filter = new FileNameExtensionFilter("XLS files", "xls");
-        jfc.addChoosableFileFilter(filter);
+        final JFileChooser jfc = Utils.genericXLSFileChooser();
 
         int returnValue = jfc.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             System.out.println(jfc.getSelectedFile().getPath());
         }
-    }//GEN-LAST:event_openFileMenuItemActionPerformed
+    }//GEN-LAST:event_openFabLoadByWCMenuItemActionPerformed
+
+    private void openAgeByWCFileItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openAgeByWCFileItemActionPerformed
+        final JFileChooser jfc = Utils.genericXLSFileChooser();
+
+        int returnValue = jfc.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            System.out.println(jfc.getSelectedFile().getPath());
+        }
+    }//GEN-LAST:event_openAgeByWCFileItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -135,7 +157,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem openFileMenuItem;
+    private javax.swing.JMenuItem openAgeByWCFileItem;
+    private javax.swing.JMenuItem openFabLoadByWCMenuItem;
     private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
 }
