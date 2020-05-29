@@ -216,8 +216,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         int returnValue = jfc.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            System.out.println(jfc.getSelectedFile().getPath());
+            fabLoadFilePath = jfc.getSelectedFile();
         }
+        updateStatusBar();
     }//GEN-LAST:event_openFabLoadByWCMenuItemActionPerformed
 
     private void openAgeByWCFileItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openAgeByWCFileItemActionPerformed
@@ -225,8 +226,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         int returnValue = jfc.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            System.out.println(jfc.getSelectedFile().getPath());
+            ageByWCFilePath = jfc.getSelectedFile();
         }
+        updateStatusBar();
     }//GEN-LAST:event_openAgeByWCFileItemActionPerformed
 
     // TODO: this method should be removed ... 
