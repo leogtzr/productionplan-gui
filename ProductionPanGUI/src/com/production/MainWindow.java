@@ -21,10 +21,6 @@ public class MainWindow extends javax.swing.JFrame {
     private File ageByWCFilePath = null;
     private String jarPath = null;
     
-    /* TODO - need to think on a strategy to either try to open automatically the two needed files or
-        use always two consistent FileChooser's.
-    */
-    
     public MainWindow() {
         initComponents();
         updateStatusBar();
@@ -276,7 +272,7 @@ public class MainWindow extends javax.swing.JFrame {
         };
         
         final DefaultTableModel workOrdersModel = (DefaultTableModel) workOrderTable.getModel();
-        final DefaultTableModel selectedPrioritiesModel = (DefaultTableModel) selectedPrioritiesTable.getModel();
+        // final DefaultTableModel selectedPrioritiesModel = (DefaultTableModel) selectedPrioritiesTable.getModel();
         
         workOrdersModel.addRow(contentToAdd);
         workOrdersModel.addRow(contentToAdd2);
