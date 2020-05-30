@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
  */
-public class WorkOrderInformation {
+public final class WorkOrderInformation {
 
     private String partNumber;
     private String workOrder;

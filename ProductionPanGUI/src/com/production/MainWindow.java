@@ -17,8 +17,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
-import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -26,6 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
+import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
+import javax.swing.JTable;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -35,7 +37,7 @@ public class MainWindow extends javax.swing.JFrame {
     private File fabLoadFilePath = null;
     private File ageByWCFilePath = null;
     private String jarPath = null;
-    private Map<String, String> partMachineInfo = new HashMap<>();
+    private final Map<String, String> partMachineInfo = new HashMap<>();
     private Optional<List<WorkOrderInformation>> workOrderInformationItems = Optional.empty();
     
     public MainWindow() {
@@ -252,13 +254,13 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void updateStatusBar() {
-        if (fabLoadFilePath == null && ageByWCFilePath == null) {
+        if (this.fabLoadFilePath == null && this.ageByWCFilePath == null) {
             this.statusLabel.setText("Please open the required files.");
-        } else if (fabLoadFilePath == null && ageByWCFilePath != null) {
+        } else if (this.fabLoadFilePath == null && this.ageByWCFilePath != null) {
             this.statusLabel.setText("Please open the file containing the 'FAB Load by WC' information.");
-        } else if (fabLoadFilePath != null && ageByWCFilePath == null) {
+        } else if (this.fabLoadFilePath != null && this.ageByWCFilePath == null) {
             this.statusLabel.setText("Please open the file containing the 'Age  by WC' information.");
-        } else if (fabLoadFilePath != null && ageByWCFilePath != null) {
+        } else if (this.fabLoadFilePath != null && this.ageByWCFilePath != null) {
             this.statusLabel.setText("Files ready.");
         }
     }
@@ -271,20 +273,18 @@ public class MainWindow extends javax.swing.JFrame {
 
         int returnValue = jfc.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            fabLoadFilePath = jfc.getSelectedFile();
-            // TODO: load the file ...
+            this.fabLoadFilePath = jfc.getSelectedFile();
             try {
                 final List<WorkOrderInformation> workOrdersFromSheetFile = 
-                        extractWorkOrdersFromSheetFile(fabLoadFilePath.getAbsolutePath());
-                // TODO: populate everything ... 
+                        extractWorkOrdersFromSheetFile(this.fabLoadFilePath.getAbsolutePath());
                 this.workOrderInformationItems = Optional.of(workOrdersFromSheetFile);
                 this.workOrderInformationItems.ifPresent(items -> items.forEach(System.out::println));
             } catch (IOException | InvalidFormatException ex) {
                 JOptionPane.showMessageDialog(
-                        this
-                        , String.format("error loading Fab Load by WC File: %s", ex.getMessage())
-                        , "Error"
-                        , JOptionPane.ERROR_MESSAGE
+                    this
+                    , String.format("error loading Fab Load by WC File: %s", ex.getMessage())
+                    , "Error"
+                    , JOptionPane.ERROR_MESSAGE
                 );
             }
         }
@@ -296,12 +296,41 @@ public class MainWindow extends javax.swing.JFrame {
 
         int returnValue = jfc.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            ageByWCFilePath = jfc.getSelectedFile();
-            // TODO: load the file ... 
+            this.ageByWCFilePath = jfc.getSelectedFile();
+            this.workOrderInformationItems.ifPresent(workOrderItems -> {
+                try {
+                    Utils.reconcileInformationFromAgeFile(this.ageByWCFilePath.getAbsolutePath(), workOrderItems);
+                    this.updateTable(workOrderItems, workOrderTable);
+                } catch (IOException | InvalidFormatException ex) {
+                    JOptionPane.showMessageDialog(
+                        this
+                        , String.format("error loading Age file: %s", ex.getMessage())
+                        , "Error"
+                        , JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            });
         }
         updateStatusBar();
     }//GEN-LAST:event_openAgeByWCFileItemActionPerformed
 
+    private void updateTable(final List<WorkOrderInformation> workOrderItems, final JTable table) {        
+        final DefaultTableModel workOrdersModel = (DefaultTableModel) workOrderTable.getModel();
+        
+        // "#Part", "Hr", "Stup", "P/Hac", "Máquina"
+        workOrderItems.forEach(item -> {
+            final String machine = this.partMachineInfo.getOrDefault(item.getPartNumber(), "");
+            final Object[] data = {
+                item.getPartNumber()
+                , item.getRunHours()
+                , item.getSetupHours()
+                , item.getQty()
+                , machine
+            };
+            workOrdersModel.addRow(data);
+        });
+    }
+    
     // TODO: this method should be removed ... 
     private void testButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testButtonActionPerformed
         
@@ -338,7 +367,6 @@ public class MainWindow extends javax.swing.JFrame {
         };
         
         final DefaultTableModel workOrdersModel = (DefaultTableModel) workOrderTable.getModel();
-        // final DefaultTableModel selectedPrioritiesModel = (DefaultTableModel) selectedPrioritiesTable.getModel();
         
         workOrdersModel.addRow(contentToAdd);
         workOrdersModel.addRow(contentToAdd2);
@@ -348,7 +376,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void moveToSelectedPrioritiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToSelectedPrioritiesButtonActionPerformed
         
-        // TODO: There is a small bug ... 
         final int[] selectedRowsIndexes = workOrderTable.getSelectedRows();
         if (selectedRowsIndexes.length == 0) {
             return;
@@ -380,13 +407,14 @@ public class MainWindow extends javax.swing.JFrame {
             final File jf = new File(jarFilepath);
             this.jarPath = URLDecoder.decode(jf.getParent(), "UTF-8");
             
-            // TODO: fix this ... the word "Leo" shouldn't be in the path
+            // TODO: fix this ... the word "Leo" shouldn't be in the path, read it from a constant.
             final Path fabLoadByWCPath = Paths.get(this.jarPath, "FAB Load by WC Leo.xls");
             final File fabLoadByWCFile = fabLoadByWCPath.toFile();
             if (fabLoadByWCFile.exists()) {
                 this.fabLoadFilePath = fabLoadByWCFile;
             }
             
+            // TODO: Use the name from a constant ..
             final Path ageByWCPath = Paths.get(this.jarPath, "Age  by WC.xls");
             final File ageByWCFile = ageByWCPath.toFile();
             if (ageByWCFile.exists()) {
@@ -402,7 +430,7 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(final String[] args) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
