@@ -4,6 +4,7 @@
 
 package com.production;
 
+import com.production.domain.WorkOrderInformation;
 import com.production.util.Utils;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -17,11 +18,14 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
+import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -32,11 +36,13 @@ public class MainWindow extends javax.swing.JFrame {
     private File ageByWCFilePath = null;
     private String jarPath = null;
     private Map<String, String> partMachineInfo = new HashMap<>();
+    private Optional<List<WorkOrderInformation>> workOrderInformationItems = Optional.empty();
     
     public MainWindow() {
         initComponents();
         updateStatusBar();
         loadPartMachineInformation();
+        // workOrderInformationItems.
     }
     
     private void loadPartMachineInformation() {
@@ -266,6 +272,21 @@ public class MainWindow extends javax.swing.JFrame {
         int returnValue = jfc.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             fabLoadFilePath = jfc.getSelectedFile();
+            // TODO: load the file ...
+            try {
+                final List<WorkOrderInformation> workOrdersFromSheetFile = 
+                        extractWorkOrdersFromSheetFile(fabLoadFilePath.getAbsolutePath());
+                // TODO: populate everything ... 
+                this.workOrderInformationItems = Optional.of(workOrdersFromSheetFile);
+                this.workOrderInformationItems.ifPresent(items -> items.forEach(System.out::println));
+            } catch (IOException | InvalidFormatException ex) {
+                JOptionPane.showMessageDialog(
+                        this
+                        , String.format("error loading Fab Load by WC File: %s", ex.getMessage())
+                        , "Error"
+                        , JOptionPane.ERROR_MESSAGE
+                );
+            }
         }
         updateStatusBar();
     }//GEN-LAST:event_openFabLoadByWCMenuItemActionPerformed
@@ -276,6 +297,7 @@ public class MainWindow extends javax.swing.JFrame {
         int returnValue = jfc.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             ageByWCFilePath = jfc.getSelectedFile();
+            // TODO: load the file ... 
         }
         updateStatusBar();
     }//GEN-LAST:event_openAgeByWCFileItemActionPerformed

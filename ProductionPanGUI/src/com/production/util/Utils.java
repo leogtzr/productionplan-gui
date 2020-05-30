@@ -96,8 +96,8 @@ public final class Utils {
     }
 
     public static void reconcileInformationFromAgeFile(
-            final String ageAndPriceFilePath
-    , final List<WorkOrderInformation> workOrderItems) throws IOException, InvalidFormatException {
+            final String ageAndPriceFilePath, final List<WorkOrderInformation> workOrderItems) 
+            throws IOException, InvalidFormatException {
 
         final Map<String, SimpleWorkOrderInformation> workOrdersFromAgeFile = new HashMap<>();
 
