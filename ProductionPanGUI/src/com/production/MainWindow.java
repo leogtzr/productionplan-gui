@@ -14,7 +14,11 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,7 +29,7 @@ public class MainWindow extends javax.swing.JFrame {
     private File fabLoadFilePath = null;
     private File ageByWCFilePath = null;
     private String jarPath = null;
-    private Map<String, String> partMachine = new HashMap<>();
+    private Map<String, String> partMachineInfo = new HashMap<>();
     
     public MainWindow() {
         initComponents();
@@ -34,6 +38,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void loadPartMachineInformation() {
+        
         final File partMachineCSVFile = new File(PART_MACHINE_FILE_NAME);
         if (!partMachineCSVFile.exists()) {
             JOptionPane.showMessageDialog(
@@ -42,6 +47,25 @@ public class MainWindow extends javax.swing.JFrame {
                 , JOptionPane.WARNING_MESSAGE
             );
         }
+            
+        try {
+            
+            final List<String> lines = Files.readAllLines(Paths.get(PART_MACHINE_FILE_NAME));
+            for (int i = 0; i < lines.size(); i++) {
+                // Skip the header:
+                if (i == 0) {
+                    continue;
+                }
+                final String line = lines.get(i);
+                // System.out.println("");
+                final String[] tokens = line.split(",");
+                System.out.printf("[%s]-[%s]\n", tokens[0], tokens[1]);
+                this.partMachineInfo.put(tokens[0], tokens[1]);
+            }
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, String.format("error: %s", ex.getMessage()), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
     }
 
     /**
@@ -209,14 +233,12 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addComponent(moveToSelectedPrioritiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(241, 241, 241))
-                .addGroup(layout.createSequentialGroup()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1))
-                    .addGap(18, 18, 18)))
+                    .addGap(229, 229, 229))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)))
             .addComponent(statusLabel)
-            .addGap(43, 43, 43))
+            .addGap(55, 55, 55))
     );
 
     pack();
