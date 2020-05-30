@@ -49,6 +49,13 @@ public final class Utils {
         return data;
     }
     
+    public static String getPartNumberFromRow(final TableModel model, final int rowIndex) {
+        if (rowIndex < 0) {
+            return "";
+        }
+        return model.getValueAt(rowIndex, 0).toString();
+    }
+    
     // TODO: change this to a proper enum or something similar ...
     private static final int PART_CELL_INDEX = 4;
     private static final int WORKORDER_CELL_INDEX = 6;

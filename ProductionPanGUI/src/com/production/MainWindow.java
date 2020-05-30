@@ -1,5 +1,6 @@
 package com.production;
 
+
 import com.production.util.Utils;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -9,10 +10,14 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author lgutierr <leogutierrezramirez@gmail.com>
  */
 public class MainWindow extends javax.swing.JFrame {
@@ -20,10 +25,23 @@ public class MainWindow extends javax.swing.JFrame {
     private File fabLoadFilePath = null;
     private File ageByWCFilePath = null;
     private String jarPath = null;
+    private Map<String, String> partMachine = new HashMap<>();
     
     public MainWindow() {
         initComponents();
         updateStatusBar();
+        loadPartMachineInformation();
+    }
+    
+    private void loadPartMachineInformation() {
+        final File partMachineCSVFile = new File(PART_MACHINE_FILE_NAME);
+        if (!partMachineCSVFile.exists()) {
+            JOptionPane.showMessageDialog(
+                this
+                , String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", PART_MACHINE_FILE_NAME), "Warning ... "
+                , JOptionPane.WARNING_MESSAGE
+            );
+        }
     }
 
     /**
@@ -53,8 +71,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Production Plan Priorities");
-        setMaximumSize(new java.awt.Dimension(900, 600));
-        setMinimumSize(new java.awt.Dimension(900, 600));
+        setMaximumSize(new java.awt.Dimension(1000, 625));
+        setMinimumSize(new java.awt.Dimension(1000, 625));
+        setPreferredSize(new java.awt.Dimension(1000, 625));
         setResizable(false);
 
         statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -65,7 +84,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             },
             new String [] {
-                "#Part", "Run", "Other"
+                "#Part", "Hr", "Stup", "P/Hac", "Máquina"
             }
         )
         {
@@ -75,6 +94,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
 
     );
+    workOrderTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
     jScrollPane1.setViewportView(workOrderTable);
 
     selectedPrioritiesTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -82,7 +102,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         },
         new String [] {
-            "#Part", "Run", "Other"
+            "#", "#Part Number"
         }
     )
     {
@@ -94,7 +114,7 @@ public class MainWindow extends javax.swing.JFrame {
     jScrollPane2.setViewportView(selectedPrioritiesTable);
 
     moveToSelectedPrioritiesButton.setMnemonic('n');
-    moveToSelectedPrioritiesButton.setText("=>");
+    moveToSelectedPrioritiesButton.setText(">");
     moveToSelectedPrioritiesButton.setSelectedIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/next-icon.png"))); // NOI18N
     moveToSelectedPrioritiesButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,46 +184,39 @@ public class MainWindow extends javax.swing.JFrame {
         .addGroup(layout.createSequentialGroup()
             .addContainerGap()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createSequentialGroup()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(111, 111, 111)
-                            .addComponent(moveToSelectedPrioritiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addContainerGap())
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(testButton)
-                            .addGap(29, 29, 29))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addComponent(clearButton)
-                            .addContainerGap())))))
+                            .addGap(18, 18, 18)
+                            .addComponent(testButton))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(10, 10, 10)
+                    .addComponent(moveToSelectedPrioritiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(20, Short.MAX_VALUE))))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addGap(21, 21, 21)
-            .addComponent(testButton)
+            .addContainerGap(24, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(testButton)
+                .addComponent(clearButton))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(clearButton)
-                    .addGap(4, 4, 4)
-                    .addComponent(statusLabel)
-                    .addContainerGap())
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(186, 186, 186)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addComponent(moveToSelectedPrioritiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGap(241, 241, 241))
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1))
+                    .addGap(18, 18, 18)))
+            .addComponent(statusLabel)
+            .addGap(43, 43, 43))
     );
 
     pack();
@@ -248,27 +261,35 @@ public class MainWindow extends javax.swing.JFrame {
     private void testButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testButtonActionPerformed
         
         final Object[] contentToAdd = {
-            "4022.637.70102",
-            "ENC-0983-141-20",
-            "ENC-0983-129-00",
+            "4022.637.70102   ",
+            "7.2",
+            "0.4",
+            "5",
+            "3"
         };
         
         final Object[] contentToAdd2 = {
-            "5022.637.70102",
-            "ENC-0983-141-20",
-            "ENC-0983-129-00",
+            "3022.637.70102   ",
+            "7.2",
+            "0.4",
+            "5",
+            "3"
         };
         
         final Object[] contentToAdd3 = {
-            "6022.637.70102",
-            "ENC-0983-141-20",
-            "ENC-0983-129-00",
+            "5022.637.70102   ",
+            "7.2",
+            "0.4",
+            "5",
+            "3"
         };
         
         final Object[] contentToAdd4 = {
-            "7022.637.70102",
-            "ENC-0983-141-20",
-            "ENC-0983-129-00",
+            "7022.637.70102   ",
+            "7.2",
+            "0.4",
+            "5",
+            "3"
         };
         
         final DefaultTableModel workOrdersModel = (DefaultTableModel) workOrderTable.getModel();
@@ -282,6 +303,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void moveToSelectedPrioritiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToSelectedPrioritiesButtonActionPerformed
         
+        // TODO: There is a small bug ... 
         final int[] selectedRowsIndexes = workOrderTable.getSelectedRows();
         if (selectedRowsIndexes.length == 0) {
             return;
@@ -289,9 +311,14 @@ public class MainWindow extends javax.swing.JFrame {
         
         final DefaultTableModel selectedPrioritiesModel = (DefaultTableModel) selectedPrioritiesTable.getModel();
         
+        final int rowCount = selectedPrioritiesModel.getRowCount();
+        
+        int priority = rowCount > 0 ? (rowCount + 1) : 1;
         for (int rowIndex : selectedRowsIndexes) {
-            final String[] dataFromModelAt = Utils.dataFromModelAt(workOrderTable.getModel(), rowIndex);
-            selectedPrioritiesModel.addRow(dataFromModelAt);
+            final String ptNumber = Utils.getPartNumberFromRow(workOrderTable.getModel(), rowIndex);
+            final String[] data = {priority + "", ptNumber};
+            selectedPrioritiesModel.addRow(data);
+            priority++;
         }
         
     }//GEN-LAST:event_moveToSelectedPrioritiesButtonActionPerformed
