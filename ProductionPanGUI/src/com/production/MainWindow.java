@@ -278,7 +278,7 @@ public class MainWindow extends javax.swing.JFrame {
                 final List<WorkOrderInformation> workOrdersFromSheetFile = 
                         extractWorkOrdersFromSheetFile(this.fabLoadFilePath.getAbsolutePath());
                 this.workOrderInformationItems = Optional.of(workOrdersFromSheetFile);
-                this.workOrderInformationItems.ifPresent(items -> items.forEach(System.out::println));
+                // this.workOrderInformationItems.ifPresent(items -> items.forEach(System.out::println));
             } catch (IOException | InvalidFormatException ex) {
                 JOptionPane.showMessageDialog(
                     this
