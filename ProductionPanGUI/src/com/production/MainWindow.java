@@ -57,9 +57,7 @@ public class MainWindow extends javax.swing.JFrame {
                     continue;
                 }
                 final String line = lines.get(i);
-                // System.out.println("");
                 final String[] tokens = line.split(",");
-                System.out.printf("[%s]-[%s]\n", tokens[0], tokens[1]);
                 this.partMachineInfo.put(tokens[0], tokens[1]);
             }
         } catch (IOException ex) {
