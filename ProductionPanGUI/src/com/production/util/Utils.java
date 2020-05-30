@@ -24,6 +24,14 @@ import org.apache.poi.ss.usermodel.*;
  */
 public final class Utils {
     
+    // TODO: change this to a proper enum or something similar ...
+    private static final int PART_CELL_INDEX = 4;
+    private static final int WORKORDER_CELL_INDEX = 6;
+    private static final int RUN_CELL_INDEX = 10;
+    private static final int SETUP_CELL_INDEX = 9;
+    private static final int QTY_CELL_INDEX = 12;
+    private static final double RUN_EFFICIENCY = 0.8;
+    
     /**
      * "factory" method to build a FileChooser for .XLS files.
      * @return a JFileChooser to select .XLS files
@@ -55,14 +63,6 @@ public final class Utils {
         }
         return model.getValueAt(rowIndex, 0).toString();
     }
-    
-    // TODO: change this to a proper enum or something similar ...
-    private static final int PART_CELL_INDEX = 4;
-    private static final int WORKORDER_CELL_INDEX = 6;
-    private static final int RUN_CELL_INDEX = 10;
-    private static final int SETUP_CELL_INDEX = 9;
-    private static final int QTY_CELL_INDEX = 12;
-    private static final double RUN_EFFICIENCY = 0.8;
 
     public static List<WorkOrderInformation> extractWorkOrdersFromSheetFile(final String filePath)
             throws IOException, InvalidFormatException {

@@ -2,6 +2,9 @@ package com.production.domain;
 
 import java.util.Objects;
 
+/**
+ * @author lgutierr <leogutierrezramirez@gmail.com>
+ */
 public class WorkOrderInformation {
 
     private String partNumber;

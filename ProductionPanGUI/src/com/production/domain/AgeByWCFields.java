@@ -1,5 +1,8 @@
 package com.production.domain;
 
+/**
+ * @author lgutierr <leogutierrezramirez@gmail.com>
+ */
 public enum AgeByWCFields {
     WORK_ORDER_NUMBER(7)
     , AGE(9)

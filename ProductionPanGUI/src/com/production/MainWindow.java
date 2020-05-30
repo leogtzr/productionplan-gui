@@ -1,12 +1,15 @@
-package com.production;
+// TODO: Put the information in the table ...
+// TODO: Need to modify the domains to store the WC Description ... "Doblado" as an example.
+    // TODO: Need a Dropdown here. 
 
+package com.production;
 
 import com.production.util.Utils;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.Paths; 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -15,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 
 import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
@@ -38,14 +40,15 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void loadPartMachineInformation() {
-        
         final File partMachineCSVFile = new File(PART_MACHINE_FILE_NAME);
         if (!partMachineCSVFile.exists()) {
             JOptionPane.showMessageDialog(
                 this
-                , String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", PART_MACHINE_FILE_NAME), "Warning ... "
+                , String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", PART_MACHINE_FILE_NAME)
+                , "Warning ... "
                 , JOptionPane.WARNING_MESSAGE
             );
+            return;
         }
             
         try {
@@ -60,7 +63,7 @@ public class MainWindow extends javax.swing.JFrame {
                 final String[] tokens = line.split(",");
                 this.partMachineInfo.put(tokens[0], tokens[1]);
             }
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             JOptionPane.showMessageDialog(this, String.format("error: %s", ex.getMessage()), "Error", JOptionPane.ERROR_MESSAGE);
         }
         

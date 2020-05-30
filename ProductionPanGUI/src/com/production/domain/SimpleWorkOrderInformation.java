@@ -2,6 +2,9 @@ package com.production.domain;
 
 import java.util.Objects;
 
+/**
+ * @author lgutierr <leogutierrezramirez@gmail.com>
+ */
 public final class SimpleWorkOrderInformation {
 
     private final String workOrder;
