@@ -1,5 +1,4 @@
-// TODO: Need a Dropdown here. 
-// TODO: filter based on the WC description to populate the Dropdown ... 
+// TODO: fix the clear button ... 
 package com.production;
 
 import com.production.domain.WorkOrderInformation;
@@ -25,6 +24,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
+import java.util.Arrays;
 import javax.swing.JTable;
 
 /**
@@ -71,7 +71,6 @@ public class MainWindow extends javax.swing.JFrame {
         } catch (final IOException ex) {
             JOptionPane.showMessageDialog(this, String.format("error: %s", ex.getMessage()), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
     }
 
     /**
@@ -395,21 +394,32 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void moveToSelectedPrioritiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToSelectedPrioritiesButtonActionPerformed
         
-        final int[] selectedRowsIndexes = workOrderTable.getSelectedRows();
-        if (selectedRowsIndexes.length == 0) {
+        final int[] rowIndexesToRemove = workOrderTable.getSelectedRows();
+        if (rowIndexesToRemove.length == 0) {
             return;
         }
         
-        final DefaultTableModel selectedPrioritiesModel = (DefaultTableModel) selectedPrioritiesTable.getModel();
+        final DefaultTableModel selectedPrioritiesModel = (DefaultTableModel) this.selectedPrioritiesTable.getModel();
+        final DefaultTableModel workOrdersModel = (DefaultTableModel) this.workOrderTable.getModel();
         
         final int rowCount = selectedPrioritiesModel.getRowCount();
-        
         int priority = rowCount > 0 ? (rowCount + 1) : 1;
-        for (int rowIndex : selectedRowsIndexes) {
+        for (int rowIndex : rowIndexesToRemove) {
             final String ptNumber = Utils.getPartNumberFromRow(workOrderTable.getModel(), rowIndex);
             final String[] data = {priority + "", ptNumber};
             selectedPrioritiesModel.addRow(data);
             priority++;
+        }
+        
+        // Remove indexes from the table ...
+        int numRows = workOrdersModel.getRowCount();
+        
+        for (final int rowIndexToRemove : rowIndexesToRemove) {
+            workOrdersModel.removeRow(rowIndexToRemove);
+            this.workOrderTable.clearSelection();
+            workOrdersModel.setRowCount(--numRows);
+            workOrdersModel.fireTableDataChanged();
+            this.workOrderTable.repaint();
         }
         
     }//GEN-LAST:event_moveToSelectedPrioritiesButtonActionPerformed

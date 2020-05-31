@@ -13,7 +13,6 @@ public final class WorkOrderInformation {
     private double runHours;
     private double setupHours;
     private int qty;
-
     private int age;
     public double salesPrice;
 
