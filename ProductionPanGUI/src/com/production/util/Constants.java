@@ -13,6 +13,8 @@ public final class Constants {
     public static final String FAB_LOAD_FILE_NAME = "FAB Load by WC Leo.xls";
     public static final String AGE_BY_WC_FILE_NAME = "Age  by WC.xls";
     
+    public static final double RUN_EFFICIENCY = 0.8;
+    
     private Constants() {}
     
 }

@@ -1,6 +1,7 @@
 package com.production.util;
 
 import com.production.domain.AgeByWCFields;
+import com.production.domain.FabLoadByWCFields;
 import com.production.domain.SimpleWorkOrderInformation;
 import com.production.domain.WorkOrderInformation;
 import java.io.File;
@@ -23,15 +24,6 @@ import org.apache.poi.ss.usermodel.*;
  * @author lgutierr
  */
 public final class Utils {
-    
-    // TODO: change this to a proper enum or something similar ...
-    private static final int WC_DESCRIPTION_INDEX = 1;
-    private static final int PART_CELL_INDEX = 4;
-    private static final int WORKORDER_CELL_INDEX = 6;
-    private static final int RUN_CELL_INDEX = 10;
-    private static final int SETUP_CELL_INDEX = 9;
-    private static final int QTY_CELL_INDEX = 12;
-    private static final double RUN_EFFICIENCY = 0.8;
     
     /**
      * "factory" method to build a FileChooser for .XLS files.
@@ -84,17 +76,35 @@ public final class Utils {
                         continue;
                 }
 
-                final Cell wcDescription = row.getCell(WC_DESCRIPTION_INDEX);
-                final Cell partCell = row.getCell(PART_CELL_INDEX);
-                final Cell workOrderCell = row.getCell(WORKORDER_CELL_INDEX);
-                final Cell runCell = row.getCell(RUN_CELL_INDEX);
-                final Cell setupCell = row.getCell(SETUP_CELL_INDEX);
-                final Cell qtyCell = row.getCell(QTY_CELL_INDEX);
+                final Cell wcDescription = row.getCell(FabLoadByWCFields.WC_DESCRIPTION_INDEX.get());
+                
+                if (!allowedWC(wcDescription.getStringCellValue())) {
+                    continue;
+                }
+                
+                final Cell partCell = row.getCell(FabLoadByWCFields.PART_CELL_INDEX.get());
+                final Cell workOrderCell = row.getCell(FabLoadByWCFields.WORKORDER_CELL_INDEX.get());
+                final Cell runCell = row.getCell(FabLoadByWCFields.RUN_CELL_INDEX.get());
+                final Cell setupCell = row.getCell(FabLoadByWCFields.SETUP_CELL_INDEX.get());
+                final Cell qtyCell = row.getCell(FabLoadByWCFields.QTY_CELL_INDEX.get());
 
                 workOrderInfoItems.add(to(wcDescription, partCell, workOrderCell, runCell, setupCell, qtyCell));
             }
         }
         return workOrderInfoItems;
+    }
+    
+    public static boolean allowedWC(final String desc) {
+        boolean ok = false;
+        switch (desc.trim().toUpperCase()) {
+            case "DOBLADO":
+            case "MAQUINADO MANUAL":
+            case "MAQUINADO CNC":
+            case "PUNZONADO":
+                ok = true;
+                break;  
+        }
+        return ok;
     }
 
     public static void reconcileInformationFromAgeFile(
@@ -161,7 +171,7 @@ public final class Utils {
 
         final double runNumericCellValue = runCell.getNumericCellValue();
 
-        workOrderInformation.setRunHours(runNumericCellValue / RUN_EFFICIENCY);
+        workOrderInformation.setRunHours(runNumericCellValue / Constants.RUN_EFFICIENCY);
         workOrderInformation.setSetupHours(setupCell.getNumericCellValue());
         workOrderInformation.setQty((int)qtyCell.getNumericCellValue());
 

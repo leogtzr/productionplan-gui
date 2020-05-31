@@ -1,13 +1,11 @@
-// TODO: Need to modify the domains to store the WC Description ... "Doblado" as an example.
-    // TODO: Need a Dropdown here. 
-
+// TODO: Need a Dropdown here. 
+// TODO: filter based on the WC description to populate the Dropdown ... 
 package com.production;
 
 import com.production.domain.WorkOrderInformation;
 import com.production.util.Constants;
 import com.production.util.Utils;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.nio.file.Paths; 
@@ -44,7 +42,6 @@ public class MainWindow extends javax.swing.JFrame {
         initComponents();
         updateStatusBar();
         loadPartMachineInformation();
-        // workOrderInformationItems.
     }
     
     private void loadPartMachineInformation() {
@@ -94,6 +91,7 @@ public class MainWindow extends javax.swing.JFrame {
         moveToSelectedPrioritiesButton = new javax.swing.JButton();
         testButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
+        wcDescriptions = new javax.swing.JComboBox<>();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFabLoadByWCMenuItem = new javax.swing.JMenuItem();
@@ -170,6 +168,13 @@ public class MainWindow extends javax.swing.JFrame {
         }
     });
 
+    wcDescriptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DOBLADO", "MAQUINADO MANUAL", "MAQUINADO CNC", "PUNZONADO" }));
+    wcDescriptions.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            wcDescriptionsActionPerformed(evt);
+        }
+    });
+
     fileMenu.setText("File");
 
     openFabLoadByWCMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_MASK));
@@ -219,8 +224,10 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(statusLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createSequentialGroup()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(layout.createSequentialGroup()
+                            .addComponent(wcDescriptions, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(clearButton)
                             .addGap(18, 18, 18)
                             .addComponent(testButton))
@@ -234,11 +241,17 @@ public class MainWindow extends javax.swing.JFrame {
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-            .addContainerGap(24, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(testButton)
-                .addComponent(clearButton))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap(24, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(testButton)
+                        .addComponent(clearButton))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(wcDescriptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addComponent(moveToSelectedPrioritiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -268,9 +281,6 @@ public class MainWindow extends javax.swing.JFrame {
     private void extractWorkOrderItemsFromFile(final File file) throws IOException, InvalidFormatException {
         final List<WorkOrderInformation> workOrdersFromSheetFile = extractWorkOrdersFromSheetFile(file.getAbsolutePath());
         this.workOrderInformationItems = Optional.of(workOrdersFromSheetFile);
-        
-        // TEST-CODE:
-        this.workOrderInformationItems.ifPresent(woItems -> woItems.forEach(System.out::println));
     }
     
     private void openFabLoadByWCMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFabLoadByWCMenuItemActionPerformed
@@ -404,6 +414,11 @@ public class MainWindow extends javax.swing.JFrame {
         
     }//GEN-LAST:event_moveToSelectedPrioritiesButtonActionPerformed
 
+    private void cleanTable(final JTable table) {
+        ((DefaultTableModel)table.getModel()).setRowCount(0);
+        table.clearSelection();
+    }
+    
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         ((DefaultTableModel)selectedPrioritiesTable.getModel()).setRowCount(0);
         workOrderTable.clearSelection();
@@ -455,6 +470,38 @@ public class MainWindow extends javax.swing.JFrame {
         updateStatusBar();
     }//GEN-LAST:event_findFilesInCurrentPathMenuItemActionPerformed
 
+    private void updateTableWithWCDescription(
+            final String wcDescription
+            , final List<WorkOrderInformation> workOrderItems
+            , final JTable table
+    ) {
+        
+        final DefaultTableModel model = (DefaultTableModel) table.getModel();
+        
+         workOrderItems
+                 .stream()
+                 .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
+                 .forEach(item -> {
+                    final String machine = this.partMachineInfo.getOrDefault(item.getPartNumber(), "");
+                    final Object[] data = {
+                        item.getPartNumber()
+                        , item.getRunHours()
+                        , item.getSetupHours()
+                        , item.getQty()
+                        , machine
+                    };
+                    model.addRow(data);
+                 });
+    }
+    
+    private void wcDescriptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wcDescriptionsActionPerformed
+        final String selectedItem = wcDescriptions.getSelectedItem().toString();
+        this.workOrderInformationItems.ifPresent(workOrderItems -> {
+            cleanTable(this.workOrderTable);
+            updateTableWithWCDescription(selectedItem, workOrderItems, this.workOrderTable);
+        });
+    }//GEN-LAST:event_wcDescriptionsActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -499,6 +546,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTable selectedPrioritiesTable;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JButton testButton;
+    private javax.swing.JComboBox<String> wcDescriptions;
     private javax.swing.JTable workOrderTable;
     // End of variables declaration//GEN-END:variables
 }
