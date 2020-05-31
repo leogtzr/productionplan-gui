@@ -437,6 +437,10 @@ public class MainWindow extends javax.swing.JFrame {
             final File ageByWCFile = ageByWCPath.toFile();
             
             if (fabLoadByWCFile.exists() && ageByWCFile.exists()) {
+                // Clean the tables ... 
+                cleanTable(this.workOrderTable);
+                cleanTable(this.selectedPrioritiesTable);
+                
                 this.fabLoadFilePath = fabLoadByWCFile;
                 this.ageByWCFilePath = ageByWCFile;
                 
