@@ -1,10 +1,10 @@
-// TODO: Put the information in the table ...
 // TODO: Need to modify the domains to store the WC Description ... "Doblado" as an example.
     // TODO: Need a Dropdown here. 
 
 package com.production;
 
 import com.production.domain.WorkOrderInformation;
+import com.production.util.Constants;
 import com.production.util.Utils;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -122,7 +122,7 @@ public class MainWindow extends javax.swing.JFrame {
         )
         {
             @Override public boolean isCellEditable(final int row, final int column) {
-                return false;
+                return true;
             }
         }
 
@@ -265,20 +265,24 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
     
+    private void extractWorkOrderItemsFromFile(final File file) throws IOException, InvalidFormatException {
+        final List<WorkOrderInformation> workOrdersFromSheetFile = extractWorkOrdersFromSheetFile(file.getAbsolutePath());
+        this.workOrderInformationItems = Optional.of(workOrdersFromSheetFile);
+        
+        // TEST-CODE:
+        this.workOrderInformationItems.ifPresent(woItems -> woItems.forEach(System.out::println));
+    }
+    
     private void openFabLoadByWCMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFabLoadByWCMenuItemActionPerformed
-                
         // Note, the following code can be changed to use something like:
         // new JFileChooser(System.getProperty("user.home"))
         final JFileChooser jfc = Utils.genericXLSFileChooser();
-
         int returnValue = jfc.showOpenDialog(null);
+        
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             this.fabLoadFilePath = jfc.getSelectedFile();
             try {
-                final List<WorkOrderInformation> workOrdersFromSheetFile = 
-                        extractWorkOrdersFromSheetFile(this.fabLoadFilePath.getAbsolutePath());
-                this.workOrderInformationItems = Optional.of(workOrdersFromSheetFile);
-                // this.workOrderInformationItems.ifPresent(items -> items.forEach(System.out::println));
+                this.extractWorkOrderItemsFromFile(this.fabLoadFilePath);
             } catch (IOException | InvalidFormatException ex) {
                 JOptionPane.showMessageDialog(
                     this
@@ -291,6 +295,13 @@ public class MainWindow extends javax.swing.JFrame {
         updateStatusBar();
     }//GEN-LAST:event_openFabLoadByWCMenuItemActionPerformed
 
+    private void reconcileInformationAndUpdateTable(
+            final File file
+            , final List<WorkOrderInformation> workOrderItems) throws IOException, InvalidFormatException {
+        Utils.reconcileInformationFromAgeFile(file.getAbsolutePath(), workOrderItems);
+        this.updateTable(workOrderItems, workOrderTable);
+    }
+    
     private void openAgeByWCFileItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openAgeByWCFileItemActionPerformed
         final JFileChooser jfc = Utils.genericXLSFileChooser();
 
@@ -299,8 +310,7 @@ public class MainWindow extends javax.swing.JFrame {
             this.ageByWCFilePath = jfc.getSelectedFile();
             this.workOrderInformationItems.ifPresent(workOrderItems -> {
                 try {
-                    Utils.reconcileInformationFromAgeFile(this.ageByWCFilePath.getAbsolutePath(), workOrderItems);
-                    this.updateTable(workOrderItems, workOrderTable);
+                    this.reconcileInformationAndUpdateTable(this.ageByWCFilePath, workOrderItems);
                 } catch (IOException | InvalidFormatException ex) {
                     JOptionPane.showMessageDialog(
                         this
@@ -316,7 +326,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void updateTable(final List<WorkOrderInformation> workOrderItems, final JTable table) {        
         final DefaultTableModel workOrdersModel = (DefaultTableModel) workOrderTable.getModel();
-        
         // "#Part", "Hr", "Stup", "P/Hac", "Máquina"
         workOrderItems.forEach(item -> {
             final String machine = this.partMachineInfo.getOrDefault(item.getPartNumber(), "");
@@ -407,20 +416,39 @@ public class MainWindow extends javax.swing.JFrame {
             final File jf = new File(jarFilepath);
             this.jarPath = URLDecoder.decode(jf.getParent(), "UTF-8");
             
-            // TODO: fix this ... the word "Leo" shouldn't be in the path, read it from a constant.
-            final Path fabLoadByWCPath = Paths.get(this.jarPath, "FAB Load by WC Leo.xls");
+            final Path fabLoadByWCPath = Paths.get(this.jarPath, Constants.FAB_LOAD_FILE_NAME);
             final File fabLoadByWCFile = fabLoadByWCPath.toFile();
-            if (fabLoadByWCFile.exists()) {
-                this.fabLoadFilePath = fabLoadByWCFile;
-            }
-            
-            // TODO: Use the name from a constant ..
-            final Path ageByWCPath = Paths.get(this.jarPath, "Age  by WC.xls");
+            final Path ageByWCPath = Paths.get(this.jarPath, Constants.AGE_BY_WC_FILE_NAME);
             final File ageByWCFile = ageByWCPath.toFile();
-            if (ageByWCFile.exists()) {
+            
+            if (fabLoadByWCFile.exists() && ageByWCFile.exists()) {
+                this.fabLoadFilePath = fabLoadByWCFile;
                 this.ageByWCFilePath = ageByWCFile;
+                
+                this.extractWorkOrderItemsFromFile(this.fabLoadFilePath);
+                this.workOrderInformationItems.ifPresent(workOrderItems -> {
+                    try {
+                        this.reconcileInformationAndUpdateTable(this.ageByWCFilePath, workOrderItems);
+                    } catch (IOException | InvalidFormatException ex) {
+                        JOptionPane.showMessageDialog(
+                            this
+                            , String.format("error loading Age file: %s", ex.getMessage())
+                            , "Error"
+                            , JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                });
+                
+            } else {
+                JOptionPane.showMessageDialog(
+                    this
+                    , "Error: los archivos necesarios no existen en el directorio actual."
+                    , "Error"
+                    , JOptionPane.ERROR_MESSAGE
+                );
+                return;
             }
-        } catch (final UnsupportedEncodingException ex) {
+        } catch (IOException | InvalidFormatException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
         

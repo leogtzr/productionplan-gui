@@ -6,7 +6,8 @@ import java.util.Objects;
  * @author lgutierr <leogutierrezramirez@gmail.com>
  */
 public final class WorkOrderInformation {
-
+    
+    private String wcDescription;
     private String partNumber;
     private String workOrder;
     private double runHours;
@@ -15,26 +16,6 @@ public final class WorkOrderInformation {
 
     private int age;
     public double salesPrice;
-
-    // Not feeling really good having this constructor with all these parameters ... a builder pattern would be a good
-    // fit here ... - Leo
-    public WorkOrderInformation(
-            final String partNumber
-            , final String workOrder
-            , final double runHours
-            , final double setupHours
-            , final int qty
-            , final int age
-            , final double salesPrice
-    ) {
-        this.partNumber = partNumber;
-        this.workOrder = workOrder;
-        this.runHours = runHours;
-        this.setupHours = setupHours;
-        this.qty = qty;
-        this.age = age;
-        this.salesPrice = salesPrice;
-    }
 
     public WorkOrderInformation() { }
 
@@ -94,39 +75,75 @@ public final class WorkOrderInformation {
         this.salesPrice = salesPrice;
     }
 
-    @Override
-    public String toString() {
-        return "WorkOrderInformation{" +
-                "partNumber='" + partNumber + '\'' +
-                ", workOrder='" + workOrder + '\'' +
-                ", runHours=" + runHours +
-                ", setupHours=" + setupHours +
-                ", qty=" + qty +
-                ", age=" + age +
-                ", salesPrice=" + salesPrice +
-                '}';
+    public String getWcDescription() {
+        return wcDescription;
+    }
+
+    public void setWcDescription(String wcDescription) {
+        this.wcDescription = wcDescription;
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        final WorkOrderInformation that = (WorkOrderInformation) o;
-        return Double.compare(that.runHours, runHours) == 0 &&
-                Double.compare(that.setupHours, setupHours) == 0 &&
-                qty == that.qty &&
-                age == that.age &&
-                Double.compare(that.salesPrice, salesPrice) == 0 &&
-                Objects.equals(partNumber, that.partNumber) &&
-                Objects.equals(workOrder, that.workOrder);
+    public String toString() {
+        return "WO{" + "wcDescription=" + wcDescription + ", partNumber=" + partNumber + ", workOrder=" + workOrder + 
+                ", runHours=" + runHours + ", setupHours=" + setupHours + ", qty=" + qty + ", age=" + age + ", salesPrice=" + 
+                salesPrice + '}';
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(partNumber, workOrder, runHours, setupHours, qty, age, salesPrice);
+        int hash = 5;
+        hash = 71 * hash + Objects.hashCode(this.wcDescription);
+        hash = 71 * hash + Objects.hashCode(this.partNumber);
+        hash = 71 * hash + Objects.hashCode(this.workOrder);
+        hash = 71 * hash + (int) (Double.doubleToLongBits(this.runHours) ^ (Double.doubleToLongBits(this.runHours) >>> 32));
+        hash = 71 * hash + (int) (Double.doubleToLongBits(this.setupHours) ^ (Double.doubleToLongBits(this.setupHours) >>> 32));
+        hash = 71 * hash + this.qty;
+        hash = 71 * hash + this.age;
+        hash = 71 * hash + (int) (Double.doubleToLongBits(this.salesPrice) ^ (Double.doubleToLongBits(this.salesPrice) >>> 32));
+        return hash;
     }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final WorkOrderInformation other = (WorkOrderInformation) obj;
+        if (Double.doubleToLongBits(this.runHours) != Double.doubleToLongBits(other.runHours)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.setupHours) != Double.doubleToLongBits(other.setupHours)) {
+            return false;
+        }
+        if (this.qty != other.qty) {
+            return false;
+        }
+        if (this.age != other.age) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.salesPrice) != Double.doubleToLongBits(other.salesPrice)) {
+            return false;
+        }
+        if (!Objects.equals(this.wcDescription, other.wcDescription)) {
+            return false;
+        }
+        if (!Objects.equals(this.partNumber, other.partNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.workOrder, other.workOrder)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
+    
 }

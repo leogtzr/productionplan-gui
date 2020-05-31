@@ -25,6 +25,7 @@ import org.apache.poi.ss.usermodel.*;
 public final class Utils {
     
     // TODO: change this to a proper enum or something similar ...
+    private static final int WC_DESCRIPTION_INDEX = 1;
     private static final int PART_CELL_INDEX = 4;
     private static final int WORKORDER_CELL_INDEX = 6;
     private static final int RUN_CELL_INDEX = 10;
@@ -83,13 +84,14 @@ public final class Utils {
                         continue;
                 }
 
+                final Cell wcDescription = row.getCell(WC_DESCRIPTION_INDEX);
                 final Cell partCell = row.getCell(PART_CELL_INDEX);
                 final Cell workOrderCell = row.getCell(WORKORDER_CELL_INDEX);
                 final Cell runCell = row.getCell(RUN_CELL_INDEX);
                 final Cell setupCell = row.getCell(SETUP_CELL_INDEX);
                 final Cell qtyCell = row.getCell(QTY_CELL_INDEX);
 
-                workOrderInfoItems.add(to(partCell, workOrderCell, runCell, setupCell, qtyCell));
+                workOrderInfoItems.add(to(wcDescription, partCell, workOrderCell, runCell, setupCell, qtyCell));
             }
         }
         return workOrderInfoItems;
@@ -127,8 +129,6 @@ public final class Utils {
                 final SimpleWorkOrderInformation simpleWorkOrderInformation = workOrdersFromAgeFile.get(workOrder.getWorkOrder());
                 workOrder.setAge(simpleWorkOrderInformation.getAge());
                 workOrder.setSalesPrice(simpleWorkOrderInformation.getSalesPrice());
-            } else {
-                // System.out.printf("[%s] didn't exist in the file.\n", workOrder.getWorkOrder());
             }
         });
     }
@@ -147,13 +147,15 @@ public final class Utils {
     }
 
     private static WorkOrderInformation to(
-            final Cell partCell
+            final Cell wcDescriptionCell
+            , final Cell partCell
             , final Cell workOrderCell
             , final Cell runCell
             , final Cell setupCell
             , final Cell qtyCell
     ) {
         final WorkOrderInformation workOrderInformation = new WorkOrderInformation();
+        workOrderInformation.setWcDescription(wcDescriptionCell.getStringCellValue());
         workOrderInformation.setPartNumber(partCell.getStringCellValue().trim());
         workOrderInformation.setWorkOrder(workOrderCell.getStringCellValue().trim());
 
