@@ -307,7 +307,7 @@ public class MainWindow extends javax.swing.JFrame {
             final File file
             , final List<WorkOrderInformation> workOrderItems) throws IOException, InvalidFormatException {
         Utils.reconcileInformationFromAgeFile(file.getAbsolutePath(), workOrderItems);
-        this.updateTable(workOrderItems, workOrderTable);
+        this.updateTable(workOrderItems, this.workOrderTable);
     }
     
     private void openAgeByWCFileItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openAgeByWCFileItemActionPerformed
@@ -393,7 +393,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void moveToSelectedPrioritiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToSelectedPrioritiesButtonActionPerformed
         
-        final int[] rowIndexesToRemove = workOrderTable.getSelectedRows();
+        final int[] rowIndexesToRemove = this.workOrderTable.getSelectedRows();
         if (rowIndexesToRemove.length == 0) {
             return;
         }
@@ -404,7 +404,7 @@ public class MainWindow extends javax.swing.JFrame {
         final int rowCount = selectedPrioritiesModel.getRowCount();
         int priority = rowCount > 0 ? (rowCount + 1) : 1;
         for (int rowIndex : rowIndexesToRemove) {
-            final String ptNumber = Utils.getPartNumberFromRow(workOrderTable.getModel(), rowIndex);
+            final String ptNumber = Utils.getPartNumberFromRow(this.workOrderTable.getModel(), rowIndex);
             final String[] data = {priority + "", ptNumber};
             selectedPrioritiesModel.addRow(data);
             priority++;
