@@ -333,7 +333,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_openAgeByWCFileItemActionPerformed
 
     private void updateTable(final List<WorkOrderInformation> workOrderItems, final JTable table) {        
-        final DefaultTableModel workOrdersModel = (DefaultTableModel) workOrderTable.getModel();
+        final DefaultTableModel workOrdersModel = (DefaultTableModel) table.getModel();
         // "#Part", "Hr", "Stup", "P/Hac", "Máquina"
         workOrderItems.forEach(item -> {
             final String machine = this.partMachineInfo.getOrDefault(item.getPartNumber(), "");
@@ -383,7 +383,7 @@ public class MainWindow extends javax.swing.JFrame {
             "3"
         };
         
-        final DefaultTableModel workOrdersModel = (DefaultTableModel) workOrderTable.getModel();
+        final DefaultTableModel workOrdersModel = (DefaultTableModel) this.workOrderTable.getModel();
         
         workOrdersModel.addRow(contentToAdd);
         workOrdersModel.addRow(contentToAdd2);
