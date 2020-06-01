@@ -1,4 +1,4 @@
-// TODO: fix the clear button ... 
+// TODO: fix the clear button ...
 package com.production;
 
 import com.production.domain.WorkOrderInformation;
@@ -125,6 +125,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     );
     workOrderTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+    workOrderTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     jScrollPane1.setViewportView(workOrderTable);
 
     selectedPrioritiesTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -430,8 +431,14 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
-        ((DefaultTableModel)selectedPrioritiesTable.getModel()).setRowCount(0);
-        workOrderTable.clearSelection();
+        ((DefaultTableModel) this.selectedPrioritiesTable.getModel()).setRowCount(0);
+        this.workOrderTable.clearSelection();
+        
+        final String selectedWCDescription = this.wcDescriptions.getSelectedItem().toString();
+        this.workOrderInformationItems.ifPresent(workOrderItems -> {
+            cleanTable(this.workOrderTable);
+            updateTableWithWCDescription(selectedWCDescription, workOrderItems, this.workOrderTable);
+        });
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void findFilesInCurrentPathMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findFilesInCurrentPathMenuItemActionPerformed
@@ -509,6 +516,8 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void wcDescriptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wcDescriptionsActionPerformed
+        cleanTable(this.selectedPrioritiesTable);
+        
         final String selectedItem = wcDescriptions.getSelectedItem().toString();
         this.workOrderInformationItems.ifPresent(workOrderItems -> {
             cleanTable(this.workOrderTable);
