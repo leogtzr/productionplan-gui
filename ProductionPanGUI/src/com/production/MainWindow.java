@@ -1,4 +1,3 @@
-// TODO: fix the clear button ...
 package com.production;
 
 import com.production.domain.WorkOrderInformation;
@@ -24,7 +23,6 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
-import java.util.Arrays;
 import javax.swing.JTable;
 
 /**
@@ -465,6 +463,7 @@ public class MainWindow extends javax.swing.JFrame {
                 this.workOrderInformationItems.ifPresent(workOrderItems -> {
                     try {
                         this.reconcileInformationAndUpdateTable(this.ageByWCFilePath, workOrderItems);
+                        this.wcDescriptions.setSelectedIndex(0);
                     } catch (IOException | InvalidFormatException ex) {
                         JOptionPane.showMessageDialog(
                             this
