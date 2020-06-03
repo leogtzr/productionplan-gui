@@ -1,3 +1,9 @@
+// TODO: Think about implementing a DB ... 
+// TODO: Plan acumulativo ..., es decir, si aparecen nuevas órdenes ... que cotinue en el día que se quedó ...
+// TODO: recibir un mapeo para Punzonado para private final Map<String, String> partMachineInfo = new HashMap<>();
+// TODO: tomar en cuenta que cuando hay partes iguales en un WorkCenter ... un mismo setup aplica para ello.
+// Es decir: si hay dos part numbers iguales, solo el primero tendrïa un setup ...
+// el segundo se aprovecha
 package com.production;
 
 import com.production.domain.Priority;
@@ -24,6 +30,9 @@ import javax.swing.JTable;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
+import static com.production.util.Constants.FIRST_TURN_LENGTH;
+import static com.production.util.Constants.SECOND_TURN_LENGTH;
+
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -618,9 +627,24 @@ public class MainWindow extends javax.swing.JFrame {
 
     private String buildHtmlContent(
             final String wcDescription
-            , final List<WorkOrderInformation> workOrderItemsByWCDescription
+            , final List<WorkOrderInformation> workOrderItems
             , final List<Priority> priorities) {
-        // TODO: fix this ... 
+        // TODO: remove magic numbers ... 
+        
+        double sumHoursTurns = 0.0D;
+        workOrderItems.forEach(wo -> {
+            final double woHours = wo.getRunHours() + wo.getSetupHours();
+            final double woHoursAdded = woHours + sumHoursTurns;
+            if (woHoursAdded <= FIRST_TURN_LENGTH) {
+                
+            } else if (woHoursAdded > FIRST_TURN_LENGTH && woHoursAdded <= (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
+                
+            } else if (woHoursAdded <= (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
+                
+            }
+        });
+        
         return "";
     }
+    
 }

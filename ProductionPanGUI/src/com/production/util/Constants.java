@@ -15,6 +15,9 @@ public final class Constants {
     
     public static final double RUN_EFFICIENCY = 0.8;
     
+    public static final double FIRST_TURN_LENGTH = 8.5D;
+    public static final double SECOND_TURN_LENGTH = 8.1D;
+    
     private Constants() {}
     
 }

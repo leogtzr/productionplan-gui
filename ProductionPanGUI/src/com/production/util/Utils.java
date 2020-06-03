@@ -94,9 +94,13 @@ public final class Utils {
         return workOrderInfoItems;
     }
     
-    public static boolean allowedWC(final String desc) {
+    private static String sanitizeWorkCenterName(final String wc) {
+        return wc.trim().toUpperCase().replace(" ", "_");
+    }
+    
+    public static boolean allowedWC(final String wc) {
         boolean ok = false;
-        switch (desc.trim().toUpperCase()) {
+        switch (sanitizeWorkCenterName(wc)) {
             case "DOBLADO":
             case "MAQUINADO MANUAL":
             case "MAQUINADO CNC":
