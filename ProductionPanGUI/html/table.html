@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>B2B Accesses</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="cbe.css" rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="/">Home</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+
+<main role="main">
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg">
+                        <h3>B2B Servers</h3>
+                    </div>
+                    <!-- <div class="col-sm">
+                        <h3><a href="add.html" class="btn btn-lg btn-outline-success">Add Server</a></h3>
+                    </div> -->
+                </div>
+            </div>
+            
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Destination</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Access From</th>
+                    <th scope="col">Notes</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                 <!-- {{range .}} -->
+                  <tr>
+                    <td>{{.ServerDestination}}</td>
+                    <td>{{.UserDestination}}</td>
+                    <td>{{.From}}</td>
+                    <td>{{.Notes}}</td>
+                    <td>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <ul style="list-style-type:none;">
+                                        <a href="/edit/{{.ID}}" class="btn btn-primary btn-sm">Edit</a>
+                                        <a href="/delete/{{.ID}}" class="btn btn-primary btn-sm btn-danger">Delete</a>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                  </tr>
+                  <!-- {{end}} -->
+                </tbody>
+              </table>
+        </div>
+    </div>
+</main>
+
+<footer class="container">
+    <p>B2B</p>
+</footer>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+    <script src="bootstrap.min.js"></script>
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="howto.js"></script>
+</body>
+</html>
