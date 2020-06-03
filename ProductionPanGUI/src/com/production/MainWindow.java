@@ -1,5 +1,6 @@
 package com.production;
 
+import com.production.domain.Priority;
 import com.production.domain.WorkOrderInformation;
 import com.production.util.Constants;
 import com.production.util.Utils;
@@ -24,6 +25,9 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -531,11 +535,14 @@ public class MainWindow extends javax.swing.JFrame {
         }
         
         final String wcDescription = this.wcDescriptions.getSelectedItem().toString();
+        
+        final List<Priority> priorities = buildPrioritiesFromTable(model);
+        
         this.workOrderInformationItems.ifPresentOrElse(workOrderItems -> {
-            workOrderItems
+            final List<WorkOrderInformation> items = workOrderItems
                     .stream()
                     .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
-                    .forEach(System.out::println);
+                    .collect(Collectors.toList());
         }, () -> {
             
         });
@@ -589,4 +596,21 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> wcDescriptions;
     private javax.swing.JTable workOrderTable;
     // End of variables declaration//GEN-END:variables
+
+    private List<Priority> buildPrioritiesFromTable(final DefaultTableModel model) {
+        final int rowCount = model.getRowCount();
+        if (rowCount <= 0) {
+            return Collections.EMPTY_LIST;
+        }
+        final List<Priority> priorities = new ArrayList<>();
+        
+        for (int row = 0; row < rowCount; row++) {
+            final Priority priority = new Priority();
+            priority.setOrder(Integer.parseInt(model.getValueAt(row, 0).toString()));
+            priority.setPartNumber(model.getValueAt(row, 1).toString());
+            priorities.add(priority);
+        }
+        
+        return priorities;
+    }
 }
