@@ -19,11 +19,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.swing.JTable;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
-import javax.swing.JTable;
+
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -45,17 +48,11 @@ public class MainWindow extends javax.swing.JFrame {
     private void loadPartMachineInformation() {
         final File partMachineCSVFile = new File(PART_MACHINE_FILE_NAME);
         if (!partMachineCSVFile.exists()) {
-            JOptionPane.showMessageDialog(
-                this
-                , String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", PART_MACHINE_FILE_NAME)
-                , "Warning ... "
-                , JOptionPane.WARNING_MESSAGE
-            );
+            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", PART_MACHINE_FILE_NAME), "Warning ... ");
             return;
         }
             
         try {
-            
             final List<String> lines = Files.readAllLines(Paths.get(PART_MACHINE_FILE_NAME));
             for (int i = 0; i < lines.size(); i++) {
                 // Skip the header:
@@ -67,7 +64,7 @@ public class MainWindow extends javax.swing.JFrame {
                 this.partMachineInfo.put(tokens[0], tokens[1]);
             }
         } catch (final IOException ex) {
-            JOptionPane.showMessageDialog(this, String.format("error: %s", ex.getMessage()), "Error", JOptionPane.ERROR_MESSAGE);
+            showErrorMessage(String.format("error: %s", ex.getMessage()), "Error");
         }
     }
 
@@ -281,6 +278,14 @@ public class MainWindow extends javax.swing.JFrame {
         this.workOrderInformationItems = Optional.of(workOrdersFromSheetFile);
     }
     
+    private void showErrorMessage(final String message, final String title) {
+        JOptionPane.showMessageDialog(this, message, title, ERROR_MESSAGE);
+    }
+    
+    private void showWarningMessage(final String message, final String title) {
+        JOptionPane.showMessageDialog(this, message, title, WARNING_MESSAGE);
+    }
+    
     private void openFabLoadByWCMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFabLoadByWCMenuItemActionPerformed
         // Note, the following code can be changed to use something like:
         // new JFileChooser(System.getProperty("user.home"))
@@ -292,12 +297,7 @@ public class MainWindow extends javax.swing.JFrame {
             try {
                 this.extractWorkOrderItemsFromFile(this.fabLoadFilePath);
             } catch (IOException | InvalidFormatException ex) {
-                JOptionPane.showMessageDialog(
-                    this
-                    , String.format("error loading Fab Load by WC File: %s", ex.getMessage())
-                    , "Error"
-                    , JOptionPane.ERROR_MESSAGE
-                );
+                showErrorMessage(String.format("error loading Fab Load by WC File: %s", ex.getMessage()), "Error");
             }
         }
         updateStatusBar();
@@ -320,12 +320,7 @@ public class MainWindow extends javax.swing.JFrame {
                 try {
                     this.reconcileInformationAndUpdateTable(this.ageByWCFilePath, workOrderItems);
                 } catch (IOException | InvalidFormatException ex) {
-                    JOptionPane.showMessageDialog(
-                        this
-                        , String.format("error loading Age file: %s", ex.getMessage())
-                        , "Error"
-                        , JOptionPane.ERROR_MESSAGE
-                    );
+                    showErrorMessage(String.format("error loading Age file: %s", ex.getMessage()), "Error");
                 }
             });
         }
@@ -465,22 +460,12 @@ public class MainWindow extends javax.swing.JFrame {
                         this.reconcileInformationAndUpdateTable(this.ageByWCFilePath, workOrderItems);
                         this.wcDescriptions.setSelectedIndex(0);
                     } catch (IOException | InvalidFormatException ex) {
-                        JOptionPane.showMessageDialog(
-                            this
-                            , String.format("error loading Age file: %s", ex.getMessage())
-                            , "Error"
-                            , JOptionPane.ERROR_MESSAGE
-                        );
+                        showErrorMessage(String.format("error loading Age file: %s", ex.getMessage()), "Error");
                     }
                 });
                 
             } else {
-                JOptionPane.showMessageDialog(
-                    this
-                    , "Error: los archivos necesarios no existen en el directorio actual."
-                    , "Error"
-                    , JOptionPane.ERROR_MESSAGE
-                );
+                showErrorMessage("Error: los archivos necesarios no existen en el directorio actual.", "Error");
                 return;
             }
         } catch (IOException | InvalidFormatException ex) {
