@@ -539,10 +539,12 @@ public class MainWindow extends javax.swing.JFrame {
         final List<Priority> priorities = buildPrioritiesFromTable(model);
         
         this.workOrderInformationItems.ifPresentOrElse(workOrderItems -> {
-            final List<WorkOrderInformation> items = workOrderItems
+            final List<WorkOrderInformation> workOrderItemsByWCDescription = workOrderItems
                     .stream()
                     .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                     .collect(Collectors.toList());
+            final String htmlContent = buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
+            
         }, () -> {
             
         });
@@ -612,5 +614,13 @@ public class MainWindow extends javax.swing.JFrame {
         }
         
         return priorities;
+    }
+
+    private String buildHtmlContent(
+            final String wcDescription
+            , final List<WorkOrderInformation> workOrderItemsByWCDescription
+            , final List<Priority> priorities) {
+        // TODO: fix this ... 
+        return "";
     }
 }
