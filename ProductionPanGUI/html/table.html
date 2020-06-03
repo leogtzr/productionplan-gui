@@ -6,13 +6,13 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>B2B Accesses</title>
+    <title>Production Plan</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="cbe.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
 </head>
 
 <body>
@@ -32,7 +32,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg">
-                        <h3>B2B Servers</h3>
+                        <!-- <h3>P Plan</h3> -->
                     </div>
                     <!-- <div class="col-sm">
                         <h3><a href="add.html" class="btn btn-lg btn-outline-success">Add Server</a></h3>
@@ -40,36 +40,31 @@
                 </div>
             </div>
             
-
+            
             <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">Destination</th>
-                    <th scope="col">User</th>
-                    <th scope="col">Access From</th>
-                    <th scope="col">Notes</th>
-                    <th scope="col"></th>
+                    <th scope="col">#</th>
+                    <th scope="col">Part Number</th>
+                    <th scope="col">WO</th>
+                    <th scope="col">Hrs</th>
+                    <th scope="col">Setup</th>
+                    <th scope="col">PZAS/HR (META)</th>
+                    <th scope="col">Pzas x Hacer</th>
+                    <th scope="col">Comentarios</th>
                   </tr>
                 </thead>
                 <tbody>
                  <!-- {{range .}} -->
                   <tr>
-                    <td>{{.ServerDestination}}</td>
-                    <td>{{.UserDestination}}</td>
-                    <td>{{.From}}</td>
-                    <td>{{.Notes}}</td>
-                    <td>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm">
-                                    <ul style="list-style-type:none;">
-                                        <a href="/edit/{{.ID}}" class="btn btn-primary btn-sm">Edit</a>
-                                        <a href="/delete/{{.ID}}" class="btn btn-primary btn-sm btn-danger">Delete</a>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
+                    <td>PRIMER TURNO</td>
+                    <td>4022.637.88035</td>
+                    <td>50243961</td>
+                    <td>4.2</td>
+                    <td>0.3</td>
+                    <td>2</td>
+                    <td>7</td>
+                    <td>Comentario</td>
                   </tr>
                   <!-- {{end}} -->
                 </tbody>
@@ -79,14 +74,11 @@
 </main>
 
 <footer class="container">
-    <p>B2B</p>
+    <p>Production Plan</p>
 </footer>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
     <script src="bootstrap.min.js"></script>
     <script src="jquery-3.3.1.min.js"></script>
-    <script src="howto.js"></script>
 </body>
 </html>
