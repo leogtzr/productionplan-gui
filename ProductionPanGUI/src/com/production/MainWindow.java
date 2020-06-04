@@ -4,6 +4,7 @@
 // TODO: tomar en cuenta que cuando hay partes iguales en un WorkCenter ... un mismo setup aplica para ello.
 // Es decir: si hay dos part numbers iguales, solo el primero tendrïa un setup ...
 // el segundo se aprovecha
+// TODO: think about how the files will be generated ...
 package com.production;
 
 import com.production.domain.Priority;
