@@ -11,6 +11,7 @@ import com.production.domain.Priority;
 import com.production.domain.WorkOrderInformation;
 import com.production.util.Constants;
 import com.production.util.Utils;
+
 import java.io.File;
 import java.net.URLDecoder;
 import java.nio.file.Path;
@@ -28,17 +29,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.swing.JTable;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.Collections;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.FIRST_TURN_LENGTH;
 import static com.production.util.Constants.SECOND_TURN_LENGTH;
-
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.stream.Collectors;
-
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 
@@ -250,13 +249,15 @@ public class MainWindow extends javax.swing.JFrame {
                             .addGap(18, 18, 18)
                             .addComponent(testButton))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(10, 10, 10)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
+                            .addGap(10, 10, 10)
                             .addComponent(moveToSelectedPrioritiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(generatePlanBtn))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(18, 18, 18)
+                            .addComponent(generatePlanBtn)))
                     .addContainerGap(20, Short.MAX_VALUE))))
     );
     layout.setVerticalGroup(
@@ -267,14 +268,13 @@ public class MainWindow extends javax.swing.JFrame {
                     .addContainerGap(24, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(testButton)
-                        .addComponent(clearButton))
+                        .addComponent(clearButton)
+                        .addComponent(generatePlanBtn))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(generatePlanBtn)
-                        .addComponent(wcDescriptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(wcDescriptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addComponent(moveToSelectedPrioritiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -539,10 +539,6 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void generatePlanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePlanBtnActionPerformed
         final DefaultTableModel model = (DefaultTableModel) selectedPrioritiesTable.getModel();
-        if (model.getRowCount() <= 0) {
-            System.out.println("Empty rows ... ");
-            return;
-        }
         
         final String wcDescription = this.wcDescriptions.getSelectedItem().toString();
         
