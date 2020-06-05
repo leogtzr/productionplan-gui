@@ -247,11 +247,28 @@
     <Component class="javax.swing.JComboBox" name="wcDescriptions">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
+          <StringArray count="21">
             <StringItem index="0" value="DOBLADO"/>
-            <StringItem index="1" value="MAQUINADO MANUAL"/>
-            <StringItem index="2" value="MAQUINADO CNC"/>
-            <StringItem index="3" value="PUNZONADO"/>
+            <StringItem index="1" value="EMPAQUE_A_PROVEEDOR"/>
+            <StringItem index="2" value="EMPAQUE_FINAL"/>
+            <StringItem index="3" value="ENSAMBLE"/>
+            <StringItem index="4" value="INSERTOS_PEM"/>
+            <StringItem index="5" value="INSPECCION_DE_ACABADOS"/>
+            <StringItem index="6" value="LASER"/>
+            <StringItem index="7" value="LIMPIEZA"/>
+            <StringItem index="8" value="LIMPIEZA_LUZ_NEGRA"/>
+            <StringItem index="9" value="MAQUINADO_CNC"/>
+            <StringItem index="10" value="MAQUINADO_MANUAL"/>
+            <StringItem index="11" value="PINTURA_EN_POLVO"/>
+            <StringItem index="12" value="PULIDO"/>
+            <StringItem index="13" value="PUNZONADO"/>
+            <StringItem index="14" value="REBABEO"/>
+            <StringItem index="15" value="SERIGRAFIA"/>
+            <StringItem index="16" value="SOLDADURA"/>
+            <StringItem index="17" value="SPOT_WELD"/>
+            <StringItem index="18" value="SURTIR_MATERIAL"/>
+            <StringItem index="19" value="TIME_SAVER"/>
+            <StringItem index="20" value="TRATAMIENTO_QUIMICO"/>
           </StringArray>
         </Property>
       </Properties>

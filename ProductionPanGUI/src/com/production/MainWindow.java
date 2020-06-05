@@ -177,7 +177,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
     });
 
-    wcDescriptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DOBLADO", "MAQUINADO MANUAL", "MAQUINADO CNC", "PUNZONADO" }));
+    wcDescriptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DOBLADO", "EMPAQUE_A_PROVEEDOR", "EMPAQUE_FINAL", "ENSAMBLE", "INSERTOS_PEM", "INSPECCION_DE_ACABADOS", "LASER", "LIMPIEZA", "LIMPIEZA_LUZ_NEGRA", "MAQUINADO_CNC", "MAQUINADO_MANUAL", "PINTURA_EN_POLVO", "PULIDO", "PUNZONADO", "REBABEO", "SERIGRAFIA", "SOLDADURA", "SPOT_WELD", "SURTIR_MATERIAL", "TIME_SAVER", "TRATAMIENTO_QUIMICO" }));
     wcDescriptions.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             wcDescriptionsActionPerformed(evt);

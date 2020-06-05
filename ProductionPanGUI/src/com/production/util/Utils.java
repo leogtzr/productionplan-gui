@@ -103,9 +103,26 @@ public final class Utils {
         boolean ok = false;
         switch (sanitizeWorkCenterName(wc)) {
             case "DOBLADO":
-            case "MAQUINADO MANUAL":
-            case "MAQUINADO CNC":
+            case "EMPAQUE_A_PROVEEDOR":
+            case "EMPAQUE_FINAL":
+            case "ENSAMBLE":
+            case "INSERTOS_PEM":
+            case "INSPECCION_DE_ACABADOS":
+            case "LASER":
+            case "LIMPIEZA":
+            case "LIMPIEZA_LUZ_NEGRA":
+            case "MAQUINADO_CNC":
+            case "MAQUINADO_MANUAL":
+            case "PINTURA_EN_POLVO":
+            case "PULIDO":
             case "PUNZONADO":
+            case "REBABEO":
+            case "SERIGRAFIA":
+            case "SOLDADURA":
+            case "SPOT_WELD":
+            case "SURTIR_MATERIAL":
+            case "TIME_SAVER":
+            case "TRATAMIENTO_QUIMICO":
                 ok = true;
                 break;  
         }
