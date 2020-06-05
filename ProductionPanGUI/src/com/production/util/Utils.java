@@ -94,8 +94,9 @@ public final class Utils {
         return workOrderInfoItems;
     }
     
-    private static String sanitizeWorkCenterName(final String wc) {
-        return wc.trim().toUpperCase().replace(" ", "_");
+    private static String sanitizeWorkCenterName(String wc) {
+        wc = wc.trim().toUpperCase().replace(" ", "_");
+        return wc.replace("-", "_");
     }
     
     public static boolean allowedWC(final String wc) {
