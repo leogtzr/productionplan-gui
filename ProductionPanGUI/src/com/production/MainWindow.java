@@ -1,3 +1,4 @@
+// TODO: Think about an strategy on how to select the two files based on the work center ... 
 // TODO: Think about implementing a DB ... 
 // TODO: Plan acumulativo ..., es decir, si aparecen nuevas órdenes ... que cotinue en el día que se quedó ...
 // TODO: recibir un mapeo para Punzonado para private final Map<String, String> partMachineInfo = new HashMap<>();
@@ -34,9 +35,7 @@ import java.util.stream.Collectors;
 import java.util.Collections;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import static com.production.util.Constants.PART_MACHINE_FILE_NAME;
-import static com.production.util.Constants.FIRST_TURN_LENGTH;
-import static com.production.util.Constants.SECOND_TURN_LENGTH;
+import static com.production.util.Constants.DOBLADO_PART_MACHINE_FILE_NAME;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -49,33 +48,40 @@ public class MainWindow extends javax.swing.JFrame {
     private File fabLoadFilePath = null;
     private File ageByWCFilePath = null;
     private String jarPath = null;
-    private final Map<String, String> partMachineInfo = new HashMap<>();
+    private Map<String, String> dobladoPartMachineInfo = new HashMap<>();
+    private Map<String, String> laserAndPunchPartMachineInfo = new HashMap<>();
     private Optional<List<WorkOrderInformation>> workOrderInformationItems = Optional.empty();
     
     public MainWindow() {
         initComponents();
         updateStatusBar();
-        loadPartMachineInformation();
+        loadDobladoPartMachineInformation();
+        loadLaserAndPunchPartMachineInformation();
     }
     
-    private void loadPartMachineInformation() {
-        final File partMachineCSVFile = new File(PART_MACHINE_FILE_NAME);
+    private void loadDobladoPartMachineInformation() {
+        final File partMachineCSVFile = new File(Constants.DOBLADO_PART_MACHINE_FILE_NAME);
         if (!partMachineCSVFile.exists()) {
-            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", PART_MACHINE_FILE_NAME), "Warning ... ");
+            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", Constants.DOBLADO_PART_MACHINE_FILE_NAME), "Warning ... ");
             return;
         }
             
         try {
-            final List<String> lines = Files.readAllLines(Paths.get(PART_MACHINE_FILE_NAME));
-            for (int i = 0; i < lines.size(); i++) {
-                // Skip the header:
-                if (i == 0) {
-                    continue;
-                }
-                final String line = lines.get(i);
-                final String[] tokens = line.split(",");
-                this.partMachineInfo.put(tokens[0], tokens[1]);
-            }
+            this.dobladoPartMachineInfo = Utils.loadCSVFile(Constants.DOBLADO_PART_MACHINE_FILE_NAME);
+        } catch (final IOException ex) {
+            showErrorMessage(String.format("error: %s", ex.getMessage()), "Error");
+        }
+    }
+    
+    private void loadLaserAndPunchPartMachineInformation() {
+        final File partMachineCSVFile = new File(Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME);
+        if (!partMachineCSVFile.exists()) {
+            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", Constants.DOBLADO_PART_MACHINE_FILE_NAME), "Warning ... ");
+            return;
+        }
+            
+        try {
+            this.dobladoPartMachineInfo = Utils.loadCSVFile(Constants.DOBLADO_PART_MACHINE_FILE_NAME);
         } catch (final IOException ex) {
             showErrorMessage(String.format("error: %s", ex.getMessage()), "Error");
         }
@@ -359,7 +365,7 @@ public class MainWindow extends javax.swing.JFrame {
         final DefaultTableModel workOrdersModel = (DefaultTableModel) table.getModel();
         // "#Part", "Hr", "Stup", "P/Hac", "Máquina"
         workOrderItems.forEach(item -> {
-            final String machine = this.partMachineInfo.getOrDefault(item.getPartNumber(), "");
+            final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
             final Object[] data = {
                 item.getPartNumber()
                 , item.getRunHours()
@@ -515,7 +521,7 @@ public class MainWindow extends javax.swing.JFrame {
                  .stream()
                  .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                  .forEach(item -> {
-                    final String machine = this.partMachineInfo.getOrDefault(item.getPartNumber(), "");
+                    final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
                     final Object[] data = {
                         item.getPartNumber()
                         , item.getRunHours()
@@ -623,23 +629,34 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private String buildHtmlContent(
-            final String wcDescription
+            final String workCenter
             , final List<WorkOrderInformation> workOrderItems
             , final List<Priority> priorities) {
-        // TODO: remove magic numbers ... 
         
-        double sumHoursTurns = 0.0D;
-        workOrderItems.forEach(wo -> {
-            final double woHours = wo.getRunHours() + wo.getSetupHours();
-            final double woHoursAdded = woHours + sumHoursTurns;
-            if (woHoursAdded <= FIRST_TURN_LENGTH) {
-                
-            } else if (woHoursAdded > FIRST_TURN_LENGTH && woHoursAdded <= (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
-                
-            } else if (woHoursAdded <= (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
-                
-            }
-        });
+        final int numberOfTurns = Utils.numberOfTurnsFromWorkCenter(workCenter);
+        
+        switch (numberOfTurns) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+        }
+        
+            // TODO: old code ... 
+//        double sumHoursTurns = 0.0D;
+//        workOrderItems.forEach(wo -> {
+//            final double woHours = wo.getRunHours() + wo.getSetupHours();
+//            final double woHoursAdded = woHours + sumHoursTurns;
+//            if (woHoursAdded <= FIRST_TURN_LENGTH) {
+//                
+//            } else if (woHoursAdded > FIRST_TURN_LENGTH && woHoursAdded <= (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
+//                
+//            } else if (woHoursAdded <= (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
+//                
+//            }
+//        });
         
         return "";
     }

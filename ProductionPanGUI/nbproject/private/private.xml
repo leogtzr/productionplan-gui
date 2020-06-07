@@ -5,6 +5,7 @@
         <group>
             <file>file:/home/leo/code/productionplan-gui/ProductionPanGUI/src/com/production/MainWindow.java</file>
             <file>file:/home/leo/code/productionplan-gui/ProductionPanGUI/src/com/production/domain/WorkOrderInformation.java</file>
+            <file>file:/home/leo/code/productionplan-gui/ProductionPanGUI/src/com/production/domain/WorkCenterTurns.java</file>
             <file>file:/home/leo/code/productionplan-gui/ProductionPanGUI/src/com/production/domain/AgeByWCFields.java</file>
             <file>file:/home/leo/code/productionplan-gui/ProductionPanGUI/src/com/production/util/Utils.java</file>
             <file>file:/home/leo/code/productionplan-gui/ProductionPanGUI/src/com/production/domain/FabLoadByWCFields.java</file>

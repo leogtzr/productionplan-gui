@@ -3,9 +3,12 @@ package com.production.util;
 import com.production.domain.AgeByWCFields;
 import com.production.domain.FabLoadByWCFields;
 import com.production.domain.SimpleWorkOrderInformation;
+import com.production.domain.WorkCenterTurns;
 import com.production.domain.WorkOrderInformation;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -198,6 +201,34 @@ public final class Utils {
         workOrderInformation.setQty((int)qtyCell.getNumericCellValue());
 
         return workOrderInformation;
+    }
+    
+    public static int numberOfTurnsFromWorkCenter(final String workCenterName) {
+        final WorkCenterTurns wc = WorkCenterTurns.valueOf(sanitizeWorkCenterName(workCenterName));
+        return wc.turns();
+    }
+    
+    public static Map<String, String> loadCSVFile(final String filePath) throws IOException {
+        
+        final Map<String, String> machineInfo = new HashMap<>();
+        
+        final List<String> lines = Files.readAllLines(Paths.get(filePath));
+        for (int i = 0; i < lines.size(); i++) {
+            // Skip the header:
+            if (i == 0) {
+                continue;
+            }
+            final String line = lines.get(i);
+            final String[] tokens = line.split(",");
+            String workCenter = workCenterName(tokens[1].trim());
+            machineInfo.put(tokens[0], workCenter);
+        }
+            return machineInfo;
+    }
+    
+    private static String workCenterName(final String wc) {
+        final String[] possibleTokens = wc.trim().toUpperCase().split("\\s+");
+        return possibleTokens[0];
     }
     
     private Utils() {}
