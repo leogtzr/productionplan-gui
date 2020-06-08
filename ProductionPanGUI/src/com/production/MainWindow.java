@@ -570,7 +570,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .stream()
                     .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                     .collect(Collectors.toList());
-            final String htmlContent = buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
+            final String htmlContent = this.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
             
         }, () -> {
             
@@ -642,6 +642,15 @@ public class MainWindow extends javax.swing.JFrame {
         
         return priorities;
     }
+    
+    private Map<String, Integer> workCenterOccurrenceCount(final List<WorkOrderInformation> workOrderItems) {
+        final Map<String, Integer> partsNumbersOccurrenceCount = workOrderItems.stream().collect(Collectors.toMap(
+                k -> k.getPartNumber(),
+                v -> 1,
+                Integer::sum
+        ));
+        return partsNumbersOccurrenceCount;
+    }
 
     private String buildHtmlContent(
             final String workCenter
@@ -649,30 +658,18 @@ public class MainWindow extends javax.swing.JFrame {
             , final List<Priority> priorities) {
         
         final int numberOfTurns = Utils.numberOfTurnsFromWorkCenter(workCenter);
+        final Map<String, Integer> partsNumbersOccurrenceCount = workCenterOccurrenceCount(workOrderItems);
         
         switch (numberOfTurns) {
             case 0:                 // Build a simple list ... 
+                                    // TODO: How is the list built?
+                // HOW: alv
                 break;
             case 2:                 // Only two turns ...
                 break;
             case 3:                 // Use three turns ...
                 break;
         }
-        
-            // TODO: old code ... 
-//        double sumHoursTurns = 0.0D;
-//        workOrderItems.forEach(wo -> {
-//            final double woHours = wo.getRunHours() + wo.getSetupHours();
-//            final double woHoursAdded = woHours + sumHoursTurns;
-//            if (woHoursAdded <= FIRST_TURN_LENGTH) {
-//                
-//            } else if (woHoursAdded > FIRST_TURN_LENGTH && woHoursAdded <= (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
-//                
-//            } else if (woHoursAdded <= (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
-//                
-//            }
-//        });
-        
         return "";
     }
     
