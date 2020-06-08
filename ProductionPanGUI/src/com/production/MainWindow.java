@@ -35,6 +35,7 @@ import java.util.Collections;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import static com.production.util.Constants.DOBLADO_PART_MACHINE_FILE_NAME;
+import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -80,7 +81,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
             
         try {
-            this.dobladoPartMachineInfo = Utils.loadCSVFile(DOBLADO_PART_MACHINE_FILE_NAME);
+            this.laserAndPunchPartMachineInfo = Utils.loadCSVFile(LASER_AND_PUNCH_PART_MACHINE_FILE_NAME);
         } catch (final IOException ex) {
             showErrorMessage(String.format("error: %s", ex.getMessage()), "Error");
         }
@@ -650,11 +651,11 @@ public class MainWindow extends javax.swing.JFrame {
         final int numberOfTurns = Utils.numberOfTurnsFromWorkCenter(workCenter);
         
         switch (numberOfTurns) {
-            case 0:
+            case 0:                 // Build a simple list ... 
                 break;
-            case 1:
+            case 2:                 // Only two turns ...
                 break;
-            case 2:
+            case 3:                 // Use three turns ...
                 break;
         }
         
