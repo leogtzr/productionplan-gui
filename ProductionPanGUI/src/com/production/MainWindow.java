@@ -24,7 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,14 +59,14 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void loadDobladoPartMachineInformation() {
-        final File partMachineCSVFile = new File(Constants.DOBLADO_PART_MACHINE_FILE_NAME);
+        final File partMachineCSVFile = new File(DOBLADO_PART_MACHINE_FILE_NAME);
         if (!partMachineCSVFile.exists()) {
-            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", Constants.DOBLADO_PART_MACHINE_FILE_NAME), "Warning ... ");
+            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", DOBLADO_PART_MACHINE_FILE_NAME), "Warning ... ");
             return;
         }
             
         try {
-            this.dobladoPartMachineInfo = Utils.loadCSVFile(Constants.DOBLADO_PART_MACHINE_FILE_NAME);
+            this.dobladoPartMachineInfo = Utils.loadCSVFile(DOBLADO_PART_MACHINE_FILE_NAME);
         } catch (final IOException ex) {
             showErrorMessage(String.format("error: %s", ex.getMessage()), "Error");
         }
@@ -509,6 +508,20 @@ public class MainWindow extends javax.swing.JFrame {
         updateStatusBar();
     }//GEN-LAST:event_findFilesInCurrentPathMenuItemActionPerformed
 
+    private String getMachineFromWorkCenter(
+            final Map<String, String> doblado
+            , final Map<String, String> laserAndPunch
+            , final String partNumber
+            , final String workCenter
+    ) {
+        // Nasty code ...
+        final String machine = 
+                workCenter.toUpperCase().trim().equalsIgnoreCase("DOBLADO")
+                ? doblado.getOrDefault(partNumber, "")
+                : laserAndPunch.getOrDefault(partNumber, "");
+        return machine;
+    }
+    
     private void updateTableWithWCDescription(
             final String wcDescription
             , final List<WorkOrderInformation> workOrderItems
@@ -521,6 +534,7 @@ public class MainWindow extends javax.swing.JFrame {
                  .stream()
                  .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                  .forEach(item -> {
+                     // TODO: invoke the new method here ... 
                     final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
                     final Object[] data = {
                         item.getPartNumber()
@@ -534,7 +548,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void wcDescriptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wcDescriptionsActionPerformed
-        cleanTable(this.selectedPrioritiesTable);
+        this.cleanTable(this.selectedPrioritiesTable);
         
         final String selectedItem = this.wcDescriptions.getSelectedItem().toString();
         this.workOrderInformationItems.ifPresent(workOrderItems -> {
