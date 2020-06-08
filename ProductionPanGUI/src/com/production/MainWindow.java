@@ -75,12 +75,12 @@ public class MainWindow extends javax.swing.JFrame {
     private void loadLaserAndPunchPartMachineInformation() {
         final File partMachineCSVFile = new File(Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME);
         if (!partMachineCSVFile.exists()) {
-            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", Constants.DOBLADO_PART_MACHINE_FILE_NAME), "Warning ... ");
+            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", DOBLADO_PART_MACHINE_FILE_NAME), "Warning ... ");
             return;
         }
             
         try {
-            this.dobladoPartMachineInfo = Utils.loadCSVFile(Constants.DOBLADO_PART_MACHINE_FILE_NAME);
+            this.dobladoPartMachineInfo = Utils.loadCSVFile(DOBLADO_PART_MACHINE_FILE_NAME);
         } catch (final IOException ex) {
             showErrorMessage(String.format("error: %s", ex.getMessage()), "Error");
         }
