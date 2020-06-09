@@ -16,11 +16,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -48,18 +48,7 @@ public final class Utils {
         return jfc;
     }
     
-    public static String[] dataFromModelAt(final TableModel model, final int rowIndex) {
-        
-        final int columnCount = model.getColumnCount();
-        final String[] data = new String[columnCount];
-        
-        for (int i = 0; i < columnCount; i++) {
-            data[i] = model.getValueAt(rowIndex, i).toString();
-        }
-        
-        return data;
-    }
-    
+    @Validated
     public static String getPartNumberFromRow(final TableModel model, final int rowIndex) {
         if (rowIndex < 0) {
             return "";
@@ -109,6 +98,7 @@ public final class Utils {
         return wc.replace("-", "_");
     }
     
+    @Validated
     public static boolean allowedWC(final String wc) {
         boolean ok = false;
         switch (sanitizeWorkCenterName(wc)) {

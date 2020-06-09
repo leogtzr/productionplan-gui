@@ -4,6 +4,8 @@ import com.production.domain.WorkOrderInformation;
 import com.production.util.Utils;
 import java.util.List;
 import java.util.Map;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.junit.Assert;
 
 import org.junit.Test;
@@ -91,6 +93,33 @@ public class UtilsTest {
             final int got = workCenterOccurrenceCount.get(test[0].toString());
             Assert.assertEquals(got, Integer.parseInt(test[1].toString()));
         }
+        
+    }
+    
+    @Test
+    public void shouldReturnPartNumberFromRowInTableModel() {
+        
+        final Object[][] data = {
+            {"ABC", "A", "B"},
+            {"ABCD", "A", "B"},
+        };
+        
+        final String[] columnNames = {
+                "#Part", "Hr", "Stup",
+        };
+        
+        final TableModel model = new DefaultTableModel(data, columnNames);
+        
+        final Object[][] tests = {
+            {0, "ABC"},
+            {1, "ABCD"},
+        };
+        
+        for (final Object[] test : tests) {
+            final var got = Utils.getPartNumberFromRow(model, Integer.parseInt(test[0].toString()));
+            Assert.assertEquals(got, test[1].toString());
+        }
+        
         
     }
     
