@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -79,10 +80,9 @@ public final class Utils {
                 final Cell firstCell = row.getCell(0);
                 final String firstCellStringCellValue = firstCell.getStringCellValue();
                 switch (firstCellStringCellValue.trim()) {
-                    case "WC Name":
-                    case "Count":
-                    case "Sum":
+                    case "WC Name", "Count", "Sum" -> {
                         continue;
+                    }
                 }
 
                 final Cell wcDescription = row.getCell(FabLoadByWCFields.WC_DESCRIPTION_INDEX.get());
@@ -112,29 +112,13 @@ public final class Utils {
     public static boolean allowedWC(final String wc) {
         boolean ok = false;
         switch (sanitizeWorkCenterName(wc)) {
-            case "DOBLADO":
-            case "EMPAQUE_A_PROVEEDOR":
-            case "EMPAQUE_FINAL":
-            case "ENSAMBLE":
-            case "INSERTOS_PEM":
-            case "INSPECCION_DE_ACABADOS":
-            case "LASER":
-            case "LIMPIEZA":
-            case "LIMPIEZA_LUZ_NEGRA":
-            case "MAQUINADO_CNC":
-            case "MAQUINADO_MANUAL":
-            case "PINTURA_EN_POLVO":
-            case "PULIDO":
-            case "PUNZONADO":
-            case "REBABEO":
-            case "SERIGRAFIA":
-            case "SOLDADURA":
-            case "SPOT_WELD":
-            case "SURTIR_MATERIAL":
-            case "TIME_SAVER":
-            case "TRATAMIENTO_QUIMICO":
+            case "DOBLADO", "EMPAQUE_A_PROVEEDOR", "EMPAQUE_FINAL", "ENSAMBLE", 
+                    "INSERTOS_PEM", "INSPECCION_DE_ACABADOS", "LASER", "LIMPIEZA", 
+                    "LIMPIEZA_LUZ_NEGRA", "MAQUINADO_CNC", "MAQUINADO_MANUAL", 
+                    "PINTURA_EN_POLVO", "PULIDO", "PUNZONADO", "REBABEO", "SERIGRAFIA", 
+                    "SOLDADURA", "SPOT_WELD", "SURTIR_MATERIAL", "TIME_SAVER", 
+                    "TRATAMIENTO_QUIMICO" -> 
                 ok = true;
-                break;  
         }
         return ok;
     }
@@ -154,10 +138,9 @@ public final class Utils {
                 final Cell firstCell = row.getCell(0);
                 final String firstCellStringCellValue = firstCell.getStringCellValue();
                 switch (firstCellStringCellValue.trim()) {
-                    case "WC Name":
-                    case "Count":
-                    case "Sum":
+                    case "WC Name", "Count", "Sum" -> {
                         continue;
+                    }
                 }
 
                 final SimpleWorkOrderInformation workOrderInfo = extractSimpleWorkOrderFromAgeRow(row);
@@ -268,6 +251,7 @@ el segundo se aprovecha
         return "";
     }
     
+    @Validated
     public static Map<String, Integer> workCenterOccurrenceCount(final List<WorkOrderInformation> workOrderItems) {
         final Map<String, Integer> partsNumbersOccurrenceCount = workOrderItems.stream().collect(Collectors.toMap(
                 k -> k.getPartNumber(),

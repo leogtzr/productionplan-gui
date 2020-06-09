@@ -6,7 +6,6 @@
 // Es decir: si hay dos part numbers iguales, solo el primero tendrïa un setup ...
 // el segundo se aprovecha
 // TODO: think about how the files will be generated ...
-// TODO: a custom annotation would help to identify if I have already tested a method ...
 package com.production;
 
 import com.production.domain.Priority;
@@ -201,7 +200,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     fileMenu.setText("File");
 
-    openFabLoadByWCMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_MASK));
+    openFabLoadByWCMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
     openFabLoadByWCMenuItem.setText("Open \"FAB Load by WC\" file");
     openFabLoadByWCMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,7 +209,7 @@ public class MainWindow extends javax.swing.JFrame {
     });
     fileMenu.add(openFabLoadByWCMenuItem);
 
-    openAgeByWCFileItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_MASK));
+    openAgeByWCFileItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_2, java.awt.event.InputEvent.CTRL_DOWN_MASK));
     openAgeByWCFileItem.setText("Open \"Age  by WC\" file");
     openAgeByWCFileItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -219,7 +218,7 @@ public class MainWindow extends javax.swing.JFrame {
     });
     fileMenu.add(openAgeByWCFileItem);
 
-    findFilesInCurrentPathMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_3, java.awt.event.InputEvent.CTRL_MASK));
+    findFilesInCurrentPathMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_3, java.awt.event.InputEvent.CTRL_DOWN_MASK));
     findFilesInCurrentPathMenuItem.setText("Find files");
     findFilesInCurrentPathMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {

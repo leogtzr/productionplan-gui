@@ -17,6 +17,11 @@ public final class WorkOrderInformation {
     public double salesPrice;
 
     public WorkOrderInformation() { }
+    
+    public WorkOrderInformation(final String partNumber, final String workOrder) {
+        this.partNumber = partNumber;
+        this.workOrder = workOrder;
+    }
 
     public String getPartNumber() {
         return partNumber;

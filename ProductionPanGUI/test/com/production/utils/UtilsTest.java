@@ -1,6 +1,9 @@
 package com.production.utils;
 
+import com.production.domain.WorkOrderInformation;
 import com.production.util.Utils;
+import java.util.List;
+import java.util.Map;
 import org.junit.Assert;
 
 import org.junit.Test;
@@ -47,7 +50,7 @@ public class UtilsTest {
         };
         
         for (final Object[] test : tests) {
-            final boolean got = Utils.allowedWC(test[0].toString());
+            final Boolean got = Utils.allowedWC(test[0].toString());
             Assert.assertEquals(got, test[1]);
         }
     }
@@ -64,4 +67,31 @@ public class UtilsTest {
             Assert.assertEquals(got, test[1]);
         }
     }
+    
+    @Test
+    public void shouldReturnWorkCenterOccurrenceCount() {
+        final List<WorkOrderInformation> items = List.of(
+                new WorkOrderInformation("A", "o1"),
+                new WorkOrderInformation("A", "o1"),
+                new WorkOrderInformation("B", "o2"),
+                new WorkOrderInformation("C", "o3"),
+                new WorkOrderInformation("C", "o3"),
+                new WorkOrderInformation("C", "o3")
+        );
+        
+        final Map<String, Integer> workCenterOccurrenceCount = Utils.workCenterOccurrenceCount(items);
+        
+        final Object[][] tests = {
+            {"A", 2},
+            {"B", 1},
+            {"C", 3},
+        };
+        
+        for (final Object[] test : tests) {
+            final int got = workCenterOccurrenceCount.get(test[0].toString());
+            Assert.assertEquals(got, Integer.parseInt(test[1].toString()));
+        }
+        
+    }
+    
 }
