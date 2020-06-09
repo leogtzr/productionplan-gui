@@ -2,8 +2,10 @@ package com.production.utils;
 
 import com.production.domain.WorkOrderInformation;
 import com.production.util.Utils;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.junit.Assert;
@@ -120,7 +122,37 @@ public class UtilsTest {
             Assert.assertEquals(got, test[1].toString());
         }
         
+    }
+    
+/*
+    public static void updateStatusBar(final JLabel statusLabel, final File fabLoadFilePath, final File ageByWCFilePath) {
+        if (fabLoadFilePath == null && ageByWCFilePath == null) {
+            statusLabel.setText("Please open the required files.");
+        } else if (fabLoadFilePath == null && ageByWCFilePath != null) {
+            statusLabel.setText("Please open the file containing the 'FAB Load by WC' information.");
+        } else if (fabLoadFilePath != null && ageByWCFilePath == null) {
+            statusLabel.setText("Please open the file containing the 'Age  by WC' information.");
+        } else if (fabLoadFilePath != null && ageByWCFilePath != null) {
+            statusLabel.setText("Files ready.");
+        }
+    }
+    */
+    
+    @Test
+    public void shouldUpdateStatusLabel() {
+        final JLabel statusLabel = new JLabel();
         
+        final Object[][] tests = {
+            {new File("a"), new File("b"), "Files ready."},
+            {null, new File("b"), "Please open the file containing the 'FAB Load by WC' information."},
+            {null, null, "Please open the required files."},
+            {new File("b"), null, "Please open the file containing the 'Age  by WC' information."},
+        };
+        
+        for (final Object[] test : tests) {
+            Utils.updateStatusBar(statusLabel, (File)test[0], (File)test[1]);
+            Assert.assertEquals(test[2].toString(), statusLabel.getText());
+        }
     }
     
 }

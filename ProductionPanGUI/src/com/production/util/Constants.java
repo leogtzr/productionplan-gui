@@ -20,6 +20,8 @@ public final class Constants {
     public static final double FIRST_TURN_LENGTH = 8.5D;
     public static final double SECOND_TURN_LENGTH = 8.1D;
     
+    public static final String DOBLADO = "DOBLADO";
+    
     private Constants() {}
     
 }

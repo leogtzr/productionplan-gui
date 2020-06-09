@@ -6,6 +6,7 @@ import com.production.domain.Priority;
 import com.production.domain.SimpleWorkOrderInformation;
 import com.production.domain.WorkCenterTurns;
 import com.production.domain.WorkOrderInformation;
+import com.production.lang.MissingTests;
 import com.production.lang.Validated;
 import java.io.File;
 import java.io.IOException;
@@ -18,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -29,6 +30,11 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+import static com.production.util.Constants.DOBLADO;
+import static com.production.util.Constants.TAB_SHEET_NAME;
+import static com.production.util.Constants.AGE_BY_WC_SHEET_NAME;
+import static com.production.util.Constants.RUN_EFFICIENCY;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -62,7 +68,7 @@ public final class Utils {
         // Change this for something like a constant ...
 
         try (final Workbook workbook = WorkbookFactory.create(new File(filePath))) {
-            final Sheet fabLoadByWCSheet = workbook.getSheet(Constants.TAB_SHEET_NAME);
+            final Sheet fabLoadByWCSheet = workbook.getSheet(TAB_SHEET_NAME);
             final Iterator<Row> rowIterator = fabLoadByWCSheet.rowIterator();
             while (rowIterator.hasNext()) {
                 final Row row = rowIterator.next();
@@ -121,7 +127,7 @@ public final class Utils {
 
         // Generate a map from the spread sheet ...
         try (final Workbook workbook = WorkbookFactory.create(new File(ageAndPriceFilePath))) {
-            final Sheet fabLoadByWCSheet = workbook.getSheet(Constants.AGE_BY_WC_SHEET_NAME);
+            final Sheet fabLoadByWCSheet = workbook.getSheet(AGE_BY_WC_SHEET_NAME);
             final Iterator<Row> rowIterator = fabLoadByWCSheet.rowIterator();
             while (rowIterator.hasNext()) {
                 final Row row = rowIterator.next();
@@ -176,7 +182,7 @@ public final class Utils {
 
         final double runNumericCellValue = runCell.getNumericCellValue();
 
-        workOrderInformation.setRunHours(runNumericCellValue / Constants.RUN_EFFICIENCY);
+        workOrderInformation.setRunHours(runNumericCellValue / RUN_EFFICIENCY);
         workOrderInformation.setSetupHours(setupCell.getNumericCellValue());
         workOrderInformation.setQty((int)qtyCell.getNumericCellValue());
 
@@ -213,6 +219,7 @@ public final class Utils {
         return possibleTokens[0];
     }
     
+    @MissingTests
     public static String buildHtmlContent(
             final String workCenter
             , final List<WorkOrderInformation> workOrderItems
@@ -249,6 +256,34 @@ el segundo se aprovecha
                 Integer::sum
         ));
         return partsNumbersOccurrenceCount;
+    }
+    
+    @Validated
+    public static void updateStatusBar(final JLabel statusLabel, final File fabLoadFilePath, final File ageByWCFilePath) {
+        if (fabLoadFilePath == null && ageByWCFilePath == null) {
+            statusLabel.setText("Please open the required files.");
+        } else if (fabLoadFilePath == null && ageByWCFilePath != null) {
+            statusLabel.setText("Please open the file containing the 'FAB Load by WC' information.");
+        } else if (fabLoadFilePath != null && ageByWCFilePath == null) {
+            statusLabel.setText("Please open the file containing the 'Age  by WC' information.");
+        } else if (fabLoadFilePath != null && ageByWCFilePath != null) {
+            statusLabel.setText("Files ready.");
+        }
+    }
+    
+    @MissingTests
+    public static String getMachineFromWorkCenter(
+            final Map<String, String> doblado
+            , final Map<String, String> laserAndPunch
+            , final String partNumber
+            , final String workCenter
+    ) {
+        // Nasty code ...
+        final String machine = 
+                workCenter.toUpperCase().trim().equalsIgnoreCase(DOBLADO)
+                ? doblado.getOrDefault(partNumber, "")
+                : laserAndPunch.getOrDefault(partNumber, "");
+        return machine;
     }
     
     private Utils() {}

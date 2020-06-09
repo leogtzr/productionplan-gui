@@ -10,6 +10,8 @@ package com.production;
 
 import com.production.domain.Priority;
 import com.production.domain.WorkOrderInformation;
+import com.production.lang.MissingTests;
+import com.production.lang.NeedsRefactoring;
 import com.production.util.Constants;
 import com.production.util.Utils;
 
@@ -54,7 +56,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     public MainWindow() {
         initComponents();
-        updateStatusBar();
+        Utils.updateStatusBar(this.statusLabel, this.fabLoadFilePath, this.ageByWCFilePath);
         loadDobladoPartMachineInformation();
         loadLaserAndPunchPartMachineInformation();
     }
@@ -295,18 +297,7 @@ public class MainWindow extends javax.swing.JFrame {
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void updateStatusBar() {
-        if (this.fabLoadFilePath == null && this.ageByWCFilePath == null) {
-            this.statusLabel.setText("Please open the required files.");
-        } else if (this.fabLoadFilePath == null && this.ageByWCFilePath != null) {
-            this.statusLabel.setText("Please open the file containing the 'FAB Load by WC' information.");
-        } else if (this.fabLoadFilePath != null && this.ageByWCFilePath == null) {
-            this.statusLabel.setText("Please open the file containing the 'Age  by WC' information.");
-        } else if (this.fabLoadFilePath != null && this.ageByWCFilePath != null) {
-            this.statusLabel.setText("Files ready.");
-        }
-    }
-    
+    @NeedsRefactoring
     private void extractWorkOrderItemsFromFile(final File file) throws IOException, InvalidFormatException {
         final List<WorkOrderInformation> workOrdersFromSheetFile = extractWorkOrdersFromSheetFile(file.getAbsolutePath());
         this.workOrderInformationItems = Optional.of(workOrdersFromSheetFile);
@@ -334,7 +325,7 @@ public class MainWindow extends javax.swing.JFrame {
                 showErrorMessage(String.format("error loading Fab Load by WC File: %s", ex.getMessage()), "Error");
             }
         }
-        updateStatusBar();
+        Utils.updateStatusBar(this.statusLabel, this.fabLoadFilePath, this.ageByWCFilePath);
     }//GEN-LAST:event_openFabLoadByWCMenuItemActionPerformed
 
     private void reconcileInformationAndUpdateTable(
@@ -358,9 +349,10 @@ public class MainWindow extends javax.swing.JFrame {
                 }
             });
         }
-        updateStatusBar();
+        Utils.updateStatusBar(this.statusLabel, this.fabLoadFilePath, this.ageByWCFilePath);
     }//GEN-LAST:event_openAgeByWCFileItemActionPerformed
 
+    @MissingTests
     private void updateTable(final List<WorkOrderInformation> workOrderItems, final JTable table) {        
         final DefaultTableModel workOrdersModel = (DefaultTableModel) table.getModel();
         // "#Part", "Hr", "Stup", "P/Hac", "Máquina"
@@ -452,6 +444,7 @@ public class MainWindow extends javax.swing.JFrame {
         
     }//GEN-LAST:event_moveToSelectedPrioritiesButtonActionPerformed
 
+    @MissingTests
     private void cleanTable(final JTable table) {
         ((DefaultTableModel)table.getModel()).setRowCount(0);
         table.clearSelection();
@@ -506,23 +499,10 @@ public class MainWindow extends javax.swing.JFrame {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        updateStatusBar();
+        Utils.updateStatusBar(this.statusLabel, this.fabLoadFilePath, this.ageByWCFilePath);
     }//GEN-LAST:event_findFilesInCurrentPathMenuItemActionPerformed
 
-    private String getMachineFromWorkCenter(
-            final Map<String, String> doblado
-            , final Map<String, String> laserAndPunch
-            , final String partNumber
-            , final String workCenter
-    ) {
-        // Nasty code ...
-        final String machine = 
-                workCenter.toUpperCase().trim().equalsIgnoreCase("DOBLADO")
-                ? doblado.getOrDefault(partNumber, "")
-                : laserAndPunch.getOrDefault(partNumber, "");
-        return machine;
-    }
-    
+    @MissingTests
     private void updateTableWithWCDescription(
             final String wcDescription
             , final List<WorkOrderInformation> workOrderItems
