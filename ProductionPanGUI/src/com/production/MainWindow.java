@@ -74,9 +74,9 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     private void loadLaserAndPunchPartMachineInformation() {
-        final File partMachineCSVFile = new File(Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME);
+        final File partMachineCSVFile = new File(LASER_AND_PUNCH_PART_MACHINE_FILE_NAME);
         if (!partMachineCSVFile.exists()) {
-            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", DOBLADO_PART_MACHINE_FILE_NAME), "Warning ... ");
+            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", LASER_AND_PUNCH_PART_MACHINE_FILE_NAME), "Warning ... ");
             return;
         }
             
@@ -659,6 +659,13 @@ public class MainWindow extends javax.swing.JFrame {
         
         final int numberOfTurns = Utils.numberOfTurnsFromWorkCenter(workCenter);
         final Map<String, Integer> partsNumbersOccurrenceCount = workCenterOccurrenceCount(workOrderItems);
+        
+        // Now we can iterate workOrderItems and do some work with partsNumbersOccurrenceCount to handle this:
+        /*
+tomar en cuenta que cuando hay partes iguales en un WorkCenter ... un mismo setup aplica para ello.
+Es decir: si hay dos part numbers iguales, solo el primero tendrïa un setup ...
+el segundo se aprovecha
+        */
         
         switch (numberOfTurns) {
             case 0:                 // Build a simple list ... 
