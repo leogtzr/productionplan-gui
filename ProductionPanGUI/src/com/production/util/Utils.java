@@ -2,6 +2,7 @@ package com.production.util;
 
 import com.production.domain.AgeByWCFields;
 import com.production.domain.FabLoadByWCFields;
+import com.production.domain.Priority;
 import com.production.domain.SimpleWorkOrderInformation;
 import com.production.domain.WorkCenterTurns;
 import com.production.domain.WorkOrderInformation;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -100,7 +102,7 @@ public final class Utils {
         return workOrderInfoItems;
     }
     
-    private static String sanitizeWorkCenterName(String wc) {
+    public static String sanitizeWorkCenterName(String wc) {
         wc = wc.trim().toUpperCase().replace(" ", "_");
         return wc.replace("-", "_");
     }
@@ -229,9 +231,46 @@ public final class Utils {
             return machineInfo;
     }
     
-    private static String workCenterName(final String wc) {
+    public static String workCenterName(final String wc) {
         final String[] possibleTokens = wc.trim().toUpperCase().split("\\s+");
         return possibleTokens[0];
+    }
+    
+    public static String buildHtmlContent(
+            final String workCenter
+            , final List<WorkOrderInformation> workOrderItems
+            , final List<Priority> priorities) {
+        
+        final int numberOfTurns = Utils.numberOfTurnsFromWorkCenter(workCenter);
+        final Map<String, Integer> partsNumbersOccurrenceCount = workCenterOccurrenceCount(workOrderItems);
+        
+        // Now we can iterate workOrderItems and do some work with partsNumbersOccurrenceCount to handle this:
+        /*
+tomar en cuenta que cuando hay partes iguales en un WorkCenter ... un mismo setup aplica para ello.
+Es decir: si hay dos part numbers iguales, solo el primero tendrïa un setup ...
+el segundo se aprovecha
+        */
+        
+        switch (numberOfTurns) {
+            case 0:                 // Build a simple list ... 
+                                    // TODO: How is the list built?
+                // HOW: alv
+                break;
+            case 2:                 // Only two turns ...
+                break;
+            case 3:                 // Use three turns ...
+                break;
+        }
+        return "";
+    }
+    
+    public static Map<String, Integer> workCenterOccurrenceCount(final List<WorkOrderInformation> workOrderItems) {
+        final Map<String, Integer> partsNumbersOccurrenceCount = workOrderItems.stream().collect(Collectors.toMap(
+                k -> k.getPartNumber(),
+                v -> 1,
+                Integer::sum
+        ));
+        return partsNumbersOccurrenceCount;
     }
     
     private Utils() {}
