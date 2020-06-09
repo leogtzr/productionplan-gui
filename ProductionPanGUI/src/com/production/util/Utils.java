@@ -6,6 +6,7 @@ import com.production.domain.Priority;
 import com.production.domain.SimpleWorkOrderInformation;
 import com.production.domain.WorkCenterTurns;
 import com.production.domain.WorkOrderInformation;
+import com.production.lang.Validated;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -102,6 +103,7 @@ public final class Utils {
         return workOrderInfoItems;
     }
     
+    @Validated
     public static String sanitizeWorkCenterName(String wc) {
         wc = wc.trim().toUpperCase().replace(" ", "_");
         return wc.replace("-", "_");
@@ -208,6 +210,7 @@ public final class Utils {
         return workOrderInformation;
     }
     
+    @Validated
     public static int numberOfTurnsFromWorkCenter(final String workCenterName) {
         final WorkCenterTurns wc = WorkCenterTurns.valueOf(sanitizeWorkCenterName(workCenterName));
         return wc.turns();
@@ -231,6 +234,7 @@ public final class Utils {
             return machineInfo;
     }
     
+    @Validated
     public static String workCenterName(final String wc) {
         final String[] possibleTokens = wc.trim().toUpperCase().split("\\s+");
         return possibleTokens[0];
