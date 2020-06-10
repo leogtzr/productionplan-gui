@@ -143,7 +143,83 @@ public class UtilsTest {
     
     @Test
     public void shouldBuildPlanForTwoTurns() {
-        // Prepare the test here ... 
+        final List<WorkOrderInformation> workOrderItems = testWorkOrderItems();
+    }
+    
+    public static List<WorkOrderInformation> testWorkOrderItems() {
+        // Prepare the data, some WorkOrderInformation items to build a list.
+        final WorkOrderInformation wo1 = new WorkOrderInformation();
+        wo1.setPartNumber("M11353A001");
+        wo1.setRunHours(38.10037500000014D);
+        wo1.setSetupHours(0.0D);
+        wo1.setQty(477);
+        
+        final WorkOrderInformation wo2 = new WorkOrderInformation();
+        wo2.setPartNumber("M14836A003");
+        wo2.setRunHours(17.374999999999773D);
+        wo2.setSetupHours(0.5D);
+        wo2.setQty(500);
+        
+        final WorkOrderInformation wo3 = new WorkOrderInformation();
+        wo3.setPartNumber("M11588A001");
+        wo3.setRunHours(11.022000000000087D);
+        wo3.setSetupHours(1.0D);
+        wo3.setQty(528);
+        
+        final WorkOrderInformation wo4 = new WorkOrderInformation();
+        wo4.setPartNumber("M14836A003");
+        wo4.setRunHours(6.950000000000012D);
+        wo4.setSetupHours(0.5D);
+        wo4.setQty(200);
+        
+        final WorkOrderInformation wo5 = new WorkOrderInformation();
+        wo5.setPartNumber("M11588A001");
+        wo5.setRunHours(10.980250000000078D);
+        wo5.setSetupHours(0.0D);
+        wo5.setQty(527);
+        
+        final WorkOrderInformation wo6 = new WorkOrderInformation();
+        wo6.setPartNumber("4022.482.54242");
+        wo6.setRunHours(2.0831249999999994D);
+        wo6.setSetupHours(1.5D);
+        wo6.setQty(15);
+        
+        final WorkOrderInformation wo7 = new WorkOrderInformation();
+        wo7.setPartNumber("ENC-1284-4-20");
+        wo7.setRunHours(0.7469999999999977D);
+        wo7.setSetupHours(0.5D);
+        wo7.setQty(72);
+        
+        final WorkOrderInformation wo8 = new WorkOrderInformation();
+        wo8.setPartNumber("M11588A001");
+        wo8.setRunHours(9.519000000000073D);
+        wo8.setSetupHours(1.0D);
+        wo8.setQty(528);
+        
+        final WorkOrderInformation wo9 = new WorkOrderInformation();
+        wo9.setPartNumber("4022.470.25863");
+        wo9.setRunHours(1.942500000000013D);
+        wo9.setSetupHours(1.5D);
+        wo9.setQty(70);
+        
+        final WorkOrderInformation wo10 = new WorkOrderInformation();
+        wo10.setPartNumber("4022.639.17091");
+        wo10.setRunHours(1.168999999999999D);
+        wo10.setSetupHours(1.25D);
+        wo10.setQty(56);
+        
+        return List.of(
+                wo1
+                , wo2
+                , wo3
+                , wo4
+                , wo5
+                , wo6
+                , wo7
+                , wo8
+                , wo9
+                , wo10
+        );
     }
     
 }

@@ -293,8 +293,15 @@ el segundo se aprovecha
             , final List<WorkOrderInformation> workOrderItems
             , final List<Priority> priorities
     ) {
+        
+        final List<WorkOrderWrapper> plan = new ArrayList<>();
         final Map<String, Integer> partsNumbersOccurrenceCount = workCenterOccurrenceCount(workOrderItems);
-        return Collections.EMPTY_LIST;
+        
+        for (final WorkOrderInformation woInfo : workOrderItems) {
+            
+        }
+        
+        return plan;
     }
     
     private Utils() {}
