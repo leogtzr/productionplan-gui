@@ -219,35 +219,6 @@ public final class Utils {
         return possibleTokens[0];
     }
     
-    @MissingTests
-    public static String buildHtmlContent(
-            final String workCenter
-            , final List<WorkOrderInformation> workOrderItems
-            , final List<Priority> priorities) {
-        
-        final int numberOfTurns = Utils.numberOfTurnsFromWorkCenter(workCenter);
-        final Map<String, Integer> partsNumbersOccurrenceCount = workCenterOccurrenceCount(workOrderItems);
-        
-        // Now we can iterate workOrderItems and do some work with partsNumbersOccurrenceCount to handle this:
-        /*
-tomar en cuenta que cuando hay partes iguales en un WorkCenter ... un mismo setup aplica para ello.
-Es decir: si hay dos part numbers iguales, solo el primero tendrïa un setup ...
-el segundo se aprovecha
-        */
-        
-        switch (numberOfTurns) {
-            case 0:                 // Build a simple list ... 
-                                    // TODO: How is the list built?
-                // HOW: alv
-                break;
-            case 2:                 // Only two turns ...
-                break;
-            case 3:                 // Use three turns ...
-                break;
-        }
-        return "";
-    }
-    
     @Validated
     public static Map<String, Integer> workCenterOccurrenceCount(final List<WorkOrderInformation> workOrderItems) {
         final Map<String, Integer> partsNumbersOccurrenceCount = workOrderItems.stream().collect(Collectors.toMap(
@@ -284,6 +255,35 @@ el segundo se aprovecha
                 ? doblado.getOrDefault(partNumber, "")
                 : laserAndPunch.getOrDefault(partNumber, "");
         return machine;
+    }
+    
+    @MissingTests
+    public static String buildHtmlContent(
+            final String workCenter
+            , final List<WorkOrderInformation> workOrderItems
+            , final List<Priority> priorities) {
+        
+        final int numberOfTurns = numberOfTurnsFromWorkCenter(workCenter);
+        final Map<String, Integer> partsNumbersOccurrenceCount = workCenterOccurrenceCount(workOrderItems);
+        
+        // Now we can iterate workOrderItems and do some work with partsNumbersOccurrenceCount to handle this:
+        /*
+tomar en cuenta que cuando hay partes iguales en un WorkCenter ... un mismo setup aplica para ello.
+Es decir: si hay dos part numbers iguales, solo el primero tendrïa un setup ...
+el segundo se aprovecha
+        */
+        
+        switch (numberOfTurns) {
+            case 0:                 // Build a simple list ... 
+                                    // TODO: How is the list built?
+                // HOW: alv
+                break;
+            case 2:                 // Only two turns ...
+                break;
+            case 3:                 // Use three turns ...
+                break;
+        }
+        return "";
     }
     
     private Utils() {}
