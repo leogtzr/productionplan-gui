@@ -6,6 +6,7 @@ import com.production.domain.Priority;
 import com.production.domain.SimpleWorkOrderInformation;
 import com.production.domain.WorkCenterTurns;
 import com.production.domain.WorkOrderInformation;
+import com.production.domain.WorkOrderWrapper;
 import com.production.lang.MissingTests;
 import com.production.lang.Validated;
 import java.io.File;
@@ -35,6 +36,7 @@ import static com.production.util.Constants.DOBLADO;
 import static com.production.util.Constants.TAB_SHEET_NAME;
 import static com.production.util.Constants.AGE_BY_WC_SHEET_NAME;
 import static com.production.util.Constants.RUN_EFFICIENCY;
+import java.util.Collections;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -263,10 +265,9 @@ public final class Utils {
             , final List<WorkOrderInformation> workOrderItems
             , final List<Priority> priorities) {
         
-        final int numberOfTurns = numberOfTurnsFromWorkCenter(workCenter);
-        final Map<String, Integer> partsNumbersOccurrenceCount = workCenterOccurrenceCount(workOrderItems);
+        // Items in the "priorities" list will go first.
         
-        // Now we can iterate workOrderItems and do some work with partsNumbersOccurrenceCount to handle this:
+        final int numberOfTurns = numberOfTurnsFromWorkCenter(workCenter);
         /*
 tomar en cuenta que cuando hay partes iguales en un WorkCenter ... un mismo setup aplica para ello.
 Es decir: si hay dos part numbers iguales, solo el primero tendrïa un setup ...
@@ -279,11 +280,21 @@ el segundo se aprovecha
                 // HOW: alv
                 break;
             case 2:                 // Only two turns ...
+                buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
                 break;
             case 3:                 // Use three turns ...
                 break;
         }
         return "";
+    }
+    
+    public static List<WorkOrderWrapper> buildPlanForTwoTurns(
+            final String workCenter
+            , final List<WorkOrderInformation> workOrderItems
+            , final List<Priority> priorities
+    ) {
+        final Map<String, Integer> partsNumbersOccurrenceCount = workCenterOccurrenceCount(workOrderItems);
+        return Collections.EMPTY_LIST;
     }
     
     private Utils() {}

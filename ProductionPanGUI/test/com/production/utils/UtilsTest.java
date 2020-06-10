@@ -124,20 +124,6 @@ public class UtilsTest {
         
     }
     
-/*
-    public static void updateStatusBar(final JLabel statusLabel, final File fabLoadFilePath, final File ageByWCFilePath) {
-        if (fabLoadFilePath == null && ageByWCFilePath == null) {
-            statusLabel.setText("Please open the required files.");
-        } else if (fabLoadFilePath == null && ageByWCFilePath != null) {
-            statusLabel.setText("Please open the file containing the 'FAB Load by WC' information.");
-        } else if (fabLoadFilePath != null && ageByWCFilePath == null) {
-            statusLabel.setText("Please open the file containing the 'Age  by WC' information.");
-        } else if (fabLoadFilePath != null && ageByWCFilePath != null) {
-            statusLabel.setText("Files ready.");
-        }
-    }
-    */
-    
     @Test
     public void shouldUpdateStatusLabel() {
         final JLabel statusLabel = new JLabel();
@@ -153,6 +139,11 @@ public class UtilsTest {
             Utils.updateStatusBar(statusLabel, (File)test[0], (File)test[1]);
             Assert.assertEquals(test[2].toString(), statusLabel.getText());
         }
+    }
+    
+    @Test
+    public void shouldBuildPlanForTwoTurns() {
+        // Prepare the test here ... 
     }
     
 }
