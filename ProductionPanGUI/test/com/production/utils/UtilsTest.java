@@ -1,6 +1,9 @@
 package com.production.utils;
 
+import com.production.domain.Priority;
 import com.production.domain.WorkOrderInformation;
+import com.production.domain.WorkOrderWrapper;
+import com.production.util.Constants;
 import com.production.util.Utils;
 import java.io.File;
 import java.util.List;
@@ -73,7 +76,7 @@ public class UtilsTest {
     }
     
     @Test
-    public void shouldReturnWorkCenterOccurrenceCount() {
+    public void shouldReturnPartNumbersOccurrenceCount() {
         final List<WorkOrderInformation> items = List.of(
                 new WorkOrderInformation("A", "o1"),
                 new WorkOrderInformation("A", "o1"),
@@ -83,7 +86,7 @@ public class UtilsTest {
                 new WorkOrderInformation("C", "o3")
         );
         
-        final Map<String, Integer> workCenterOccurrenceCount = Utils.workCenterOccurrenceCount(items);
+        final Map<String, Integer> workCenterOccurrenceCount = Utils.partsNumbersOccurrenceCount(items);
         
         final Object[][] tests = {
             {"A", 2},
@@ -144,9 +147,18 @@ public class UtilsTest {
     @Test
     public void shouldBuildPlanForTwoTurns() {
         final List<WorkOrderInformation> workOrderItems = testWorkOrderItems();
+        final Map<String, Integer> partsNumbersOccurrenceCount = Utils.partsNumbersOccurrenceCount(workOrderItems);
+        final String workCenter = Constants.DOBLADO;
+        final List<Priority> priorities = List.of();
+        
+        final List<WorkOrderWrapper> buildPlanForTwoTurns = Utils
+                .buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
+        
+        // The list shouldn't be empty ...
+        Assert.assertFalse(buildPlanForTwoTurns.isEmpty());
     }
     
-    public static List<WorkOrderInformation> testWorkOrderItems() {
+    private static List<WorkOrderInformation> testWorkOrderItems() {
         // Prepare the data, some WorkOrderInformation items to build a list.
         final WorkOrderInformation wo1 = new WorkOrderInformation();
         wo1.setPartNumber("M11353A001");
@@ -220,6 +232,29 @@ public class UtilsTest {
                 , wo9
                 , wo10
         );
+    }
+    
+    // Note: this is not a very strict test, we only check counts, not the value of the lists.
+    @Test
+    public void shouldReturnWorkOrderItemsPerPartNumber() {
+        final List<WorkOrderInformation> workOrderItems = testWorkOrderItems();
+        final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = 
+                Utils.workOrderItemsPerPartNumber(workOrderItems);
+        
+        final Object[][] tests = {
+            {"M11353A001", 1},
+            {"M14836A003", 2},
+            {"M11588A001", 3},
+            {"4022.482.54242", 1},
+            {"ENC-1284-4-20", 1},
+            {"4022.470.25863", 1},
+            {"4022.639.17091", 1}
+        };
+        
+        for (final Object[] test : tests) {
+            final List<WorkOrderInformation> items = workOrderItemsPerPartNumber.getOrDefault(test[0].toString(), List.of());
+            Assert.assertEquals((Integer)test[1], (Integer)items.size());
+        }
     }
     
 }

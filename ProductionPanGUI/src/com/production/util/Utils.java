@@ -37,6 +37,7 @@ import static com.production.util.Constants.TAB_SHEET_NAME;
 import static com.production.util.Constants.AGE_BY_WC_SHEET_NAME;
 import static com.production.util.Constants.RUN_EFFICIENCY;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -222,13 +223,25 @@ public final class Utils {
     }
     
     @Validated
-    public static Map<String, Integer> workCenterOccurrenceCount(final List<WorkOrderInformation> workOrderItems) {
+    public static Map<String, Integer> partsNumbersOccurrenceCount(final List<WorkOrderInformation> workOrderItems) {
         final Map<String, Integer> partsNumbersOccurrenceCount = workOrderItems.stream().collect(Collectors.toMap(
                 k -> k.getPartNumber(),
                 v -> 1,
                 Integer::sum
         ));
         return partsNumbersOccurrenceCount;
+    }
+    
+    @Validated
+    public static Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber(
+            final List<WorkOrderInformation> workOrderItems) {
+        
+        final Map<String, List<WorkOrderInformation>> parts = new LinkedHashMap<>();
+        
+        workOrderItems.forEach(woInfo -> 
+                parts.computeIfAbsent(woInfo.getPartNumber(), items -> new ArrayList<>()).add(woInfo));
+        
+        return parts;
     }
     
     @Validated
@@ -295,10 +308,15 @@ el segundo se aprovecha
     ) {
         
         final List<WorkOrderWrapper> plan = new ArrayList<>();
-        final Map<String, Integer> partsNumbersOccurrenceCount = workCenterOccurrenceCount(workOrderItems);
+        final Map<String, Integer> partsNumbersOccurrenceCount = partsNumbersOccurrenceCount(workOrderItems);
         
+        // We will iterate in order ... 
         for (final WorkOrderInformation woInfo : workOrderItems) {
-            
+            final String partNumber = woInfo.getPartNumber();
+            final int count = partsNumbersOccurrenceCount.get(partNumber);
+            // Having the count now ...
+            // De hecho ahora pienso que sería mejor tener algo como esto:
+            // Map<partNumber : String, woItems: List<WorkOrderInformation>>
         }
         
         return plan;
