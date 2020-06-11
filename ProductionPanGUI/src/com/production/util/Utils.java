@@ -8,6 +8,7 @@ import com.production.domain.WorkCenterTurns;
 import com.production.domain.WorkOrderInformation;
 import com.production.domain.WorkOrderWrapper;
 import com.production.lang.MissingTests;
+import com.production.lang.NeedsRefactoring;
 import com.production.lang.Validated;
 import java.io.File;
 import java.io.IOException;
@@ -300,6 +301,7 @@ el segundo se aprovecha
         return "";
     }
     
+    @MissingTests
     public static List<WorkOrderWrapper> buildPlanForTwoTurns(
             final String workCenter
             , final List<WorkOrderInformation> workOrderItems
@@ -312,6 +314,16 @@ el segundo se aprovecha
         // We will iterate in order ... 
         for (final WorkOrderInformation woInfo : workOrderItems) {
             final String partNumber = woInfo.getPartNumber();
+            final List<WorkOrderInformation> partNumbers = workOrderItemsPerPartNumber.get(partNumber);
+            // Check if a part number has more than one element so we can join
+            if (partNumbers.size() > 1) {
+                for (int i = 1; i < partNumbers.size(); i++) {
+                    final WorkOrderInformation wo = partNumbers.get(i);
+                    wo.setSetupHours(0.0D);
+                }
+            } else {                                            
+                
+            }
             // TODO: ... algorithm to build the shit ... 
         }
         
