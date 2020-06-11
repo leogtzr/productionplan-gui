@@ -36,7 +36,6 @@ import static com.production.util.Constants.DOBLADO;
 import static com.production.util.Constants.TAB_SHEET_NAME;
 import static com.production.util.Constants.AGE_BY_WC_SHEET_NAME;
 import static com.production.util.Constants.RUN_EFFICIENCY;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 
 /**
@@ -308,15 +307,12 @@ el segundo se aprovecha
     ) {
         
         final List<WorkOrderWrapper> plan = new ArrayList<>();
-        final Map<String, Integer> partsNumbersOccurrenceCount = partsNumbersOccurrenceCount(workOrderItems);
         
+        final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
         // We will iterate in order ... 
         for (final WorkOrderInformation woInfo : workOrderItems) {
             final String partNumber = woInfo.getPartNumber();
-            final int count = partsNumbersOccurrenceCount.get(partNumber);
-            // Having the count now ...
-            // De hecho ahora pienso que sería mejor tener algo como esto:
-            // Map<partNumber : String, woItems: List<WorkOrderInformation>>
+            // TODO: ... algorithm to build the shit ... 
         }
         
         return plan;
