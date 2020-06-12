@@ -311,23 +311,30 @@ el segundo se aprovecha
         final List<WorkOrderWrapper> plan = new ArrayList<>();
         
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
-        // We will iterate in order ... 
+        
+        // The following variable will be used to accumulate
+        double turnHours = 0.0D;
         for (final WorkOrderInformation woInfo : workOrderItems) {
             final String partNumber = woInfo.getPartNumber();
             final List<WorkOrderInformation> partNumbers = workOrderItemsPerPartNumber.get(partNumber);
-            // Check if a part number has more than one element so we can join
+            // Check if a part number has more than one element so we can adjust the setup time after the first element.
             if (partNumbers.size() > 1) {
                 for (int i = 1; i < partNumbers.size(); i++) {
                     final WorkOrderInformation wo = partNumbers.get(i);
                     wo.setSetupHours(0.0D);
                 }
-            } else {                                            
-                
             }
-            // TODO: ... algorithm to build the shit ... 
+            // Get the total hours for the individual list:
+            
+            
         }
         
         return plan;
+    }
+    
+    @Validated
+    public static double sumTurnHoursFromWorkOrderItems(final List<WorkOrderInformation> items) {
+        return items.stream().mapToDouble(x -> x.getRunHours() + x.getSetupHours()).sum();
     }
     
     private Utils() {}

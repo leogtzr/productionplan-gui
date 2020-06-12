@@ -5,6 +5,7 @@ import com.production.domain.WorkOrderInformation;
 import com.production.domain.WorkOrderWrapper;
 import com.production.util.Constants;
 import com.production.util.Utils;
+import static com.production.util.Utils.workOrderItemsPerPartNumber;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -257,4 +258,23 @@ public class UtilsTest {
         }
     }
     
+    @Test
+    public void shouldReturnSumTurnHoursFromWorkOrderItems() {
+        final List<WorkOrderInformation> workOrderItems = testWorkOrderItems();
+        final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = 
+            Utils.workOrderItemsPerPartNumber(workOrderItems);
+        
+        final Object[][] tests = {
+            {"M14836A003", 25.324999999999783D},
+            {"M11588A001", 33.521250D},
+        };
+        
+        for (final Object[] test : tests) {
+            final List<WorkOrderInformation> items = workOrderItemsPerPartNumber.get(test[0].toString());
+            final double got = Utils.sumTurnHoursFromWorkOrderItems(items);
+            Assert.assertEquals((double)test[1], got, 0.001);
+        }
+        
+    }
 }
+    
