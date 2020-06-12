@@ -14,7 +14,8 @@ public final class WorkOrderInformation {
     private double setupHours;
     private int qty;
     private int age;
-    public double salesPrice;
+    private double salesPrice;
+    private Turn turn = Turn.NA;
 
     public WorkOrderInformation() { }
     
@@ -87,24 +88,26 @@ public final class WorkOrderInformation {
         this.wcDescription = wcDescription;
     }
 
-    @Override
-    public String toString() {
-        return "WO{" + "wcDescription=" + wcDescription + ", partNumber=" + partNumber + ", workOrder=" + workOrder + 
-                ", runHours=" + runHours + ", setupHours=" + setupHours + ", qty=" + qty + ", age=" + age + ", salesPrice=" + 
-                salesPrice + '}';
+    public Turn getTurn() {
+        return turn;
+    }
+
+    public void setTurn(final Turn turn) {
+        this.turn = turn;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + Objects.hashCode(this.wcDescription);
-        hash = 71 * hash + Objects.hashCode(this.partNumber);
-        hash = 71 * hash + Objects.hashCode(this.workOrder);
-        hash = 71 * hash + (int) (Double.doubleToLongBits(this.runHours) ^ (Double.doubleToLongBits(this.runHours) >>> 32));
-        hash = 71 * hash + (int) (Double.doubleToLongBits(this.setupHours) ^ (Double.doubleToLongBits(this.setupHours) >>> 32));
-        hash = 71 * hash + this.qty;
-        hash = 71 * hash + this.age;
-        hash = 71 * hash + (int) (Double.doubleToLongBits(this.salesPrice) ^ (Double.doubleToLongBits(this.salesPrice) >>> 32));
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.wcDescription);
+        hash = 17 * hash + Objects.hashCode(this.partNumber);
+        hash = 17 * hash + Objects.hashCode(this.workOrder);
+        hash = 17 * hash + (int) (Double.doubleToLongBits(this.runHours) ^ (Double.doubleToLongBits(this.runHours) >>> 32));
+        hash = 17 * hash + (int) (Double.doubleToLongBits(this.setupHours) ^ (Double.doubleToLongBits(this.setupHours) >>> 32));
+        hash = 17 * hash + this.qty;
+        hash = 17 * hash + this.age;
+        hash = 17 * hash + (int) (Double.doubleToLongBits(this.salesPrice) ^ (Double.doubleToLongBits(this.salesPrice) >>> 32));
+        hash = 17 * hash + Objects.hashCode(this.turn);
         return hash;
     }
 
@@ -144,10 +147,17 @@ public final class WorkOrderInformation {
         if (!Objects.equals(this.workOrder, other.workOrder)) {
             return false;
         }
+        if (this.turn != other.turn) {
+            return false;
+        }
         return true;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "WorkOrderInformation{" + "wcDescription=" + wcDescription + ", partNumber=" + partNumber + 
+                ", workOrder=" + workOrder + ", runHours=" + runHours + ", setupHours=" + setupHours + 
+                ", qty=" + qty + ", age=" + age + ", salesPrice=" + salesPrice + ", turn=" + turn + '}';
+    }
     
 }

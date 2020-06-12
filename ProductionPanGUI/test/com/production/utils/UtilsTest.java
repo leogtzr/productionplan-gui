@@ -1,12 +1,14 @@
 package com.production.utils;
 
 import com.production.domain.Priority;
+import com.production.domain.Turn;
 import com.production.domain.WorkOrderInformation;
 import com.production.domain.WorkOrderWrapper;
 import com.production.util.Constants;
 import com.production.util.Utils;
 import static com.production.util.Utils.workOrderItemsPerPartNumber;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JLabel;
@@ -233,6 +235,120 @@ public class UtilsTest {
                 , wo9
                 , wo10
         );
+    }
+    
+    /*
+        This factory test method contains the 
+    */
+    private static List<WorkOrderInformation> dobladora2TestItems() {
+        final List<WorkOrderInformation> items = new ArrayList<>();
+        
+        final WorkOrderInformation wo1 = new WorkOrderInformation();
+        wo1.setPartNumber("4022.637.88035");
+        wo1.setWorkOrder("50243961");
+        wo1.setRunHours(4.2D);
+        wo1.setSetupHours(0.3D);
+        wo1.setQty(7);
+        wo1.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo2 = new WorkOrderInformation();
+        wo2.setPartNumber("4022.635.80052");
+        wo2.setWorkOrder("50244087");
+        wo2.setRunHours(1.1D);
+        wo2.setSetupHours(2.3D);
+        wo2.setQty(20);
+        wo2.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo3 = new WorkOrderInformation();
+        wo3.setPartNumber("3-80889");
+        wo3.setWorkOrder("50244135");
+        wo3.setRunHours(0.2D);
+        wo3.setSetupHours(0.5D);
+        wo3.setQty(14);
+        wo3.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo4 = new WorkOrderInformation();
+        wo4.setPartNumber("3-80889");
+        wo4.setWorkOrder("50244135");
+        wo4.setRunHours(1.4D);
+        // The following property should be modified and adjusted to 0.0 since the previous item shares the
+        // same part number
+        wo4.setSetupHours(0.5D);
+        wo4.setQty(94);
+        wo4.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo5 = new WorkOrderInformation();
+        wo5.setPartNumber("4022.630.29291");
+        wo5.setWorkOrder("50244272");
+        wo5.setRunHours(3.4D);
+        wo5.setSetupHours(3.3D);
+        wo5.setQty(14);
+        wo5.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo6 = new WorkOrderInformation();
+        wo6.setPartNumber("4022.630.29291");
+        wo6.setWorkOrder("50244272");
+        wo6.setRunHours(5.7D);
+        // The following property should be modified and adjusted to 0.0 since the previous item shares the
+        // same part number
+        wo6.setSetupHours(3.3D);
+        wo6.setQty(24);
+        wo6.setTurn(Turn.NA);
+        
+        // Some of the following items should be set to Day.TUESDAY:
+        final WorkOrderInformation wo7 = new WorkOrderInformation();
+        wo7.setPartNumber("70102-2");
+        wo7.setWorkOrder("50244440");
+        wo7.setRunHours(0.7D);
+        wo7.setSetupHours(0.5D);
+        wo7.setQty(240);
+        wo7.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo8 = new WorkOrderInformation();
+        wo8.setPartNumber("3-74457");
+        wo8.setWorkOrder("50244299");
+        wo8.setRunHours(2.5D);
+        wo8.setSetupHours(2.0D);
+        wo8.setQty(55);
+        wo8.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo9 = new WorkOrderInformation();
+        wo9.setPartNumber("4022.636.36333");
+        wo9.setWorkOrder("50244318");
+        wo9.setRunHours(0.8D);
+        wo9.setSetupHours(0.5D);
+        wo9.setQty(40);
+        wo9.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo10 = new WorkOrderInformation();
+        wo10.setPartNumber("4022.470.25882");
+        wo10.setWorkOrder("50244312");
+        wo10.setRunHours(1.3D);
+        wo10.setSetupHours(1.0D);
+        wo10.setQty(39);
+        
+        // The following property should be modified and adjusted to 0.0 since the previous item shares the
+        // same part number
+        final WorkOrderInformation wo11 = new WorkOrderInformation();
+        wo11.setPartNumber("4022.470.25882");
+        wo11.setWorkOrder("50244312");
+        wo11.setRunHours(1.0D);
+        wo11.setQty(30);
+        wo11.setTurn(Turn.NA);
+        
+        items.add(wo1);
+        items.add(wo2);
+        items.add(wo3);
+        items.add(wo4);
+        items.add(wo5);
+        items.add(wo6);
+        items.add(wo7);
+        items.add(wo8);
+        items.add(wo9);
+        items.add(wo10);
+        items.add(wo11);
+        
+        return items;
     }
     
     // Note: this is not a very strict test, we only check counts, not the value of the lists.

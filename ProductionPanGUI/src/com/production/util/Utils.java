@@ -325,7 +325,9 @@ el segundo se aprovecha
                 }
             }
             // Get the total hours for the individual list:
-            
+            final var hours = sumTurnHoursFromWorkOrderItems(partNumbers);
+            turnHours += hours;
+            // ifs ... TODO: ...
             
         }
         
@@ -334,7 +336,7 @@ el segundo se aprovecha
     
     @Validated
     public static double sumTurnHoursFromWorkOrderItems(final List<WorkOrderInformation> items) {
-        return items.stream().mapToDouble(x -> x.getRunHours() + x.getSetupHours()).sum();
+        return items.stream().mapToDouble(wo -> wo.getRunHours() + wo.getSetupHours()).sum();
     }
     
     private Utils() {}
