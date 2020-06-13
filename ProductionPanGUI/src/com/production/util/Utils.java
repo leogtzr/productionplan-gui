@@ -1,14 +1,15 @@
 package com.production.util;
 
 import com.production.domain.AgeByWCFields;
+import com.production.domain.Day;
 import com.production.domain.FabLoadByWCFields;
 import com.production.domain.Priority;
 import com.production.domain.SimpleWorkOrderInformation;
+import com.production.domain.Turn;
 import com.production.domain.WorkCenterTurns;
 import com.production.domain.WorkOrderInformation;
 import com.production.domain.WorkOrderWrapper;
 import com.production.lang.MissingTests;
-import com.production.lang.NeedsRefactoring;
 import com.production.lang.Validated;
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +38,11 @@ import static com.production.util.Constants.DOBLADO;
 import static com.production.util.Constants.TAB_SHEET_NAME;
 import static com.production.util.Constants.AGE_BY_WC_SHEET_NAME;
 import static com.production.util.Constants.RUN_EFFICIENCY;
+
+import static com.production.util.Constants.FIRST_TURN_LENGTH;
+import static com.production.util.Constants.SECOND_TURN_LENGTH;
+import static com.production.util.Constants.THIRD_TURN_LENGTH;
+
 import java.util.LinkedHashMap;
 
 /**
@@ -302,7 +308,7 @@ el segundo se aprovecha
     }
     
     @MissingTests
-    public static List<WorkOrderWrapper> buildPlanForTwoTurns(
+    public static List<WorkOrderInformation> buildPlanForTwoTurns(
             final String workCenter
             , final List<WorkOrderInformation> workOrderItems
             , final List<Priority> priorities
@@ -324,14 +330,37 @@ el segundo se aprovecha
                     wo.setSetupHours(0.0D);
                 }
             }
+            
             // Get the total hours for the individual list:
-            final var hours = sumTurnHoursFromWorkOrderItems(partNumbers);
+            final double hours = sumTurnHoursFromWorkOrderItems(partNumbers);
             turnHours += hours;
-            // ifs ... TODO: ...
+            System.out.printf("H: %f\n", turnHours);
+            
+            // System.out.printf("===> Analyzing: [%s][%s]\n", woInfo.getPartNumber(), woInfo.getWorkOrder());
+            
+            if (turnHours < FIRST_TURN_LENGTH) {
+                woInfo.setTurn(Turn.FIRST);
+            } else if ((turnHours > FIRST_TURN_LENGTH) && (turnHours < (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH))) {
+                // System.out.printf("Changing because of this: %f - [%s] wo: %s\n", turnHours, woInfo.getPartNumber(), woInfo.getWorkOrder());
+                System.out.printf("Changing turn for: %s    [%f]\n", woInfo, turnHours);
+                woInfo.setTurn(Turn.SECOND);
+                System.out.printf("Changed to: %s       [%f]\n", woInfo, turnHours);
+            } else if (turnHours > (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
+                // send it to the next day ... 
+                // TODO: need a way to automatically increase the day
+                woInfo.setTurn(Turn.FIRST);
+                woInfo.setDay(Day.TUESDAY);
+                
+                System.out.printf("Reseting the hours for: [%s][%s], H: %f\n", woInfo.getPartNumber(), woInfo.getWorkOrder(), turnHours);
+                // Restoring the hours: 
+                // System.out.println("The hour has been reset with");
+                // System.out.printf("The hour has been reset with: [%s] [%s]\n", woInfo.getPartNumber(), woInfo.getWorkOrder());
+                turnHours = 0.0D;
+            }
             
         }
         
-        return plan;
+        return workOrderItems;
     }
     
     @Validated

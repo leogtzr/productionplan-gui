@@ -16,6 +16,7 @@ public final class WorkOrderInformation {
     private int age;
     private double salesPrice;
     private Turn turn = Turn.NA;
+    private Day day = Day.MONDAY;
 
     public WorkOrderInformation() { }
     
@@ -28,7 +29,7 @@ public final class WorkOrderInformation {
         return partNumber;
     }
 
-    public void setPartNumber(String partNumber) {
+    public void setPartNumber(final String partNumber) {
         this.partNumber = partNumber;
     }
 
@@ -36,7 +37,7 @@ public final class WorkOrderInformation {
         return workOrder;
     }
 
-    public void setWorkOrder(String workOrder) {
+    public void setWorkOrder(final String workOrder) {
         this.workOrder = workOrder;
     }
 
@@ -44,7 +45,7 @@ public final class WorkOrderInformation {
         return runHours;
     }
 
-    public void setRunHours(double runHours) {
+    public void setRunHours(final double runHours) {
         this.runHours = runHours;
     }
 
@@ -52,7 +53,7 @@ public final class WorkOrderInformation {
         return setupHours;
     }
 
-    public void setSetupHours(double setupHours) {
+    public void setSetupHours(final double setupHours) {
         this.setupHours = setupHours;
     }
 
@@ -84,7 +85,7 @@ public final class WorkOrderInformation {
         return wcDescription;
     }
 
-    public void setWcDescription(String wcDescription) {
+    public void setWcDescription(final String wcDescription) {
         this.wcDescription = wcDescription;
     }
 
@@ -96,18 +97,27 @@ public final class WorkOrderInformation {
         this.turn = turn;
     }
 
+    public Day getDay() {
+        return day;
+    }
+
+    public void setDay(final Day day) {
+        this.day = day;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 17 * hash + Objects.hashCode(this.wcDescription);
-        hash = 17 * hash + Objects.hashCode(this.partNumber);
-        hash = 17 * hash + Objects.hashCode(this.workOrder);
-        hash = 17 * hash + (int) (Double.doubleToLongBits(this.runHours) ^ (Double.doubleToLongBits(this.runHours) >>> 32));
-        hash = 17 * hash + (int) (Double.doubleToLongBits(this.setupHours) ^ (Double.doubleToLongBits(this.setupHours) >>> 32));
-        hash = 17 * hash + this.qty;
-        hash = 17 * hash + this.age;
-        hash = 17 * hash + (int) (Double.doubleToLongBits(this.salesPrice) ^ (Double.doubleToLongBits(this.salesPrice) >>> 32));
-        hash = 17 * hash + Objects.hashCode(this.turn);
+        int hash = 5;
+        hash = 73 * hash + Objects.hashCode(this.wcDescription);
+        hash = 73 * hash + Objects.hashCode(this.partNumber);
+        hash = 73 * hash + Objects.hashCode(this.workOrder);
+        hash = 73 * hash + (int) (Double.doubleToLongBits(this.runHours) ^ (Double.doubleToLongBits(this.runHours) >>> 32));
+        hash = 73 * hash + (int) (Double.doubleToLongBits(this.setupHours) ^ (Double.doubleToLongBits(this.setupHours) >>> 32));
+        hash = 73 * hash + this.qty;
+        hash = 73 * hash + this.age;
+        hash = 73 * hash + (int) (Double.doubleToLongBits(this.salesPrice) ^ (Double.doubleToLongBits(this.salesPrice) >>> 32));
+        hash = 73 * hash + Objects.hashCode(this.turn);
+        hash = 73 * hash + Objects.hashCode(this.day);
         return hash;
     }
 
@@ -150,14 +160,18 @@ public final class WorkOrderInformation {
         if (this.turn != other.turn) {
             return false;
         }
+        if (this.day != other.day) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "WorkOrderInformation{" + "wcDescription=" + wcDescription + ", partNumber=" + partNumber + 
-                ", workOrder=" + workOrder + ", runHours=" + runHours + ", setupHours=" + setupHours + 
-                ", qty=" + qty + ", age=" + age + ", salesPrice=" + salesPrice + ", turn=" + turn + '}';
+        return "{partNumber=" + partNumber + ", workOrder=" + workOrder + ", runHours=" + runHours + ", setupHours=" + setupHours + ", qty=" + qty + ", age=" + age + ", salesPrice=" + salesPrice + ", turn=" + turn + ", day=" + day + '}';
     }
+
     
+    
+
 }
