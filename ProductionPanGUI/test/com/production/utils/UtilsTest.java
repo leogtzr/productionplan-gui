@@ -161,8 +161,8 @@ public class UtilsTest {
 
         final Object[][] tests = {
             // Index, setup hours, turn, day
-            {0, 0.3D, Turn.FIRST, Day.MONDAY, "PT_1"}, // 0
-            {1, 2.3D, Turn.FIRST, Day.MONDAY, "PT_2"}, // 1
+            {0, 0.3D, Turn.FIRST, Day.MONDAY, "PT_1"},  // 0
+            {1, 2.3D, Turn.FIRST, Day.MONDAY, "PT_2"},  // 1
             {2, 0.5D, Turn.SECOND, Day.MONDAY, "PT_3"}, // 2
             {3, 0.0D, Turn.SECOND, Day.MONDAY, "PT_3"}, // 3
             {4, 3.3D, Turn.FIRST, Day.TUESDAY, "PT_4"}, // 4
@@ -171,7 +171,6 @@ public class UtilsTest {
             {7, 2.0D, Turn.SECOND, Day.TUESDAY, "PT_6"},// 7
         };
 
-        // int idx = 0;
         for (final Object[] test : tests) {
             final WorkOrderInformation wo = planForTwoTurns.get(Integer.parseInt(test[0].toString()));
             Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.01D);
@@ -179,8 +178,6 @@ public class UtilsTest {
             Assert.assertEquals((Day) test[3], wo.getDay());
         }
 
-        //System.out.println(planForTwoTurns);
-        // planForTwoTurns.forEach(System.out::println);
     }
 
     private static List<WorkOrderInformation> testWorkOrderItems() {

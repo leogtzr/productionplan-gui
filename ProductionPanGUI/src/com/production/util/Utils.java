@@ -360,20 +360,16 @@ el segundo se aprovecha
             // final double hours = sumTurnHoursFromWorkOrderItems(partNumbers);
             final double hours = woInfo.getRunHours() + woInfo.getSetupHours();
             turnHours += hours;
-            // System.out.printf("H: %f\n", turnHours);
-            // System.out.printf("H: %f\n", turnHours);
             
             if (turnHours < FIRST_TURN_LENGTH) {
                 woInfo.setTurn(Turn.FIRST);
             } else if ((turnHours > FIRST_TURN_LENGTH) && (turnHours < (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH))) {
                 woInfo.setTurn(Turn.SECOND);
-                //System.out.printf("H: %f\n", turnHours);
             } else if (turnHours > (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
                 woInfo.setTurn(Turn.FIRST);
                 day = nextDay(day, woInfo.getPartNumber(), woInfo.getWorkOrder());
                 woInfo.setDay(day);
                 turnHours = 0.0D;
-                //System.out.printf("H: %f\n", turnHours);
             }
             
         }
@@ -383,11 +379,7 @@ el segundo se aprovecha
     
     @Validated
     public static double sumTurnHoursFromWorkOrderItems(final List<WorkOrderInformation> items) {
-        final double result = items.stream().mapToDouble(wo -> wo.getRunHours() + wo.getSetupHours()).sum();
-        
-        // System.out.printf("The result for: [%s] is -> %f\n", items, result);
-        
-        return result;
+        return items.stream().mapToDouble(wo -> wo.getRunHours() + wo.getSetupHours()).sum();
     }
     
     private Utils() {}
