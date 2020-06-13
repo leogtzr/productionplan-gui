@@ -146,7 +146,7 @@ public class UtilsTest {
     public void shouldBuildPlanForTwoTurns() {
 
         // The following value might change:
-        final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = 11;
+        final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = 23;
 
         final List<WorkOrderInformation> workOrderItems = dobladora2TestItems();
         final String workCenter = Constants.DOBLADO;
@@ -241,7 +241,7 @@ public class UtilsTest {
         wo10.setRunHours(1.168999999999999D);
         wo10.setSetupHours(1.25D);
         wo10.setQty(56);
-
+        
         return List.of(
                 wo1,
                 wo2,
@@ -355,6 +355,85 @@ public class UtilsTest {
         wo11.setSetupHours(1.0D);
         wo11.setQty(30);
         wo11.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo12 = new WorkOrderInformation("PT_9", "WO_9");
+        wo12.setRunHours(1.0D);
+        wo12.setSetupHours(1.5D);
+        wo12.setQty(45);
+        wo12.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo13 = new WorkOrderInformation("PT_10", "WO_10");
+        wo13.setRunHours(0.5D);
+        wo13.setSetupHours(2.0D);
+        wo13.setQty(12);
+        wo13.setTurn(Turn.NA);
+        
+        // The following property should be modified and adjusted to 0.0 since the previous item shares the
+        // same part number
+        final WorkOrderInformation wo14 = new WorkOrderInformation("PT_10", "WO_11");
+        wo14.setRunHours(0.5D);
+        wo14.setSetupHours(2.5D);
+        wo14.setQty(96);
+        wo14.setTurn(Turn.NA);
+        
+        // Some of the following items may appear on Wednesday:
+        
+        final WorkOrderInformation wo15 = new WorkOrderInformation("PT_11", "WO_12");
+        wo15.setRunHours(1.1D);
+        wo15.setSetupHours(0.8D);
+        wo15.setQty(22);
+        wo15.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo16 = new WorkOrderInformation("PT_12", "WO_13");
+        wo16.setRunHours(1.5D);
+        wo16.setSetupHours(0.8D);
+        wo16.setQty(47);
+        wo16.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo17 = new WorkOrderInformation("PT_12", "WO_14");
+        wo17.setRunHours(3.6);
+        // This one should be adjusted since the previous part number is the same.
+        wo17.setSetupHours(12.0D);
+        wo17.setQty(54);
+        wo17.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo18 = new WorkOrderInformation("PT_13", "WO_15");
+        wo18.setRunHours(0.2D);
+        wo18.setSetupHours(0.5D);
+        wo18.setQty(5);
+        wo18.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo19 = new WorkOrderInformation("PT_13", "WO_15");
+        wo19.setRunHours(1.4D);
+        // This one should be adjusted since the previous part number is the same.
+        wo19.setSetupHours(Math.PI);
+        wo19.setQty(31);
+        wo19.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo20 = new WorkOrderInformation("PT_14", "WO_16");
+        wo20.setRunHours(0.6D);
+        wo20.setSetupHours(0.5D);
+        wo20.setQty(50);
+        wo20.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo21 = new WorkOrderInformation("PT_15", "WO_17");
+        wo21.setRunHours(1.1D);
+        wo21.setSetupHours(0.8D);
+        wo21.setQty(22);
+        wo21.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo22 = new WorkOrderInformation("PT_16", "WO_18");
+        wo22.setRunHours(3.0D);
+        wo22.setSetupHours(0.8D);
+        wo22.setQty(75);
+        wo22.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo23 = new WorkOrderInformation("PT_16", "WO_18");
+        wo23.setRunHours(5.8D);
+        // This one should be adjusted since the previous part number is the same.
+        wo23.setSetupHours(Math.PI);
+        wo23.setQty(145);
+        wo23.setTurn(Turn.NA);
 
         items.add(wo1);
         items.add(wo2);
@@ -367,6 +446,18 @@ public class UtilsTest {
         items.add(wo9);
         items.add(wo10);
         items.add(wo11);
+        items.add(wo12);
+        items.add(wo13);
+        items.add(wo14);
+        items.add(wo15);
+        items.add(wo16);
+        items.add(wo17);
+        items.add(wo18);
+        items.add(wo19);
+        items.add(wo20);
+        items.add(wo21);
+        items.add(wo22);
+        items.add(wo23);
 
         return items;
     }
