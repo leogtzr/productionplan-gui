@@ -1,93 +1,94 @@
-final WorkOrderInformation wo1 = new WorkOrderInformation();
+final WorkOrderInformation wo1 = new WorkOrderInformation();            // 0                                -> Turn.FIRST
 wo1.setPartNumber("PT_1");
 wo1.setWorkOrder("WO_1");
 wo1.setRunHours(4.2D);
-wo1.setSetupHours(0.3D);
+wo1.setSetupHours(0.3D);       // 4.2 + 0.3 = 4.5                       sum = 4.5
 wo1.setQty(7);
 wo1.setTurn(Turn.NA);
 
-final WorkOrderInformation wo2 = new WorkOrderInformation();
+final WorkOrderInformation wo2 = new WorkOrderInformation();            // 1
 wo2.setPartNumber("PT_2");
 wo2.setWorkOrder("WO_2");
-wo2.setRunHours(1.1D);
+wo2.setRunHours(1.1D);       // 1.1 + 2.3 = 3.4                         sum = 4.5 + 3.4 = 7.9
 wo2.setSetupHours(2.3D);
 wo2.setQty(20);
 wo2.setTurn(Turn.NA);
 
-final WorkOrderInformation wo3 = new WorkOrderInformation();
+final WorkOrderInformation wo3 = new WorkOrderInformation();            // 2
 wo3.setPartNumber("PT_3");
 wo3.setWorkOrder("WO_3");
-wo3.setRunHours(0.2D);
+wo3.setRunHours(0.2D);      // 0.2 + 0.5 = 0.7                          sum = 4.5 + 3.4 + 0.7 = 8.6,  8.6 > 8.5 ... Turn.SECOND
 wo3.setSetupHours(0.5D);
 wo3.setQty(14);
 wo3.setTurn(Turn.NA);
 
-final WorkOrderInformation wo4 = new WorkOrderInformation();
+final WorkOrderInformation wo4 = new WorkOrderInformation();            // 3
 wo4.setPartNumber("PT_3");
 wo4.setWorkOrder("WO_3");
-wo4.setRunHours(1.4D);
+wo4.setRunHours(1.4D);   // 1.4 + 0.0  <- this is the second part number of PT_3, that is why I used 0.0     sum = 4.5 + 3.4 + 0.7 + 1.4 = 10.0, still Turn.SECOND
 // The following property should be modified and adjusted to 0.0 since the previous item shares the
 // same part number
 wo4.setSetupHours(0.5D);
 wo4.setQty(94);
 wo4.setTurn(Turn.NA);
 
-final WorkOrderInformation wo5 = new WorkOrderInformation();
+final WorkOrderInformation wo5 = new WorkOrderInformation();            // 4            
 wo5.setPartNumber("PT_4");
 wo5.setWorkOrder("WO_4");
-wo5.setRunHours(3.4D);
+wo5.setRunHours(3.4D);     // 3.4 + 3.3 = 6.7                       sum = 4.5 + 3.4 + 0.7 + 1.4 + 6.7 = 16.7 > 16.6 (FT + ST)... Turn.FIRST, Day.TUESDAY ...
+                                                            // the sum variable should be reset here to 0.0
 wo5.setSetupHours(3.3D);
 wo5.setQty(14);
 wo5.setTurn(Turn.NA);
 
-final WorkOrderInformation wo6 = new WorkOrderInformation();
+final WorkOrderInformation wo6 = new WorkOrderInformation();            // 5
 wo6.setPartNumber("PT_4");
 wo6.setWorkOrder("WO_4");
-wo6.setRunHours(5.7D);
+wo6.setRunHours(5.7D);  // 5.7 + 0.0D <- this is the second part of PT_4, that is why I used 0.0
 // The following property should be modified and adjusted to 0.0 since the previous item shares the
 // same part number
-wo6.setSetupHours(3.3D);
+wo6.setSetupHours(3.3D);                                  //    sum = 5.7                                   ... Turn.FIRST, Day.TUESDAY
 wo6.setQty(24);
 wo6.setTurn(Turn.NA);
 
 // Some of the following items should be set to Day.TUESDAY:
-final WorkOrderInformation wo7 = new WorkOrderInformation();
+final WorkOrderInformation wo7 = new WorkOrderInformation();            // 6
 wo7.setPartNumber("PT_5");
 wo7.setWorkOrder("WO_5");
-wo7.setRunHours(0.7D);
+wo7.setRunHours(0.7D);                  // 0.7 + 0.5 = 1.2,             sum = 5.7 + 1.2 = 6.9  ... Turn.FIRST, Day.TUESDAY
 wo7.setSetupHours(0.5D);
 wo7.setQty(240);
 wo7.setTurn(Turn.NA);
 
-final WorkOrderInformation wo8 = new WorkOrderInformation();
+final WorkOrderInformation wo8 = new WorkOrderInformation();            // 7
 wo8.setPartNumber("PT_6");
 wo8.setWorkOrder("WO_6");
-wo8.setRunHours(2.5D);
+wo8.setRunHours(2.5D);              // 2.5 + 2.0 = 4.5                 sum = 5.7 + 1.2 + 4.5 = 11.4, > 8.5 so ... Turn.SECOND, Day.Tuesday
 wo8.setSetupHours(2.0D);
 wo8.setQty(55);
 wo8.setTurn(Turn.NA);
 
-final WorkOrderInformation wo9 = new WorkOrderInformation();
+final WorkOrderInformation wo9 = new WorkOrderInformation();            // 8
 wo9.setPartNumber("PT_7");
 wo9.setWorkOrder("WO_7");
-wo9.setRunHours(0.8D);
+wo9.setRunHours(0.8D);              // 0.8 + 0.5 = 1.3              sum = 5.7 + 1.2 + 4.5 + 1.3 = 12.7 > 8.5 (FT) ... Turn.SECOND, Day.Tuesday
 wo9.setSetupHours(0.5D);
 wo9.setQty(40);
 wo9.setTurn(Turn.NA);
 
-final WorkOrderInformation wo10 = new WorkOrderInformation();
+final WorkOrderInformation wo10 = new WorkOrderInformation();           // 9
 wo10.setPartNumber("PT_8");
 wo10.setWorkOrder("WO_8");
-wo10.setRunHours(1.3D);
+wo10.setRunHours(1.3D);             // 1.3 + 1.0 = 2.3          sum = 5.7 + 1.2 + 4.5 + 1.3 + 2.3 = 1.5 > 8.5 (FT) ... Turn.SECOND, Day.TUESDAY
 wo10.setSetupHours(1.0D);
 wo10.setQty(39);
 
 // The following property should be modified and adjusted to 0.0 since the previous item shares the
 // same part number
-final WorkOrderInformation wo11 = new WorkOrderInformation();
+final WorkOrderInformation wo11 = new WorkOrderInformation();           // 10
 wo11.setPartNumber("PT_8");
 wo11.setWorkOrder("WO_8");
-wo11.setRunHours(1.0D);
+wo11.setRunHours(1.0D);             // 1.0 + 0  = 1.0       sum = 5.7 + 1.2 + 4.5 + 1.3 + 2.3 + 1.0 = 16.0 > 8.5 (FT) ... Turn.SECOND, Day.Tuesday
 wo11.setSetupHours(1.0D);
 wo11.setQty(30);
 wo11.setTurn(Turn.NA);

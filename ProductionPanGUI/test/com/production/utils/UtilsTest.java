@@ -152,8 +152,8 @@ public class UtilsTest {
         final String workCenter = Constants.DOBLADO;
         final List<Priority> priorities = List.of();
 
-        final List<WorkOrderInformation> planForTwoTurns = Utils
-                .buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
+        // Build the plan:
+        final List<WorkOrderInformation> planForTwoTurns = Utils.buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
 
         // The list shouldn't be empty ...
         Assert.assertFalse(planForTwoTurns.isEmpty());
@@ -161,102 +161,101 @@ public class UtilsTest {
 
         final Object[][] tests = {
             // Index, setup hours, turn, day
-            {0, 0.3D, Turn.FIRST, Day.MONDAY},
-            {1, 2.3D, Turn.FIRST, Day.MONDAY},
-            {2, 0.5D, Turn.SECOND, Day.MONDAY},
-            {3, 0.0D, Turn.SECOND, Day.MONDAY},
-            {4, 3.3D, Turn.FIRST, Day.TUESDAY},
-            {5, 0.0D, Turn.FIRST, Day.TUESDAY},
-            {6, 0.5D, Turn.FIRST, Day.TUESDAY},
+            {0, 0.3D, Turn.FIRST, Day.MONDAY, "PT_1"}, // 0
+            {1, 2.3D, Turn.FIRST, Day.MONDAY, "PT_2"}, // 1
+            {2, 0.5D, Turn.SECOND, Day.MONDAY, "PT_3"}, // 2
+            {3, 0.0D, Turn.SECOND, Day.MONDAY, "PT_3"}, // 3
+            {4, 3.3D, Turn.FIRST, Day.TUESDAY, "PT_4"}, // 4
+            {5, 0.0D, Turn.FIRST, Day.TUESDAY, "PT_4"}, // 5
+            {6, 0.5D, Turn.FIRST, Day.TUESDAY, "PT_5"}, // 6
+            {7, 2.0D, Turn.SECOND, Day.TUESDAY, "PT_6"},// 7
         };
 
         // int idx = 0;
         for (final Object[] test : tests) {
             final WorkOrderInformation wo = planForTwoTurns.get(Integer.parseInt(test[0].toString()));
-            // System.out.println(wo);
-            System.out.printf("-> [%s] <-\n", wo);
-            Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.001D);
+            Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.01D);
             Assert.assertEquals((Turn) test[2], wo.getTurn());
             Assert.assertEquals((Day) test[3], wo.getDay());
         }
 
         //System.out.println(planForTwoTurns);
-        planForTwoTurns.forEach(System.out::println);
+        // planForTwoTurns.forEach(System.out::println);
     }
 
     private static List<WorkOrderInformation> testWorkOrderItems() {
         // Prepare the data, some WorkOrderInformation items to build a list.
         final WorkOrderInformation wo1 = new WorkOrderInformation();
-        wo1.setPartNumber("M11353A001");
+        wo1.setPartNumber("PT1");
         wo1.setRunHours(38.10037500000014D);
         wo1.setSetupHours(0.0D);
         wo1.setQty(477);
 
         final WorkOrderInformation wo2 = new WorkOrderInformation();
-        wo2.setPartNumber("M14836A003");
+        wo2.setPartNumber("PT2");
         wo2.setRunHours(17.374999999999773D);
         wo2.setSetupHours(0.5D);
         wo2.setQty(500);
 
         final WorkOrderInformation wo3 = new WorkOrderInformation();
-        wo3.setPartNumber("M11588A001");
+        wo3.setPartNumber("PT3");
         wo3.setRunHours(11.022000000000087D);
         wo3.setSetupHours(1.0D);
         wo3.setQty(528);
 
         final WorkOrderInformation wo4 = new WorkOrderInformation();
-        wo4.setPartNumber("M14836A003");
+        wo4.setPartNumber("PT2");
         wo4.setRunHours(6.950000000000012D);
         wo4.setSetupHours(0.5D);
         wo4.setQty(200);
 
         final WorkOrderInformation wo5 = new WorkOrderInformation();
-        wo5.setPartNumber("M11588A001");
+        wo5.setPartNumber("PT3");
         wo5.setRunHours(10.980250000000078D);
         wo5.setSetupHours(0.0D);
         wo5.setQty(527);
 
         final WorkOrderInformation wo6 = new WorkOrderInformation();
-        wo6.setPartNumber("4022.482.54242");
+        wo6.setPartNumber("PT4");
         wo6.setRunHours(2.0831249999999994D);
         wo6.setSetupHours(1.5D);
         wo6.setQty(15);
 
         final WorkOrderInformation wo7 = new WorkOrderInformation();
-        wo7.setPartNumber("ENC-1284-4-20");
+        wo7.setPartNumber("PT5");
         wo7.setRunHours(0.7469999999999977D);
         wo7.setSetupHours(0.5D);
         wo7.setQty(72);
 
         final WorkOrderInformation wo8 = new WorkOrderInformation();
-        wo8.setPartNumber("M11588A001");
+        wo8.setPartNumber("PT6");
         wo8.setRunHours(9.519000000000073D);
         wo8.setSetupHours(1.0D);
         wo8.setQty(528);
 
         final WorkOrderInformation wo9 = new WorkOrderInformation();
-        wo9.setPartNumber("4022.470.25863");
+        wo9.setPartNumber("PT7");
         wo9.setRunHours(1.942500000000013D);
         wo9.setSetupHours(1.5D);
         wo9.setQty(70);
 
         final WorkOrderInformation wo10 = new WorkOrderInformation();
-        wo10.setPartNumber("4022.639.17091");
+        wo10.setPartNumber("PT8");
         wo10.setRunHours(1.168999999999999D);
         wo10.setSetupHours(1.25D);
         wo10.setQty(56);
 
         return List.of(
                 wo1,
-                 wo2,
-                 wo3,
-                 wo4,
-                 wo5,
-                 wo6,
-                 wo7,
-                 wo8,
-                 wo9,
-                 wo10
+                wo2,
+                wo3,
+                wo4,
+                wo5,
+                wo6,
+                wo7,
+                wo8,
+                wo9,
+                wo10
         );
     }
 
@@ -382,13 +381,14 @@ public class UtilsTest {
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
 
         final Object[][] tests = {
-            {"M11353A001", 1},
-            {"M14836A003", 2},
-            {"M11588A001", 3},
-            {"4022.482.54242", 1},
-            {"ENC-1284-4-20", 1},
-            {"4022.470.25863", 1},
-            {"4022.639.17091", 1}
+            {"PT1", 1},
+            {"PT2", 2},
+            {"PT3", 2},
+            {"PT4", 1},
+            {"PT5", 1},
+            {"PT6", 1},
+            {"PT7", 1},
+            {"PT8", 1}
         };
 
         for (final Object[] test : tests) {
@@ -403,8 +403,15 @@ public class UtilsTest {
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
 
         final Object[][] tests = {
-            {"M14836A003", 25.324999999999783D},
-            {"M11588A001", 33.521250D},};
+            {"PT1", 38.10037500000014D},
+            {"PT2", 25.324999999999783D},
+            {"PT3", 23.00225D},
+            {"PT4", 3.5831249999999994D},
+            {"PT5", 1.2469999999999977D},
+            {"PT6", 10.519000000000073D},
+            {"PT7", 3.442500000000013D},
+            {"PT8", 1.168999999999999D + 1.25D},
+        };
 
         for (final Object[] test : tests) {
             final List<WorkOrderInformation> items = workOrderItemsPerPartNumber.get(test[0].toString());

@@ -244,8 +244,7 @@ public final class Utils {
         
         final Map<String, List<WorkOrderInformation>> parts = new LinkedHashMap<>();
         
-        workOrderItems.forEach(woInfo -> 
-                parts.computeIfAbsent(woInfo.getPartNumber(), items -> new ArrayList<>()).add(woInfo));
+        workOrderItems.forEach(woInfo -> parts.computeIfAbsent(woInfo.getPartNumber(), items -> new ArrayList<>()).add(woInfo));
         
         return parts;
     }
@@ -307,20 +306,46 @@ el segundo se aprovecha
         return "";
     }
     
-    @MissingTests
+    private static Day nextDay(final Day day, final String part, final String wc) {
+        // System.out.printf("Day{%s}, from: %s & %s\n", day, part, wc);
+        switch (day) {
+            case MONDAY:
+                return Day.TUESDAY;
+            case TUESDAY:
+                return Day.WEDNESDAY;
+            case WEDNESDAY:
+                return Day.THURSDAY;
+            case THURSDAY:
+                return Day.FRIDAY;
+            case FRIDAY:
+                return Day.SATURDAY;
+            case SATURDAY:
+                return Day.SUNDAY;
+            case SUNDAY:
+                return Day.MONDAY;
+        }
+        return Day.MONDAY;
+    }
+    
+    @MissingTests                   // TODO: working on it ...
     public static List<WorkOrderInformation> buildPlanForTwoTurns(
             final String workCenter
             , final List<WorkOrderInformation> workOrderItems
             , final List<Priority> priorities
     ) {
         
+        // TODO: not used yet ... 
         final List<WorkOrderWrapper> plan = new ArrayList<>();
         
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
         
+        Day day = Day.MONDAY;
         // The following variable will be used to accumulate
         double turnHours = 0.0D;
         for (final WorkOrderInformation woInfo : workOrderItems) {
+            
+            woInfo.setDay(day);
+            
             final String partNumber = woInfo.getPartNumber();
             final List<WorkOrderInformation> partNumbers = workOrderItemsPerPartNumber.get(partNumber);
             // Check if a part number has more than one element so we can adjust the setup time after the first element.
@@ -332,30 +357,23 @@ el segundo se aprovecha
             }
             
             // Get the total hours for the individual list:
-            final double hours = sumTurnHoursFromWorkOrderItems(partNumbers);
+            // final double hours = sumTurnHoursFromWorkOrderItems(partNumbers);
+            final double hours = woInfo.getRunHours() + woInfo.getSetupHours();
             turnHours += hours;
-            System.out.printf("H: %f\n", turnHours);
-            
-            // System.out.printf("===> Analyzing: [%s][%s]\n", woInfo.getPartNumber(), woInfo.getWorkOrder());
+            // System.out.printf("H: %f\n", turnHours);
+            // System.out.printf("H: %f\n", turnHours);
             
             if (turnHours < FIRST_TURN_LENGTH) {
                 woInfo.setTurn(Turn.FIRST);
             } else if ((turnHours > FIRST_TURN_LENGTH) && (turnHours < (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH))) {
-                // System.out.printf("Changing because of this: %f - [%s] wo: %s\n", turnHours, woInfo.getPartNumber(), woInfo.getWorkOrder());
-                System.out.printf("Changing turn for: %s    [%f]\n", woInfo, turnHours);
                 woInfo.setTurn(Turn.SECOND);
-                System.out.printf("Changed to: %s       [%f]\n", woInfo, turnHours);
+                //System.out.printf("H: %f\n", turnHours);
             } else if (turnHours > (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
-                // send it to the next day ... 
-                // TODO: need a way to automatically increase the day
                 woInfo.setTurn(Turn.FIRST);
-                woInfo.setDay(Day.TUESDAY);
-                
-                System.out.printf("Reseting the hours for: [%s][%s], H: %f\n", woInfo.getPartNumber(), woInfo.getWorkOrder(), turnHours);
-                // Restoring the hours: 
-                // System.out.println("The hour has been reset with");
-                // System.out.printf("The hour has been reset with: [%s] [%s]\n", woInfo.getPartNumber(), woInfo.getWorkOrder());
+                day = nextDay(day, woInfo.getPartNumber(), woInfo.getWorkOrder());
+                woInfo.setDay(day);
                 turnHours = 0.0D;
+                //System.out.printf("H: %f\n", turnHours);
             }
             
         }
@@ -365,7 +383,11 @@ el segundo se aprovecha
     
     @Validated
     public static double sumTurnHoursFromWorkOrderItems(final List<WorkOrderInformation> items) {
-        return items.stream().mapToDouble(wo -> wo.getRunHours() + wo.getSetupHours()).sum();
+        final double result = items.stream().mapToDouble(wo -> wo.getRunHours() + wo.getSetupHours()).sum();
+        
+        // System.out.printf("The result for: [%s] is -> %f\n", items, result);
+        
+        return result;
     }
     
     private Utils() {}
