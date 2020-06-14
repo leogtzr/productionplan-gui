@@ -92,3 +92,4 @@ wo11.setRunHours(1.0D);             // 1.0 + 0  = 1.0       sum = 5.7 + 1.2 + 4.
 wo11.setSetupHours(1.0D);
 wo11.setQty(30);
 wo11.setTurn(Turn.NA);
+
