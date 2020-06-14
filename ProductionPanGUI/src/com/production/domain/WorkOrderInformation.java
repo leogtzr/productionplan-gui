@@ -24,6 +24,19 @@ public final class WorkOrderInformation {
         this.partNumber = partNumber;
         this.workOrder = workOrder;
     }
+    
+    private WorkOrderInformation(final Builder builder) {
+        this.wcDescription = builder.wcDescription;
+        this.partNumber = builder.partNumber;
+        this.workOrder = builder.workOrder;
+        this.runHours = builder.runHours;
+        this.setupHours = builder.setupHours;
+        this.qty = builder.qty;
+        this.age = builder.age;
+        this.salesPrice = builder.salesPrice;
+        this.turn = builder.turn;
+        this.day = builder.day;
+    }
 
     public String getPartNumber() {
         return partNumber;
@@ -168,10 +181,83 @@ public final class WorkOrderInformation {
 
     @Override
     public String toString() {
-        return "{partNumber=" + partNumber + ", workOrder=" + workOrder + ", runHours=" + runHours + ", setupHours=" + setupHours + ", qty=" + qty + ", age=" + age + ", salesPrice=" + salesPrice + ", turn=" + turn + ", day=" + day + '}';
+        return "{partNumber=" + partNumber + ", workOrder=" + workOrder + ", runHours=" + 
+                runHours + ", setupHours=" + setupHours + ", qty=" + qty + ", age=" + age +
+                ", salesPrice=" + salesPrice + ", turn=" + turn + ", day=" + day + '}';
     }
 
-    
-    
+    public static class Builder {
+        
+        private String wcDescription;
+        private String partNumber;
+        private String workOrder;
+        private double runHours;
+        private double setupHours;
+        private int qty;
+        private int age;
+        private double salesPrice;
+        private Turn turn = Turn.NA;
+        private Day day = Day.MONDAY;
+        
+        public Builder(final String partNumber, final String workOrder) {
+            this.partNumber = partNumber;
+            this.workOrder = workOrder;
+        }
+        
+        public Builder workCenter(final String wcDescription) {
+            this.wcDescription = wcDescription;
+            return this;
+        }
+        
+        public Builder partNumber(final String partNumber) {
+            this.partNumber = partNumber;
+            return this;
+        }
+        
+        public Builder workOrder(final String workOrder) {
+            this.workOrder = workOrder;
+            return this;
+        }
+        
+        public Builder runHours(final double runHours) {
+            this.runHours = runHours;
+            return this;
+        }
+        
+        public Builder setupHours(final double setupHours) {
+            this.setupHours = setupHours;
+            return this;
+        }
+        
+        public Builder qty(final int qty) {
+            this.qty = qty;
+            return this;
+        }
+        
+        public Builder age(final int age) {
+            this.age = age;
+            return this;
+        }
+        
+        public Builder salesPrice(final double salesPrice) {
+            this.salesPrice = salesPrice;
+            return this;
+        }
+        
+        public Builder turn(final Turn turn) {
+            this.turn = turn;
+            return this;
+        }
+        
+        public Builder day(final Day day) {
+            this.day = day;
+            return this;
+        }
+        
+        public WorkOrderInformation build() {
+            return new WorkOrderInformation(this);
+        }
+        
+    }
 
 }

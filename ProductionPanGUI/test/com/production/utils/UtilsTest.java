@@ -393,7 +393,6 @@ public class UtilsTest {
         wo14.setTurn(Turn.NA);
         
         // Some of the following items may appear on Wednesday:
-        
         final WorkOrderInformation wo15 = new WorkOrderInformation("PT_11", "WO_12");
         wo15.setRunHours(1.1D);
         wo15.setSetupHours(0.8D);
@@ -450,7 +449,48 @@ public class UtilsTest {
         wo23.setSetupHours(Math.PI);
         wo23.setQty(145);
         wo23.setTurn(Turn.NA);
-
+        
+        final WorkOrderInformation wo24 = new WorkOrderInformation("PT_17", "WO_19");
+        wo24.setRunHours(1.1D);
+        wo24.setSetupHours(0.8D);
+        wo24.setQty(170);
+        wo24.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo25 = new WorkOrderInformation("PT_18", "WO_20");
+        wo25.setRunHours(1.5D);
+        wo25.setSetupHours(0.0D);
+        wo25.setQty(47);
+        wo25.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo26 = new WorkOrderInformation("PT_18", "WO_20");
+        wo26.setRunHours(3.6D);
+        // This one should be adjusted since the previous part number is the same.
+        wo26.setSetupHours(Math.PI);
+        wo26.setQty(54);
+        wo26.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo27 = new WorkOrderInformation("PT_19", "WO_21");
+        wo27.setRunHours(0.2D);
+        wo27.setSetupHours(0.5D);
+        wo27.setQty(15);
+        wo27.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo28 = new WorkOrderInformation("PT_19", "WO_21");
+        wo28.setRunHours(0.7D);
+        // This one should be adjusted since the previous part number is the same.
+        wo28.setSetupHours(Math.E);
+        wo28.setQty(51);
+        wo28.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo29 = new WorkOrderInformation("PT_20", "WO_22");
+        wo29.setRunHours(1.6D);
+        wo29.setSetupHours(0.5D);
+        wo29.setQty(36);
+        wo29.setTurn(Turn.NA);
+        
+        final WorkOrderInformation wo30 = new WorkOrderInformation.Builder("PT_30", "WO_23")
+                .runHours(2.9D).setupHours(0.5D).qty(99).turn(Turn.NA).build();
+        
         items.add(wo1);
         items.add(wo2);
         items.add(wo3);
@@ -474,6 +514,13 @@ public class UtilsTest {
         items.add(wo21);
         items.add(wo22);
         items.add(wo23);
+        items.add(wo24);
+        items.add(wo25);
+        items.add(wo26);
+        items.add(wo27);
+        items.add(wo28);
+        items.add(wo29);
+        items.add(wo30);
 
         return items;
     }

@@ -328,7 +328,7 @@ el segundo se aprovecha
         return Day.MONDAY;
     }
     
-    @MissingTests                   // TODO: working on it ...
+    @MissingTests               // TODO: almost done ... so we could change it to @Validated
     public static List<WorkOrderInformation> buildPlanForTwoTurns(
             final String workCenter
             , final List<WorkOrderInformation> workOrderItems
