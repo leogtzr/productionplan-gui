@@ -93,3 +93,81 @@ wo11.setSetupHours(1.0D);
 wo11.setQty(30);
 wo11.setTurn(Turn.NA);
 
+// 
+final WorkOrderInformation wo12 = new WorkOrderInformation("PT_9", "WO_9");             // 11
+wo12.setRunHours(1.0D);             // 1.0 + 1.5 = 2.5    sum = 5.7 + 1.2 + 4.5 + 1.3 + 2.3 + 1.0 + 2.5 = 18.5 > (FT + ST) ... Turn.FIRST, Day.WEDNESDAY ... 
+                                    // sum variable should be reset to 0.0. 
+wo12.setSetupHours(1.5D);
+wo12.setQty(45);
+wo12.setTurn(Turn.NA);
+
+final WorkOrderInformation wo13 = new WorkOrderInformation("PT_10", "WO_10");           // 12
+wo13.setRunHours(0.5D);
+wo13.setSetupHours(2.0D);          // 0.5 + 2.0 = 2.5           sum = 2.5, Turn.FIRST, Day.WEDNESDAY
+wo13.setQty(12);
+wo13.setTurn(Turn.NA);
+
+// The following property should be modified and adjusted to 0.0 since the previous item shares the
+// same part number
+final WorkOrderInformation wo14 = new WorkOrderInformation("PT_10", "WO_11");           // 13
+wo14.setRunHours(0.5D);
+wo14.setSetupHours(2.5D);         // 0.5 + 0.0D = 0.5,          sum = 2.5 + 0.5 = 3.0, Turn.FIRST, Day.WEDNESDAY
+wo14.setQty(96);
+wo14.setTurn(Turn.NA);
+
+final WorkOrderInformation wo15 = new WorkOrderInformation("PT_11", "WO_12");           // 14
+wo15.setRunHours(1.1D);
+wo15.setSetupHours(0.8D);       // 1.1 + 0.8 = 1.9              sum = 2.5 + 0.5 + 1.9 = 4.9, Turn.FIRST, Day.WEDNESDAY
+wo15.setQty(22);
+wo15.setTurn(Turn.NA);
+
+final WorkOrderInformation wo16 = new WorkOrderInformation("PT_12", "WO_13");
+wo16.setRunHours(1.5D);
+wo16.setSetupHours(0.8D);
+wo16.setQty(47);
+wo16.setTurn(Turn.NA);
+
+final WorkOrderInformation wo17 = new WorkOrderInformation("PT_12", "WO_14");
+wo17.setRunHours(3.6);
+// This one should be adjusted since the previous part number is the same.
+wo17.setSetupHours(12.0D);
+wo17.setQty(54);
+wo17.setTurn(Turn.NA);
+
+final WorkOrderInformation wo18 = new WorkOrderInformation("PT_13", "WO_15");
+wo18.setRunHours(0.2D);
+wo18.setSetupHours(0.5D);
+wo18.setQty(5);
+wo18.setTurn(Turn.NA);
+
+final WorkOrderInformation wo19 = new WorkOrderInformation("PT_13", "WO_15");
+wo19.setRunHours(1.4D);
+// This one should be adjusted since the previous part number is the same.
+wo19.setSetupHours(Math.PI);
+wo19.setQty(31);
+wo19.setTurn(Turn.NA);
+
+final WorkOrderInformation wo20 = new WorkOrderInformation("PT_14", "WO_16");
+wo20.setRunHours(0.6D);
+wo20.setSetupHours(0.5D);
+wo20.setQty(50);
+wo20.setTurn(Turn.NA);
+
+final WorkOrderInformation wo21 = new WorkOrderInformation("PT_15", "WO_17");
+wo21.setRunHours(1.1D);
+wo21.setSetupHours(0.8D);
+wo21.setQty(22);
+wo21.setTurn(Turn.NA);
+
+final WorkOrderInformation wo22 = new WorkOrderInformation("PT_16", "WO_18");
+wo22.setRunHours(3.0D);
+wo22.setSetupHours(0.8D);
+wo22.setQty(75);
+wo22.setTurn(Turn.NA);
+
+final WorkOrderInformation wo23 = new WorkOrderInformation("PT_16", "WO_18");
+wo23.setRunHours(5.8D);
+// This one should be adjusted since the previous part number is the same.
+wo23.setSetupHours(Math.PI);
+wo23.setQty(145);
+wo23.setTurn(Turn.NA);

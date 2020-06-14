@@ -173,6 +173,10 @@ public class UtilsTest {
             {9, 1.0D, Turn.SECOND, Day.TUESDAY, "PT_8"},    // 9
             // setup hours for the following item should be 0.0
             {10, 0.0D, Turn.SECOND, Day.TUESDAY, "PT_8"},   //10
+            {11, 1.5D, Turn.FIRST, Day.WEDNESDAY, "PT_9"},  //11
+            {12, 2.0D, Turn.FIRST, Day.WEDNESDAY, "PT_10"}, //12
+            {13, 0.0D, Turn.FIRST, Day.WEDNESDAY, "PT_10"}, //13
+            {14, 0.8D, Turn.FIRST, Day.WEDNESDAY, "PT_11"}, //13
         };
 
         for (final Object[] test : tests) {
