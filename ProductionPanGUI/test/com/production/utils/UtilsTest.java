@@ -176,7 +176,15 @@ public class UtilsTest {
             {11, 1.5D, Turn.FIRST, Day.WEDNESDAY, "PT_9"},  //11
             {12, 2.0D, Turn.FIRST, Day.WEDNESDAY, "PT_10"}, //12
             {13, 0.0D, Turn.FIRST, Day.WEDNESDAY, "PT_10"}, //13
-            {14, 0.8D, Turn.FIRST, Day.WEDNESDAY, "PT_11"}, //13
+            {14, 0.8D, Turn.FIRST, Day.WEDNESDAY, "PT_11"}, //14
+            {15, 0.8D, Turn.FIRST, Day.WEDNESDAY, "PT_12"}, //15
+            {16, 0.0D, Turn.SECOND, Day.WEDNESDAY, "PT_12"},//16
+            {17, 0.5D, Turn.SECOND, Day.WEDNESDAY, "PT_13"},//17
+            {18, 0.0D, Turn.SECOND, Day.WEDNESDAY, "PT_13"},//18
+            {19, 0.5D, Turn.SECOND, Day.WEDNESDAY, "PT_14"},//19
+            {20, 0.8D, Turn.SECOND, Day.WEDNESDAY, "PT_15"},//20
+            {21, 0.8D, Turn.FIRST, Day.THURSDAY, "PT_16"},  //21
+            {22, 0.0D, Turn.FIRST, Day.THURSDAY, "PT_16"},  //22
         };
 
         for (final Object[] test : tests) {
