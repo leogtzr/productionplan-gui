@@ -148,7 +148,7 @@ public class UtilsTest {
         // The following value might change:
         final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = 23;
 
-        final List<WorkOrderInformation> workOrderItems = dobladora2TestItems();
+        final List<WorkOrderInformation> workOrderItems = testItems();
         final String workCenter = Constants.DOBLADO;
         final List<Priority> priorities = List.of();
 
@@ -259,7 +259,7 @@ public class UtilsTest {
     /*
         This factory test method contains the 
      */
-    private static List<WorkOrderInformation> dobladora2TestItems() {
+    private static List<WorkOrderInformation> testItems() {
         final List<WorkOrderInformation> items = new ArrayList<>();
 
         final WorkOrderInformation wo1 = new WorkOrderInformation();

@@ -54,6 +54,7 @@ public final class Utils {
      * "factory" method to build a FileChooser for .XLS files.
      * @return a JFileChooser to select .XLS files
      */
+    @MissingTests
     public static JFileChooser genericXLSFileChooser() {
         final JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
         jfc.setDialogTitle("Select a .XLS file");
