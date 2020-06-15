@@ -434,19 +434,20 @@ el segundo se aprovecha
             }
             
             // Get the total hours for the individual list:
-            // final double hours = sumTurnHoursFromWorkOrderItems(partNumbers);
             final double hours = woInfo.getRunHours() + woInfo.getSetupHours();
             turnHours += hours;
             
-            if (turnHours < FIRST_TURN_LENGTH) {
-                woInfo.setTurn(Turn.FIRST);
-            } else if ((turnHours > FIRST_TURN_LENGTH) && (turnHours < (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH))) {
-                woInfo.setTurn(Turn.SECOND);
-            } else if (turnHours > (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
-                woInfo.setTurn(Turn.FIRST);
-                day = nextDay(day, woInfo.getPartNumber(), woInfo.getWorkOrder());
-                woInfo.setDay(day);
-                turnHours = 0.0D;
+            final Turn turn = hoursTo3Turns(turnHours);
+            switch (turn) {
+                case FIRST -> woInfo.setTurn(Turn.FIRST);
+                case SECOND -> woInfo.setTurn(Turn.SECOND);
+                case THIRD -> woInfo.setTurn(Turn.THIRD);
+                case FIRST_NEXT_DAY -> {
+                    woInfo.setTurn(Turn.FIRST);
+                    day = nextDay(day, woInfo.getPartNumber(), woInfo.getWorkOrder());
+                    woInfo.setDay(day);
+                    turnHours = 0.0D;
+                }
             }
             
         }

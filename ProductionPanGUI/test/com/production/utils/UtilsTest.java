@@ -159,7 +159,36 @@ public class UtilsTest {
     
     @Test
     public void shouldConvertHoursTo3Turns() {
+        // The following value might change:
+        final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = 30;
+
+        final List<WorkOrderInformation> workOrderItems = testItems();
+        final String workCenter = Constants.DOBLADO;
+        final List<Priority> priorities = List.of();
+
+        // Build the plan:
+        final List<WorkOrderInformation> planForTwoTurns = Utils.buildPlanForThreeTurns(workCenter, workOrderItems, priorities);
+
+        // The list shouldn't be empty ...
+        Assert.assertFalse(planForTwoTurns.isEmpty());
+        Assert.assertEquals(EXPECTED_NUMBER_OF_ITEMS_IN_PLAN, planForTwoTurns.size());
         
+        final Object[][] tests = {
+            // Index, setup hours, turn, day
+            {0, 0.3D, Turn.FIRST, Day.MONDAY, "PT_1"},      // 0
+            {1, 2.3D, Turn.FIRST, Day.MONDAY, "PT_2"},      // 1
+            {2, 0.5, Turn.SECOND, Day.MONDAY, "PT_3"},      // 2
+            {3, 0.0, Turn.SECOND, Day.MONDAY, "PT_3"},      // 3
+            {4, 3.3, Turn.THIRD, Day.MONDAY,  "PT_4"},      // 4
+            {5, 0.0, Turn.FIRST, Day.TUESDAY, "PT_4"},      // 5
+        };
+        
+        for (final Object[] test : tests) {
+            final WorkOrderInformation wo = planForTwoTurns.get(Integer.parseInt(test[0].toString()));
+            Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.01D);
+            Assert.assertEquals((Turn) test[2], wo.getTurn());
+            Assert.assertEquals((Day) test[3], wo.getDay());
+        }
     }
 
     @Test
