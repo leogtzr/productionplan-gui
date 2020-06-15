@@ -285,7 +285,6 @@ public final class Utils {
             , final List<Priority> priorities) {
         
         // Items in the "priorities" list will go first.
-        
         final int numberOfTurns = numberOfTurnsFromWorkCenter(workCenter);
         /*
 tomar en cuenta que cuando hay partes iguales en un WorkCenter ... un mismo setup aplica para ello.
@@ -308,7 +307,6 @@ el segundo se aprovecha
     }
     
     private static Day nextDay(final Day day, final String part, final String wc) {
-        // System.out.printf("Day{%s}, from: %s & %s\n", day, part, wc);
         switch (day) {
             case MONDAY:
                 return Day.TUESDAY;
