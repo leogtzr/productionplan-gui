@@ -6,6 +6,7 @@ package com.production.domain;
 public enum Turn {
     NA,
     FIRST,
+    FIRST_NEXT_DAY,
     SECOND,
     THIRD
 }

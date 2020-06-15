@@ -328,11 +328,72 @@ el segundo se aprovecha
         return Day.MONDAY;
     }
     
-    @MissingTests               // TODO: almost done ... so we could change it to @Validated
+    @Validated
     public static List<WorkOrderInformation> buildPlanForTwoTurns(
-            final String workCenter
-            , final List<WorkOrderInformation> workOrderItems
-            , final List<Priority> priorities
+        final String workCenter
+        , final List<WorkOrderInformation> workOrderItems
+        , final List<Priority> priorities
+    ) {
+        
+        // TODO: not used yet ... 
+        final List<WorkOrderWrapper> plan = new ArrayList<>();
+        
+        final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
+        
+        Day day = Day.MONDAY;
+        // The following variable will be used to accumulate
+        double turnHours = 0.0D;
+        for (final WorkOrderInformation woInfo : workOrderItems) {
+            
+            woInfo.setDay(day);
+            
+            final String partNumber = woInfo.getPartNumber();
+            final List<WorkOrderInformation> partNumbers = workOrderItemsPerPartNumber.get(partNumber);
+            // Check if a part number has more than one element so we can adjust the setup time after the first element.
+            if (partNumbers.size() > 1) {
+                for (int i = 1; i < partNumbers.size(); i++) {
+                    final WorkOrderInformation wo = partNumbers.get(i);
+                    wo.setSetupHours(0.0D);
+                }
+            }
+            
+            // Get the total hours for the individual list:
+            final double hours = woInfo.getRunHours() + woInfo.getSetupHours();
+            turnHours += hours;
+            
+            final Turn turn = hoursTo2Turns(turnHours);
+            switch (turn) {
+                case FIRST -> woInfo.setTurn(Turn.FIRST);
+                case SECOND -> woInfo.setTurn(Turn.SECOND);
+                case FIRST_NEXT_DAY -> {
+                    woInfo.setTurn(Turn.FIRST);
+                    day = nextDay(day, woInfo.getPartNumber(), woInfo.getWorkOrder());
+                    woInfo.setDay(day);
+                    turnHours = 0.0D;
+                }
+            }
+        }
+        
+        return workOrderItems;
+    }
+    
+    @Validated
+    public static Turn hoursTo2Turns(final double turnHours) {
+        if (turnHours < FIRST_TURN_LENGTH) {
+            return Turn.FIRST;
+        } else if ((turnHours > FIRST_TURN_LENGTH) && (turnHours < (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH))) {
+            return Turn.SECOND;
+        } else if (turnHours > (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
+            return Turn.FIRST_NEXT_DAY;
+        }
+        return Turn.NA;
+    }
+    
+    @Validated
+    public static List<WorkOrderInformation> buildPlanForThreeTurns(
+        final String workCenter
+        , final List<WorkOrderInformation> workOrderItems
+        , final List<Priority> priorities
     ) {
         
         // TODO: not used yet ... 

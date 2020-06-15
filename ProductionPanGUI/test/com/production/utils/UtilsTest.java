@@ -141,6 +141,20 @@ public class UtilsTest {
             Assert.assertEquals(test[2].toString(), statusLabel.getText());
         }
     }
+    
+    @Test
+    public void shouldConvertHoursTo2Turns() {
+        final Object[][] tests = {
+            {1.3D, Turn.FIRST},
+            {8.6D, Turn.SECOND},
+            {16.7, Turn.FIRST_NEXT_DAY}
+        };
+
+        for (final Object[] test : tests) {
+            final Turn got = Utils.hoursTo2Turns((double)test[0]);
+            Assert.assertEquals(test[1], got);
+        }
+    }
 
     @Test
     public void shouldBuildPlanForTwoTurns() {
@@ -201,6 +215,11 @@ public class UtilsTest {
             Assert.assertEquals((Day) test[3], wo.getDay());
         }
 
+    }
+    
+    @Test
+    public void shouldBuildPlanForThreeTurns() {
+        
     }
 
     private static List<WorkOrderInformation> testWorkOrderItems() {
