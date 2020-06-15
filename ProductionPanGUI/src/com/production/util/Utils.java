@@ -390,6 +390,21 @@ el segundo se aprovecha
     }
     
     @Validated
+    public static Turn hoursTo3Turns(final double turnHours) {
+        if (turnHours < FIRST_TURN_LENGTH) {
+            return Turn.FIRST;
+        } else if ((turnHours > FIRST_TURN_LENGTH) && (turnHours < (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH))) {
+            return Turn.SECOND;
+        } else if ((turnHours > (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) && 
+                (turnHours < (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH + THIRD_TURN_LENGTH))) {
+            return Turn.THIRD;
+        } else if ((turnHours > (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH + THIRD_TURN_LENGTH))) {
+            return Turn.FIRST_NEXT_DAY;
+        }
+        return Turn.NA;
+    }
+    
+    @Validated
     public static List<WorkOrderInformation> buildPlanForThreeTurns(
         final String workCenter
         , final List<WorkOrderInformation> workOrderItems

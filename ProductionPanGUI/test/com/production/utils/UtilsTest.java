@@ -147,13 +147,19 @@ public class UtilsTest {
         final Object[][] tests = {
             {1.3D, Turn.FIRST},
             {8.6D, Turn.SECOND},
-            {16.7, Turn.FIRST_NEXT_DAY}
+            {16.7, Turn.THIRD},
+            {22.2, Turn.FIRST_NEXT_DAY},
         };
 
         for (final Object[] test : tests) {
-            final Turn got = Utils.hoursTo2Turns((double)test[0]);
+            final Turn got = Utils.hoursTo3Turns((double)test[0]);
             Assert.assertEquals(test[1], got);
         }
+    }
+    
+    @Test
+    public void shouldConvertHoursTo3Turns() {
+        
     }
 
     @Test
