@@ -146,7 +146,7 @@ public class UtilsTest {
     public void shouldBuildPlanForTwoTurns() {
 
         // The following value might change:
-        final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = 23;
+        final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = 30;
 
         final List<WorkOrderInformation> workOrderItems = testItems();
         final String workCenter = Constants.DOBLADO;
@@ -185,6 +185,13 @@ public class UtilsTest {
             {20, 0.8D, Turn.SECOND, Day.WEDNESDAY, "PT_15"},//20
             {21, 0.8D, Turn.FIRST, Day.THURSDAY, "PT_16"},  //21
             {22, 0.0D, Turn.FIRST, Day.THURSDAY, "PT_16"},  //22
+            {23, 0.8D, Turn.FIRST, Day.THURSDAY, "PT_17"},  //23
+            {24, 0.0D, Turn.SECOND, Day.THURSDAY, "PT_18"}, //24
+            {25, 0.0D, Turn.SECOND, Day.THURSDAY, "PT_18"}, //25
+            {26, 0.5D, Turn.SECOND, Day.THURSDAY, "PT_19"}, //26
+            {27, 0.0D, Turn.SECOND, Day.THURSDAY, "PT_19"}, //27
+            {28, 0.5D, Turn.SECOND, Day.THURSDAY, "PT_20"}, //28
+            {29, 0.5D, Turn.FIRST, Day.FRIDAY, "PT_21"},    //29
         };
 
         for (final Object[] test : tests) {
@@ -273,7 +280,7 @@ public class UtilsTest {
     }
 
     /*
-        This factory test method contains the 
+        This factory test method contains items that will be used to test how the plans are built.
      */
     private static List<WorkOrderInformation> testItems() {
         final List<WorkOrderInformation> items = new ArrayList<>();
@@ -488,7 +495,8 @@ public class UtilsTest {
         wo29.setQty(36);
         wo29.setTurn(Turn.NA);
         
-        final WorkOrderInformation wo30 = new WorkOrderInformation.Builder("PT_30", "WO_23")
+        // TODO: test the results using this builder pattern.
+        final WorkOrderInformation wo30 = new WorkOrderInformation.Builder("PT_21", "WO_23")
                 .runHours(2.9D).setupHours(0.5D).qty(99).turn(Turn.NA).build();
         
         items.add(wo1);

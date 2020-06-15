@@ -169,6 +169,50 @@ wo22.setTurn(Turn.NA);
 final WorkOrderInformation wo23 = new WorkOrderInformation("PT_16", "WO_18");       // 22
 wo23.setRunHours(5.8D);
 // This one should be adjusted since the previous part number is the same.
-wo23.setSetupHours(Math.PI);  // 5.8 + 0.0, sum = 5.8
+wo23.setSetupHours(Math.PI);  // 5.8 + 0.0, sum = 5.8 < FT, Turn.FIRST, Day.THURSDAY
 wo23.setQty(145);
 wo23.setTurn(Turn.NA);
+
+final WorkOrderInformation wo24 = new WorkOrderInformation("PT_17", "WO_19");       // 23
+wo24.setRunHours(1.1D); 
+wo24.setSetupHours(0.8D);     // 1.1 + 0.8 = 1.9, sum = 5.8 + 1.9 = 7.7 < FT, Turn.FIRST, Day.THURSDAY
+wo24.setQty(170);
+wo24.setTurn(Turn.NA);
+
+final WorkOrderInformation wo25 = new WorkOrderInformation("PT_18", "WO_20");       // 24
+wo25.setRunHours(1.5D);
+wo25.setSetupHours(0.0D);       // 1.5 + 0.0 = 1.5, sum = 5.8 + 1.9 + 1.5 = 9.2 > FT, Turn.SECOND, Day.THURSDAY
+wo25.setQty(47);
+wo25.setTurn(Turn.NA);
+
+final WorkOrderInformation wo26 = new WorkOrderInformation("PT_18", "WO_20");           // 25
+wo26.setRunHours(3.6D);
+// This one should be adjusted since the previous part number is the same.
+wo26.setSetupHours(Math.PI);    // 3.6 + 0.0 = 3.6, sum = 5.8 + 1.9 + 1.5 + 3.6 = 12.8 > FT, Turn.SECOND, Day.Thursday
+wo26.setQty(54);
+wo26.setTurn(Turn.NA);
+
+final WorkOrderInformation wo27 = new WorkOrderInformation("PT_19", "WO_21");           // 26
+wo27.setRunHours(0.2D);         // 0.2 + 0.5 = 0.7, sum = 5.8 + 1.9 + 1.5 + 3.6 + 0.7 = 13.5 > FT, Turn.SECOND, Day.Thursday
+wo27.setSetupHours(0.5D);
+wo27.setQty(15);
+wo27.setTurn(Turn.NA);
+
+final WorkOrderInformation wo28 = new WorkOrderInformation("PT_19", "WO_21");           // 27
+wo28.setRunHours(0.7D);         // 0.7 + 0.0 = 0.7, sum = 5.8 + 1.9 + 1.5 + 3.6 + 0.7 + 0.7 = 14.2 > FT, Turn.SECOND, Day.Thursday
+// This one should be adjusted since the previous part number is the same.
+wo28.setSetupHours(Math.E);
+wo28.setQty(51);
+wo28.setTurn(Turn.NA);
+
+final WorkOrderInformation wo29 = new WorkOrderInformation("PT_20", "WO_22");           // 28
+wo29.setRunHours(1.6D);      // 1.6 + 0.5 = 2.1, sum = 5.8 + 1.9 + 1.5 + 3.6 + 0.7 + 0.7 + 2.1 = 16.3 > FT, Turn.SECOND, Day.Thursday
+wo29.setSetupHours(0.5D);
+wo29.setQty(36);
+wo29.setTurn(Turn.NA);
+
+// TODO: test the results using this builder pattern.
+final WorkOrderInformation wo30 = new WorkOrderInformation.Builder("PT_21", "WO_23")            // 29
+        .runHours(2.9D).setupHours(0.5D).qty(99).turn(Turn.NA).build();
+
+    // 2.9 + 0.5 = 3.4, sum = 5.8 + 1.9 + 1.5 + 3.6 + 0.7 + 0.7 + 2.1 + 3.4 = 19.7 > (FT + ST), day change. Turn.FIRST, Day.FRIDAY
