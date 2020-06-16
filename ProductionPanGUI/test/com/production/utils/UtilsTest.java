@@ -158,7 +158,7 @@ public class UtilsTest {
     }
     
     @Test
-    public void shouldConvertHoursTo3Turns() {
+    public void shouldBuildPlanForThreeTurns() {
         // The following value might change:
         final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = 30;
 
@@ -181,11 +181,35 @@ public class UtilsTest {
             {3, 0.0, Turn.SECOND, Day.MONDAY, "PT_3"},      // 3
             {4, 3.3, Turn.THIRD, Day.MONDAY,  "PT_4"},      // 4
             {5, 0.0, Turn.FIRST, Day.TUESDAY, "PT_4"},      // 5
+            {6, 0.5, Turn.FIRST, Day.TUESDAY, "PT_5"},      // 6
+            {7, 2.0, Turn.FIRST, Day.TUESDAY, "PT_6"},      // 7
+            {8, 0.5, Turn.FIRST, Day.TUESDAY, "PT_7"},      // 8
+            {9, 1.0, Turn.SECOND, Day.TUESDAY, "PT_8"},     // 9
+            {10, 0.0, Turn.SECOND, Day.TUESDAY, "PT_8"},    // 10
+            {11, 1.5, Turn.SECOND, Day.TUESDAY, "PT_9"},    // 11
+            {12, 2.0, Turn.SECOND, Day.TUESDAY, "PT_10"},   // 12
+            {13, 0.0, Turn.SECOND, Day.TUESDAY, "PT_10"},   // 13
+            {14, 0.8, Turn.THIRD, Day.TUESDAY, "PT_11"},    // 14
+            {15, 0.8, Turn.THIRD, Day.TUESDAY, "PT_12"},    // 15
+            {16, 0.0, Turn.FIRST, Day.WEDNESDAY, "PT_12"},  // 16
+            {17, 0.5, Turn.FIRST, Day.WEDNESDAY, "PT_13"},  // 17
+            {18, 0.0, Turn.FIRST, Day.WEDNESDAY, "PT_13"},  // 18
+            {19, 0.5, Turn.FIRST, Day.WEDNESDAY, "PT_14"},  // 19
+            {20, 0.8, Turn.FIRST, Day.WEDNESDAY, "PT_15"},  // 20
+            {21, 0.8, Turn.SECOND, Day.WEDNESDAY, "PT_16"}, // 21
+            {22, 0.0, Turn.SECOND, Day.WEDNESDAY, "PT_16"}, // 22
+            {23, 0.8, Turn.SECOND, Day.WEDNESDAY, "PT_17"}, // 23
+            {24, 0.0, Turn.THIRD, Day.WEDNESDAY, "PT_18"},  // 24
+            {25, 0.0, Turn.THIRD, Day.WEDNESDAY, "PT_18"},  // 25
+            {26, 0.5, Turn.FIRST, Day.THURSDAY, "PT_19"},   // 26
+            {27, 0.0, Turn.FIRST, Day.THURSDAY, "PT_19"},   // 27
+            {28, 0.5, Turn.FIRST, Day.THURSDAY, "PT_20"},   // 28
+            {29, 0.5, Turn.FIRST, Day.THURSDAY, "PT_21"},   // 29
         };
         
         for (final Object[] test : tests) {
             final WorkOrderInformation wo = planForTwoTurns.get(Integer.parseInt(test[0].toString()));
-            Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.01D);
+            Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.001D);
             Assert.assertEquals((Turn) test[2], wo.getTurn());
             Assert.assertEquals((Day) test[3], wo.getDay());
         }
@@ -250,11 +274,6 @@ public class UtilsTest {
             Assert.assertEquals((Day) test[3], wo.getDay());
         }
 
-    }
-    
-    @Test
-    public void shouldBuildPlanForThreeTurns() {
-        
     }
 
     private static List<WorkOrderInformation> testWorkOrderItems() {
