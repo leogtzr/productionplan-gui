@@ -50,3 +50,29 @@ public Builder machine(final String machine) {
     return this;
 }
 ```
+también hay que pensar en qué hacer con esto:
+```java
+@MissingTests
+private void updateTable(final List<WorkOrderInformation> workOrderItems, final JTable table) {        
+    final DefaultTableModel workOrdersModel = (DefaultTableModel) table.getModel();
+    // "#Part", "Hr", "Stup", "P/Hac", "Máquina"
+    workOrderItems.forEach(item -> {
+        final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
+        final Object[] data = {
+            item.getPartNumber()
+            , item.getRunHours()
+            , item.getSetupHours()
+            , item.getQty()
+            , machine
+        };
+        workOrdersModel.addRow(data);
+    });
+}
+```
+perhaps it can be changed to:
+```java
+workOrderItems.forEach(item -> {
+    final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
+    item.setMachine(machine);
+    ...
+```

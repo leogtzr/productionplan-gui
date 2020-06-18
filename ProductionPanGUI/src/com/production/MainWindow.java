@@ -375,6 +375,7 @@ public class MainWindow extends javax.swing.JFrame {
         // "#Part", "Hr", "Stup", "P/Hac", "Máquina"
         workOrderItems.forEach(item -> {
             final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
+            item.setMachine(machine);
             final Object[] data = {
                 item.getPartNumber()
                 , item.getRunHours()
