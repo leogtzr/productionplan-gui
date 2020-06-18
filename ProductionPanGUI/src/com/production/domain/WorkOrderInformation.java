@@ -17,6 +17,7 @@ public final class WorkOrderInformation {
     private double salesPrice;
     private Turn turn = Turn.NA;
     private Day day = Day.MONDAY;
+    private String machine = "";
 
     public WorkOrderInformation() { }
     
@@ -36,6 +37,7 @@ public final class WorkOrderInformation {
         this.salesPrice = builder.salesPrice;
         this.turn = builder.turn;
         this.day = builder.day;
+        this.machine = builder.machine;
     }
 
     public String getPartNumber() {
@@ -118,19 +120,28 @@ public final class WorkOrderInformation {
         this.day = day;
     }
 
+    public String getMachine() {
+        return machine;
+    }
+
+    public void setMachine(final String machine) {
+        this.machine = machine;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 73 * hash + Objects.hashCode(this.wcDescription);
-        hash = 73 * hash + Objects.hashCode(this.partNumber);
-        hash = 73 * hash + Objects.hashCode(this.workOrder);
-        hash = 73 * hash + (int) (Double.doubleToLongBits(this.runHours) ^ (Double.doubleToLongBits(this.runHours) >>> 32));
-        hash = 73 * hash + (int) (Double.doubleToLongBits(this.setupHours) ^ (Double.doubleToLongBits(this.setupHours) >>> 32));
-        hash = 73 * hash + this.qty;
-        hash = 73 * hash + this.age;
-        hash = 73 * hash + (int) (Double.doubleToLongBits(this.salesPrice) ^ (Double.doubleToLongBits(this.salesPrice) >>> 32));
-        hash = 73 * hash + Objects.hashCode(this.turn);
-        hash = 73 * hash + Objects.hashCode(this.day);
+        hash = 97 * hash + Objects.hashCode(this.wcDescription);
+        hash = 97 * hash + Objects.hashCode(this.partNumber);
+        hash = 97 * hash + Objects.hashCode(this.workOrder);
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.runHours) ^ (Double.doubleToLongBits(this.runHours) >>> 32));
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.setupHours) ^ (Double.doubleToLongBits(this.setupHours) >>> 32));
+        hash = 97 * hash + this.qty;
+        hash = 97 * hash + this.age;
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.salesPrice) ^ (Double.doubleToLongBits(this.salesPrice) >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.turn);
+        hash = 97 * hash + Objects.hashCode(this.day);
+        hash = 97 * hash + Objects.hashCode(this.machine);
         return hash;
     }
 
@@ -170,6 +181,9 @@ public final class WorkOrderInformation {
         if (!Objects.equals(this.workOrder, other.workOrder)) {
             return false;
         }
+        if (!Objects.equals(this.machine, other.machine)) {
+            return false;
+        }
         if (this.turn != other.turn) {
             return false;
         }
@@ -181,11 +195,12 @@ public final class WorkOrderInformation {
 
     @Override
     public String toString() {
-        return "{partNumber=" + partNumber + ", workOrder=" + workOrder + ", runHours=" + 
-                runHours + ", setupHours=" + setupHours + ", qty=" + qty + ", age=" + age +
-                ", salesPrice=" + salesPrice + ", turn=" + turn + ", day=" + day + '}';
+        return "WorkOrderInformation{" + "wcDescription=" + wcDescription + ", partNumber=" + partNumber + 
+                ", workOrder=" + workOrder + ", runHours=" + runHours + ", setupHours=" + setupHours + ", qty=" + 
+                qty + ", age=" + age + ", salesPrice=" + salesPrice + ", turn=" + turn + ", day=" + day + 
+                ", machine=" + machine + '}';
     }
-
+    
     public static class Builder {
         
         private String wcDescription;
@@ -198,6 +213,7 @@ public final class WorkOrderInformation {
         private double salesPrice;
         private Turn turn = Turn.NA;
         private Day day = Day.MONDAY;
+        private String machine = "";
         
         public Builder(final String partNumber, final String workOrder) {
             this.partNumber = partNumber;
@@ -254,10 +270,14 @@ public final class WorkOrderInformation {
             return this;
         }
         
+        public Builder machine(final String machine) {
+            this.machine = machine;
+            return this;
+        }
+        
         public WorkOrderInformation build() {
             return new WorkOrderInformation(this);
         }
-        
     }
 
 }

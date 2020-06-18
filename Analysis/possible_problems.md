@@ -29,8 +29,24 @@ Lo que obtenemos por medio de Swing siempre será un Object ..., tendremos que c
 
 ¿Qué pasa si Miriam quiere editar algún otro valor (columna)?
 
-Aquí podemos restringirlo ... 
+Aquí podemos restringirlo ... (ver la siguiente sección ... )
 
 ### Restricciones ...
-
 - Que solo se pueda editar la columna #4.
+
+### Consideraciones para #2
+
+Dentro de la clase **WorkOrderInformation** no existe una propiedad para *machine*.
+
+Puede ser resuelto fácilmente con un:
+
+```java
+private String machine = "";
+```
+y:
+```java
+public Builder machine(final String machine) {
+    this.machine = machine;
+    return this;
+}
+```
