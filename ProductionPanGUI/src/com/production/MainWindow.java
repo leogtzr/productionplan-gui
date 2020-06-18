@@ -152,10 +152,10 @@ public class MainWindow extends javax.swing.JFrame {
                 }
 
                 if (evt.getType() == TableModelEvent.UPDATE) {
-                    // System.out.println("Update identified.");
-                    final int rowNumberToBeChanged = evt.getFirstRow();
-                    final int columnToBeChanged = evt.getColumn();
-                    System.out.printf("Row: %d, col: %d\n", rowNumberToBeChanged, columnToBeChanged);
+                    final int row = evt.getFirstRow();
+                    final int col = evt.getColumn();
+                    final Object newMachineValue = workOrderTable.getValueAt(row, col);
+                    updateMachine(row, col, newMachineValue.toString());
                 }
             }
         }
@@ -639,6 +639,11 @@ public class MainWindow extends javax.swing.JFrame {
         }
         
         return priorities;
+    }
+    
+    // TODO: ...
+    private void updateMachine(final int row, final int col, final String newMachine) {
+        
     }
     
 }
