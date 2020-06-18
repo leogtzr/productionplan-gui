@@ -190,6 +190,9 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="workOrderTable.getModel().addTableModelListener(&#xd;&#xa;    new TableModelListener() {&#xd;&#xa;        public void tableChanged(final TableModelEvent evt) {&#xd;&#xa;            &#xd;&#xa;            if (evt.getColumn() != ALLOWED_COLUMN_NUMBER_TO_BE_EDITED) {&#xd;&#xa;                return;&#xd;&#xa;            }&#xd;&#xa;        &#xd;&#xa;            if (evt.getType() == TableModelEvent.UPDATE) {&#xd;&#xa;                // System.out.println(&quot;Update identified.&quot;);&#xd;&#xa;                final int rowNumberToBeChanged = evt.getFirstRow();&#xd;&#xa;                final int columnToBeChanged = evt.getColumn();&#xd;&#xa;                System.out.printf(&quot;Row: %d, col: %d\n&quot;, rowNumberToBeChanged, columnToBeChanged);&#xd;&#xa;            }&#xd;&#xa;        }&#xd;&#xa;    }&#xd;&#xa;);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

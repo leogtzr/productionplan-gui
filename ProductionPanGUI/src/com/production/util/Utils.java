@@ -301,6 +301,7 @@ el segundo se aprovecha
                 buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
                 break;
             case 3:                 // Use three turns ...
+                buildPlanForThreeTurns(workCenter, workOrderItems, priorities);
                 break;
         }
         return "";
@@ -333,7 +334,6 @@ el segundo se aprovecha
         , final List<Priority> priorities
     ) {
         
-        // TODO: not used yet ... 
         final List<WorkOrderWrapper> plan = new ArrayList<>();
         
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);

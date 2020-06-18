@@ -19,9 +19,8 @@ rem "%JAVA_BIN%" -jar "%JAR_FILE_NAME%"
 
 rem copy "dist\%JAR_FILE_NAME%" run\
 copy run\* dist\
-(
-	cd dist\
-	"%JAVA_BIN%" -jar "%JAR_FILE_NAME%"
-)
+cd dist\
+"%JAVA_BIN%" -jar "%JAR_FILE_NAME%"
+cd ..
 
 exit /b 0

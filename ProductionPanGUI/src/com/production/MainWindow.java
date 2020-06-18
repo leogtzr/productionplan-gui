@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.swing.JTable;
+import javax.swing.event.TableModelListener;
+import javax.swing.event.TableModelEvent;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.Collections;
@@ -35,6 +37,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import static com.production.util.Constants.DOBLADO_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME;
+import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -140,6 +143,23 @@ public class MainWindow extends javax.swing.JFrame {
     );
     workOrderTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
     workOrderTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+    workOrderTable.getModel().addTableModelListener(
+        new TableModelListener() {
+            public void tableChanged(final TableModelEvent evt) {
+
+                if (evt.getColumn() != ALLOWED_COLUMN_NUMBER_TO_BE_EDITED) {
+                    return;
+                }
+
+                if (evt.getType() == TableModelEvent.UPDATE) {
+                    // System.out.println("Update identified.");
+                    final int rowNumberToBeChanged = evt.getFirstRow();
+                    final int columnToBeChanged = evt.getColumn();
+                    System.out.printf("Row: %d, col: %d\n", rowNumberToBeChanged, columnToBeChanged);
+                }
+            }
+        }
+    );
     jScrollPane1.setViewportView(workOrderTable);
 
     selectedPrioritiesTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -528,10 +548,10 @@ public class MainWindow extends javax.swing.JFrame {
     private void wcDescriptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wcDescriptionsActionPerformed
         this.cleanTable(this.selectedPrioritiesTable);
         
-        final String selectedItem = this.wcDescriptions.getSelectedItem().toString();
+        final String selectedWorkCenter = this.wcDescriptions.getSelectedItem().toString();
         this.workOrderInformationItems.ifPresent(workOrderItems -> {
             cleanTable(this.workOrderTable);
-            updateTableWithWCDescription(selectedItem, workOrderItems, this.workOrderTable);
+            updateTableWithWCDescription(selectedWorkCenter, workOrderItems, this.workOrderTable);
         });
     }//GEN-LAST:event_wcDescriptionsActionPerformed
 

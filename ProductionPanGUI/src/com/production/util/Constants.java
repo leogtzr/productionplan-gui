@@ -23,6 +23,8 @@ public final class Constants {
     
     public static final String DOBLADO = "DOBLADO";
     
+    public static final int ALLOWED_COLUMN_NUMBER_TO_BE_EDITED = 4;
+    
     private Constants() {}
     
 }
