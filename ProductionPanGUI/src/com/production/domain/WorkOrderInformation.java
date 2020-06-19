@@ -195,7 +195,7 @@ public final class WorkOrderInformation {
 
     @Override
     public String toString() {
-        return "WorkOrderInformation{" + "wcDescription=" + wcDescription + ", partNumber=" + partNumber + 
+        return "WOInfo{" + "wcDescription=" + wcDescription + ", partNumber=" + partNumber + 
                 ", workOrder=" + workOrder + ", runHours=" + runHours + ", setupHours=" + setupHours + ", qty=" + 
                 qty + ", age=" + age + ", salesPrice=" + salesPrice + ", turn=" + turn + ", day=" + day + 
                 ", machine=" + machine + '}';

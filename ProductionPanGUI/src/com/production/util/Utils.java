@@ -458,6 +458,34 @@ el segundo se aprovecha
         return items.stream().mapToDouble(wo -> wo.getRunHours() + wo.getSetupHours()).sum();
     }
     
+    @MissingTests
+    public static boolean updateMachine(
+            final int row
+            , final String newMachine
+            , final String workCenter
+            , final List<WorkOrderInformation> workOrderInformationItems) {
+        
+        boolean updated = false;
+        
+        final List<WorkOrderInformation> filteredItems = workOrderInformationItems
+                .stream()
+                .filter(wo -> wo.getWcDescription().equalsIgnoreCase(workCenter))
+                .collect(Collectors.toList());
+        
+        if (row < filteredItems.size()) {
+            final WorkOrderInformation toUpdate = filteredItems.get(row);
+            toUpdate.setMachine(newMachine);
+            updated = true;
+        } else {
+            // System.out.println("Nel ... not found ... ");
+            System.out.printf("Size: %d, workCenter: '%s'\n", filteredItems.size(), workCenter);
+            // System.out.printf("Row: %d ... \n", row);
+        }
+        
+        return updated;
+        
+    }
+    
     private Utils() {}
     
 }

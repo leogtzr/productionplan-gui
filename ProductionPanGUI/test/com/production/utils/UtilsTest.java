@@ -20,9 +20,14 @@ import org.junit.Test;
 
 import static com.production.util.Utils.sumTurnHoursFromWorkOrderItems;
 import static com.production.util.Utils.workOrderItemsPerPartNumber;
+
+import static com.production.domain.WorkOrderInformation.Builder;
+
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -738,6 +743,52 @@ public class UtilsTest {
         System.out.println(xs1);
         System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
         System.out.println(xs);   
+    }
+    
+    @Test
+    public void shouldUpdateMachineByWorkCenter() {
+        
+        // Test items:
+        final List<WorkOrderInformation> items = new ArrayList<>();
+        final WorkOrderInformation wo1 = new Builder("PT1", "W1").workCenter("DOBLADO").machine("toupdate1").build();
+        final WorkOrderInformation wo2 = new Builder("PT2", "W2").workCenter("OTRO1").machine("toupdate2").build();
+        final WorkOrderInformation wo3 = new Builder("PT3", "W3").workCenter("OTRO2").machine("toupdate3").build();
+        final WorkOrderInformation wo4 = new Builder("PT4", "W4").workCenter("DOBLADO").machine("toupdate4").build();
+        final WorkOrderInformation wo5 = new Builder("PT5", "W5").workCenter("DOBLADO").machine("toupdate5").build();
+        final WorkOrderInformation wo6 = new Builder("PT6", "W6").workCenter("DOBLADO").machine("toupdate6").build();
+        final WorkOrderInformation wo7 = new Builder("PT7", "W7").workCenter("PUNCH").machine("toupdate7").build();
+        final WorkOrderInformation wo8 = new Builder("PT8", "W8").workCenter("DOBLADO").machine("toupdate8").build();
+        final WorkOrderInformation wo9 = new Builder("PT9", "W9").workCenter("MAQUINADO").machine("toupdate9").build();
+        final WorkOrderInformation wo10 = new Builder("PT10", "W10").workCenter("MAQUINADO").machine("toupdate10").build();
+        
+        items.add(wo1);
+        items.add(wo2);
+        items.add(wo3);
+        items.add(wo4);
+        items.add(wo5);
+        items.add(wo6);
+        items.add(wo7);
+        items.add(wo8);
+        items.add(wo9);
+        items.add(wo10);
+        
+        final Object[][] tests = {
+            {3, "DOBLADO", "new-value", "new-value", true},
+        };
+        
+        for (final Object[] test : tests) {
+            final int idx = Integer.parseInt(test[0].toString());
+            final String workCenter = test[1].toString();
+            final String newMachineValue = test[2].toString();
+            final String expectedMachineValue = test[3].toString();
+            final boolean updated = Utils.updateMachine(idx, newMachineValue, workCenter, items);
+            Assert.assertEquals(Boolean.valueOf(test[4].toString()), updated);
+            
+            final var filtered = items.stream().filter(w -> w.getWcDescription().equalsIgnoreCase(workCenter)).collect(toList());
+            final WorkOrderInformation wo = filtered.get(idx);
+            Assert.assertEquals(expectedMachineValue, wo.getMachine());
+        }
+
     }
     
 }

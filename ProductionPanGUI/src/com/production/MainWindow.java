@@ -155,7 +155,10 @@ public class MainWindow extends javax.swing.JFrame {
                     final int row = evt.getFirstRow();
                     final int col = evt.getColumn();
                     final Object newMachineValue = workOrderTable.getValueAt(row, col);
-                    updateMachine(row, col, newMachineValue.toString());
+                    final String currentWorkCenter = wcDescriptions.getSelectedItem().toString();
+                    workOrderInformationItems
+                    .ifPresent(items -> 
+                        Utils.updateMachine(row, newMachineValue.toString(), currentWorkCenter, items));
                 }
             }
         }
@@ -639,11 +642,6 @@ public class MainWindow extends javax.swing.JFrame {
         }
         
         return priorities;
-    }
-    
-    // TODO: ...
-    private void updateMachine(final int row, final int col, final String newMachine) {
-        
     }
     
 }
