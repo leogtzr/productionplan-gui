@@ -1,4 +1,17 @@
+/* La lista de "prioridades" es contruída desde la tabla izquierda, esto significa que 
+la lista de prioridades contendrá "part numbers" existentes en la primera tabla.
 
+private String partNumber;
+private int order;
+
+public Priority(final String partNumber, final int order) {
+        this.partNumber = partNumber;
+        this.order = order;
+}
+
+Se supone que las prioridades significa que 
+
+*/
 
 final WorkOrderInformation wo1 = new WorkOrderInformation();
 wo1.setPartNumber("PT_1");

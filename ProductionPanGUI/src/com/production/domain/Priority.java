@@ -7,12 +7,12 @@ import java.util.Objects;
  */
 public class Priority {
     
-    private int order;
     private String partNumber;
+    private int order;
 
-    public Priority(final int order, final String partNumber) {
-        this.order = order;
+    public Priority(final String partNumber, final int order) {
         this.partNumber = partNumber;
+        this.order = order;
     }
     
     public Priority() {}
