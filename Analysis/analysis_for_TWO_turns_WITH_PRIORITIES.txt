@@ -1,4 +1,4 @@
-/* La lista de "prioridades" es contruída desde la tabla izquierda, esto significa que 
+/* La lista de "prioridades" es construída desde la tabla izquierda, esto significa que 
 la lista de prioridades contendrá "part numbers" existentes en la primera tabla.
 
 private String partNumber;
