@@ -27,6 +27,7 @@ import static com.production.util.Constants.DOBLADO;
 import java.util.Collections;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -365,6 +366,7 @@ public class UtilsTest {
     
     private static List<WorkOrderInformation> testItemsWithAgeShort() {
         final List<WorkOrderInformation> items = new ArrayList<>();
+        
         final WorkOrderInformation wo2 = new WorkOrderInformation.Builder("pt2", "wo2").workCenter(DOBLADO).age(3).build();
         final WorkOrderInformation wo3 = new WorkOrderInformation.Builder("pt3", "wo3").workCenter(DOBLADO).age(6).build();
         final WorkOrderInformation wo4 = new WorkOrderInformation.Builder("pt1", "wo9").workCenter(DOBLADO).age(5).build();
@@ -382,7 +384,7 @@ public class UtilsTest {
     public void shouldSortByAge() {
         final List<WorkOrderInformation> items = testItemsWithAgeShort();
         
-        Collections.sort(items, new AgeComparator());
+        Collections.<WorkOrderInformation>sort(items, new AgeComparator());
         
         final Object[][] tests = {
             // Index, Expected Age
@@ -398,6 +400,14 @@ public class UtilsTest {
             final int expectedAge = Integer.parseInt(test[1].toString());
             Assert.assertEquals(expectedAge, got);
         }
+        
+        // let's group the elements ... 
+        final List<WorkOrderInformation> other = new ArrayList<>();
+        
+        final Map<String, List<WorkOrderInformation>> group = Utils.workOrderItemsPerPartNumber(items);
+        group.forEach((pt, wos) -> other.addAll(wos));
+        
+        System.out.println(other);
         
     }
 
