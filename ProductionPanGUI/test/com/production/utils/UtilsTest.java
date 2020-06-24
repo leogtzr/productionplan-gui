@@ -1,5 +1,6 @@
 package com.production.utils;
 
+import com.production.domain.AgeComparator;
 import com.production.domain.Day;
 import com.production.domain.Priority;
 import com.production.domain.Turn;
@@ -22,6 +23,8 @@ import static com.production.util.Utils.sumTurnHoursFromWorkOrderItems;
 import static com.production.util.Utils.workOrderItemsPerPartNumber;
 
 import static com.production.domain.WorkOrderInformation.Builder;
+import static com.production.util.Constants.DOBLADO;
+import java.util.Collections;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -358,6 +361,44 @@ public class UtilsTest {
                 wo9,
                 wo10
         );
+    }
+    
+    private static List<WorkOrderInformation> testItemsWithAgeShort() {
+        final List<WorkOrderInformation> items = new ArrayList<>();
+        final WorkOrderInformation wo2 = new WorkOrderInformation.Builder("pt2", "wo2").workCenter(DOBLADO).age(3).build();
+        final WorkOrderInformation wo3 = new WorkOrderInformation.Builder("pt3", "wo3").workCenter(DOBLADO).age(6).build();
+        final WorkOrderInformation wo4 = new WorkOrderInformation.Builder("pt1", "wo9").workCenter(DOBLADO).age(5).build();
+        final WorkOrderInformation wo1 = new WorkOrderInformation.Builder("pt1", "wo1").workCenter(DOBLADO).age(9).build();
+        
+        items.add(wo1);
+        items.add(wo2);
+        items.add(wo3);
+        items.add(wo4);
+        
+        return items;
+    }
+    
+    @Test
+    public void shouldSortByAge() {
+        final List<WorkOrderInformation> items = testItemsWithAgeShort();
+        
+        Collections.sort(items, new AgeComparator());
+        
+        final Object[][] tests = {
+            // Index, Expected Age
+            {0, 9},
+            {1, 6},
+            {2, 5},
+            {3, 3},
+        };
+
+        for (final Object[] test : tests) {
+            final WorkOrderInformation wo = items.get(Integer.parseInt(test[0].toString()));
+            final int got = wo.getAge();
+            final int expectedAge = Integer.parseInt(test[1].toString());
+            Assert.assertEquals(expectedAge, got);
+        }
+        
     }
 
     private static List<WorkOrderInformation> testItemsWithAge() {

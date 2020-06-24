@@ -3,7 +3,7 @@
     2) Age
     3) Part Numbers iguales deberían de aparecer juntas. 
 
-    No sé porqué mi mente se inclina a pensar que 
+    Podemos ordenar por Age
 
 |Work Order|Part Number|Run|Setup|Age|
 |:----------:|:-----:|:---:|:-----:|:---:|
