@@ -79,3 +79,4 @@ workOrderItems.forEach(item -> {
 
 # Ordering ... 
 
+Hace unos días tenía una duda que Miriam aclaró ayer. La duda era sobre combinar
