@@ -26,11 +26,6 @@ import static com.production.domain.WorkOrderInformation.Builder;
 import static com.production.util.Constants.DOBLADO;
 import java.util.Collections;
 
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -384,7 +379,7 @@ public class UtilsTest {
     public void shouldSortByAge() {
         final List<WorkOrderInformation> items = testItemsWithAgeShort();
         
-        Collections.<WorkOrderInformation>sort(items, new AgeComparator());
+        Collections.sort(items, new AgeComparator());
         
         final Object[][] tests = {
             // Index, Expected Age
@@ -392,6 +387,14 @@ public class UtilsTest {
             {1, 6},
             {2, 5},
             {3, 3},
+        };
+        
+        final Object[][] testsPtOrder = {
+            // Index, expected age, pt number
+            {0, 9, "pt1"},
+            {1, 5, "pt1"},
+            {2, 6, "pt3"},
+            {3, 3, "pt2"},
         };
 
         for (final Object[] test : tests) {
@@ -407,8 +410,13 @@ public class UtilsTest {
         final Map<String, List<WorkOrderInformation>> group = Utils.workOrderItemsPerPartNumber(items);
         group.forEach((pt, wos) -> other.addAll(wos));
         
-        System.out.println(other);
-        
+        for (final Object[] test : testsPtOrder) {
+            final WorkOrderInformation wo = other.get(Integer.parseInt(test[0].toString()));
+            final int got = wo.getAge();
+            final int expectedAge = Integer.parseInt(test[1].toString());
+            Assert.assertEquals(expectedAge, got);
+            Assert.assertEquals(test[2].toString(), wo.getPartNumber());
+        }
     }
 
     private static List<WorkOrderInformation> testItemsWithAge() {
