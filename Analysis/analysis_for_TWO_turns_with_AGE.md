@@ -5,9 +5,32 @@
 
     Podemos ordenar por Age primero y luego juntar basado en 
 
-|Work Order|Part Number|Run|Setup|Age|
+|Part Number|Work Order|Age|Work Center|...|
 |:----------:|:-----:|:---:|:-----:|:---:|
-|wo1       | pt1       |0.5|0.3|6|
+|pt1       | wo1       |9|DOBLADO|,,,|
+|pt2       | wo2       |3|DOBLADO|,,,|
+|pt3       | wo2       |6|DOBLADO|,,,|
+|...       | ...       |...|...|...|
+|...       | ...       |...|...|...|
+|...       | ...       |...|...|...|
+|pt1       | wo9       |5|DOBLADO|,,,|
+
+Aquí la confusión era al orden por Age podría poner las partes separadas.
+Luego al ordenar por partes es posible que queden desacomodados ...
+
+**Miriam** confirmó que lo siguiente es correcto:
+
+|Part Number|Work Order|Age|Work Center|...|
+|:----------:|:-----:|:---:|:-----:|:---:|
+|pt1       | wo1       |9|DOBLADO|,,,|
+|pt1       | wo9       |5|DOBLADO|,,,|
+|pt3       | wo3       |6|DOBLADO|,,,|
+|pt2       | wo2       |3|DOBLADO|,,,|
+|...       | ...       |...|...|...|
+|...       | ...       |...|...|...|
+|...       | ...       |...|...|...|
+
+Fíjate cómo ordené "pt1" en los dos primeros rows, pero si te fijas el "Age" ya no coincide en el segundo renglón, es decir, es un 5, el cual es menor al 6 de "pt3". 
 
 ```java
 final WorkOrderInformation wo1 = new WorkOrderInformation("PT_1", "WO_1");
