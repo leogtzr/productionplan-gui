@@ -1,0 +1,9 @@
+// Index, expected age, expected part number
+
+// 0, 12, "PT_9"
+// 1, 8, "PT_6"
+// 2, 6, "PT_3"
+// 3, 4, "PT_3"
+// 4, 6, "PT_5"
+// 5, 6, "PT_10"
+// 6, 5, "PT_10"

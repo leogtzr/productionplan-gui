@@ -1,6 +1,7 @@
 package com.production.util;
 
 import com.production.domain.AgeByWCFields;
+import com.production.domain.AgeComparator;
 import com.production.domain.Day;
 import com.production.domain.FabLoadByWCFields;
 import com.production.domain.Priority;
@@ -42,6 +43,8 @@ import static com.production.util.Constants.RUN_EFFICIENCY;
 import static com.production.util.Constants.FIRST_TURN_LENGTH;
 import static com.production.util.Constants.SECOND_TURN_LENGTH;
 import static com.production.util.Constants.THIRD_TURN_LENGTH;
+import java.util.Collections;
+import java.util.Comparator;
 
 import java.util.LinkedHashMap;
 
@@ -476,14 +479,22 @@ el segundo se aprovecha
             final WorkOrderInformation toUpdate = filteredItems.get(row);
             toUpdate.setMachine(newMachine);
             updated = true;
-        } else {
-            // System.out.println("Nel ... not found ... ");
-            System.out.printf("Size: %d, workCenter: '%s'\n", filteredItems.size(), workCenter);
-            // System.out.printf("Row: %d ... \n", row);
         }
         
-        return updated;
+        return updated;        
+    }
+    
+    @MissingTests
+    public static List<WorkOrderInformation> sortAndGroup(
+            final List<WorkOrderInformation> items, 
+            final Comparator<WorkOrderInformation> comparator) {
+        Collections.sort(items, comparator);
+        final List<WorkOrderInformation> other = new ArrayList<>();
+
+        final Map<String, List<WorkOrderInformation>> group = Utils.workOrderItemsPerPartNumber(items);
+        group.forEach((pt, wos) -> other.addAll(wos));
         
+        return other;
     }
     
     private Utils() {}

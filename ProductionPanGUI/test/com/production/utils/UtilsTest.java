@@ -28,6 +28,8 @@ import java.util.Collections;
 
 import static java.util.stream.Collectors.toList;
 
+import static java.lang.Integer.parseInt;
+
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
  */
@@ -415,6 +417,40 @@ public class UtilsTest {
             Assert.assertEquals(test[2].toString(), wo.getPartNumber());
         }
     }
+    
+    @Test
+    public void shouldSortByAgeAndGroupByEqualPartNumbers() {
+        final List<WorkOrderInformation> items = testItemsWithAge();
+        final int EXPECTED_ITEMS_SIZE = 17;
+        Assert.assertEquals(EXPECTED_ITEMS_SIZE, items.size());
+        
+        final List<WorkOrderInformation> itemsSortedByAge = Utils.sortAndGroup(items, new AgeComparator());
+        // System.out.println(itemsSortedByAge);
+        // itemsSortedByAge.forEach(System.out::println);
+        
+        final Object[][] tests = {
+            // Index, expected age, expected part number
+            {0, 12, "PT_9"},
+            {1, 8, "PT_6"},
+            {2, 6, "PT_3"},
+            {3, 4, "PT_3"},
+            {4, 6, "PT_5"},
+            {5, 6, "PT_10"},
+            {6, 5, "PT_10"},
+            // ...
+        };
+        
+        for (final Object[] test : tests) {
+            final int idx = parseInt(test[0].toString());
+            final int expectedAge = parseInt(test[1].toString());
+            final String expectedPartNumber = test[2].toString();
+            
+            final WorkOrderInformation wo = itemsSortedByAge.get(idx);
+            Assert.assertEquals(expectedAge, wo.getAge());
+            Assert.assertEquals(expectedPartNumber, wo.getPartNumber());
+        }
+        
+    }
 
     private static List<WorkOrderInformation> testItemsWithAge() {
         final List<WorkOrderInformation> items = new ArrayList<>();
@@ -488,7 +524,7 @@ public class UtilsTest {
         wo11.setRunHours(1.0D);
         wo11.setSetupHours(1.5D);
         wo11.setQty(45);
-        wo11.setAge(8);
+        wo11.setAge(12);
 
         final WorkOrderInformation wo12 = new WorkOrderInformation("PT_10", "WO_10");
         wo12.setRunHours(0.5D);
@@ -504,7 +540,7 @@ public class UtilsTest {
         wo13.setQty(96);
         wo13.setAge(6);
 
-// Some of the following items may appear on Wednesday:
+        // Some of the following items may appear on Wednesday:
         final WorkOrderInformation wo14 = new WorkOrderInformation("PT_11", "WO_12");
         wo14.setRunHours(1.1D);
         wo14.setSetupHours(0.8D);
