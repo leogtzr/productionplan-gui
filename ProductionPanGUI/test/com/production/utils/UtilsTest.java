@@ -625,6 +625,15 @@ public class UtilsTest {
             {5, 2.5D, Turn.SECOND, Day.MONDAY, "PT_10"},    // 5
             {6, 0.0D, Turn.SECOND, Day.MONDAY, "PT_10"},    // 6
             {7, 3.3D, Turn.FIRST, Day.TUESDAY, "PT_4"},     // 7
+            {8, 0.0D, Turn.FIRST, Day.TUESDAY, "PT_4"},     // 8
+            {9, 0.0D, Turn.SECOND, Day.TUESDAY, "PT_4"},    // 9
+            {10, 0.5D, Turn.SECOND, Day.TUESDAY, "PT_7"},   // 10
+            {11, 0.8D, Turn.SECOND, Day.TUESDAY, "PT_12"},  // 11
+            {12, 1.0D, Turn.FIRST, Day.WEDNESDAY, "PT_8"},  // 12
+            {13, 0.0D, Turn.FIRST, Day.WEDNESDAY, "PT_8"},  // 13
+            {14, 0.3D, Turn.FIRST, Day.WEDNESDAY, "PT_1"},  // 14
+            {15, 0.8D, Turn.FIRST, Day.WEDNESDAY, "PT_11"}, // 15
+            {16, 2.3D, Turn.SECOND, Day.WEDNESDAY, "PT_2"}, // 16
         };
 
         for (final Object[] test : tests) {
