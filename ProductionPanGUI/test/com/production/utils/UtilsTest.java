@@ -596,6 +596,45 @@ public class UtilsTest {
 
         return items;
     }
+    
+    @Test
+    public void shouldBuilPlanForTwoTurnsWithSortedItemsByAgeAndGroupedByPartNumbers() {
+        final List<WorkOrderInformation> items = testItemsWithAge();
+        final int EXPECTED_ITEMS_SIZE = 17;
+        Assert.assertEquals(EXPECTED_ITEMS_SIZE, items.size());
+
+        final List<WorkOrderInformation> workOrderItems = Utils.sortAndGroup(items, new AgeComparator());
+        final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = items.size();
+        final String workCenter = Constants.DOBLADO;
+        final List<Priority> priorities = List.of();
+
+        // Build the plan:
+        final List<WorkOrderInformation> planForTwoTurns = Utils.buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
+
+        // The list shouldn't be empty ...
+        Assert.assertFalse(planForTwoTurns.isEmpty());
+        Assert.assertEquals(EXPECTED_NUMBER_OF_ITEMS_IN_PLAN, planForTwoTurns.size());
+
+        final Object[][] tests = {
+            // Index, setup hours, turn, day
+            {0, 1.5D, Turn.FIRST, Day.MONDAY, "PT_9"},      // 0
+            {1, 2.0D, Turn.FIRST, Day.MONDAY, "PT_6"},      // 1
+            {2, 0.5D, Turn.FIRST, Day.MONDAY, "PT_3"},      // 2
+            {3, 0.0D, Turn.SECOND, Day.MONDAY, "PT_3"},     // 3
+            {4, 0.5D, Turn.SECOND, Day.MONDAY, "PT_5"},     // 4
+            {5, 2.5D, Turn.SECOND, Day.MONDAY, "PT_10"},    // 5
+            {6, 0.0D, Turn.SECOND, Day.MONDAY, "PT_10"},    // 6
+            {7, 3.3D, Turn.FIRST, Day.TUESDAY, "PT_4"},     // 7
+        };
+
+        for (final Object[] test : tests) {
+            final WorkOrderInformation wo = planForTwoTurns.get(Integer.parseInt(test[0].toString()));
+            Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.01D);
+            Assert.assertEquals((Turn) test[2], wo.getTurn());
+            Assert.assertEquals((Day) test[3], wo.getDay());
+            Assert.assertEquals(test[4].toString(), wo.getPartNumber());
+        }
+    }
 
     /*
         This factory test method contains items that will be used to test how the plans are built.

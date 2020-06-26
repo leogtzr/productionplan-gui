@@ -484,7 +484,7 @@ el segundo se aprovecha
         return updated;        
     }
     
-    @MissingTests
+    @Validated
     public static List<WorkOrderInformation> sortAndGroup(
             final List<WorkOrderInformation> items, 
             final Comparator<WorkOrderInformation> comparator) {

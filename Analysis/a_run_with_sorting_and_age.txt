@@ -1,22 +1,56 @@
-WOInfo{wcDescription=null, partNumber=PT_9, workOrder=WO_9, runHours=1.0, setupHours=1.5, qty=45, age=12, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
+WOInfo{partNumber=PT_9, workOrder=WO_9, runHours=1.0, setupHours=1.5, qty=45, age=12, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_6, workOrder=WO_6, runHours=2.5, setupHours=2.0, qty=55, age=8, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_3, workOrder=WO_3, runHours=0.2, setupHours=0.5, qty=14, age=6, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_3, workOrder=WO_3, runHours=1.4, setupHours=0.5, qty=94, age=4, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_5, workOrder=WO_5, runHours=0.7, setupHours=0.5, qty=240, age=6, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_10, workOrder=WO_11, runHours=0.5, setupHours=2.5, qty=96, age=6, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_10, workOrder=WO_10, runHours=0.5, setupHours=2.0, qty=12, age=5, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_4, workOrder=WO_4, runHours=3.4, setupHours=3.3, qty=14, age=5, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_4, workOrder=WO_4, runHours=5.7, setupHours=3.3, qty=24, age=1, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_4, workOrder=WO_4, runHours=5.7, setupHours=3.3, qty=24, age=1, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_7, workOrder=WO_7, runHours=0.8, setupHours=0.5, qty=40, age=5, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_12, workOrder=WO_13, runHours=1.5, setupHours=0.8, qty=47, age=5, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_8, workOrder=WO_8, runHours=1.0, setupHours=1.0, qty=30, age=4, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_8, workOrder=WO_8, runHours=1.3, setupHours=1.0, qty=39, age=3, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_1, workOrder=WO_1, runHours=4.2, setupHours=0.3, qty=7, age=3, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_11, workOrder=WO_12, runHours=1.1, setupHours=0.8, qty=22, age=3, salesPrice=0.0, turn=NA, day=MONDAY}
+WOInfo{partNumber=PT_2, workOrder=WO_2, runHours=1.1, setupHours=2.3, qty=20, age=2, salesPrice=0.0, turn=NA, day=MONDAY}
 
-WOInfo{wcDescription=null, partNumber=PT_6, workOrder=WO_6, runHours=2.5, setupHours=2.0, qty=55, age=8, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
+// ===> Now taking these elements and doing the analysis for setup hours ... 
+// The previous values are how the items were sorted and 
 
-WOInfo{wcDescription=null, partNumber=PT_3, workOrder=WO_3, runHours=0.2, setupHours=0.5, qty=14, age=6, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_3, workOrder=WO_3, runHours=1.4, setupHours=0.5, qty=94, age=4, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
+// Primer turno -> 8.5 hrs                  FT
+// Segundo turno -> 8.1 hrs                 ST
+// Tercer turno -> 5.5 hrs                  TT
 
-WOInfo{wcDescription=null, partNumber=PT_5, workOrder=WO_5, runHours=0.7, setupHours=0.5, qty=240, age=6, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
+// Begin
+WOInfo{partNumber=PT_9, workOrder=WO_9, runHours=1.0, setupHours=1.5, qty=45, age=12, salesPrice=0.0, turn=NA, day=MONDAY}		// 0
+// 1.0 + 1.5 = 2.5, sum = 2.5 < FT, Turn.FIRST, Day.Monday
 
-WOInfo{wcDescription=null, partNumber=PT_10, workOrder=WO_11, runHours=0.5, setupHours=2.5, qty=96, age=6, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_10, workOrder=WO_10, runHours=0.5, setupHours=2.0, qty=12, age=5, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
+WOInfo{partNumber=PT_6, workOrder=WO_6, runHours=2.5, setupHours=2.0, qty=55, age=8, salesPrice=0.0, turn=NA, day=MONDAY}		// 1
+// 2.5 + 2.0 = 4.5, sum = 2.5 + 4.5 = 7.0 < FT, Turn.FIRST Day.MONDAY
 
-WOInfo{wcDescription=null, partNumber=PT_4, workOrder=WO_4, runHours=3.4, setupHours=3.3, qty=14, age=5, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_4, workOrder=WO_4, runHours=5.7, setupHours=3.3, qty=24, age=1, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_4, workOrder=WO_4, runHours=5.7, setupHours=3.3, qty=24, age=1, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_7, workOrder=WO_7, runHours=0.8, setupHours=0.5, qty=40, age=5, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_12, workOrder=WO_13, runHours=1.5, setupHours=0.8, qty=47, age=5, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_8, workOrder=WO_8, runHours=1.0, setupHours=1.0, qty=30, age=4, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_8, workOrder=WO_8, runHours=1.3, setupHours=1.0, qty=39, age=3, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_1, workOrder=WO_1, runHours=4.2, setupHours=0.3, qty=7, age=3, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_11, workOrder=WO_12, runHours=1.1, setupHours=0.8, qty=22, age=3, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
-WOInfo{wcDescription=null, partNumber=PT_2, workOrder=WO_2, runHours=1.1, setupHours=2.3, qty=20, age=2, salesPrice=0.0, turn=NA, day=MONDAY, machine=}
+
+WOInfo{partNumber=PT_3, workOrder=WO_3, runHours=0.2, setupHours=0.5, qty=14, age=6, salesPrice=0.0, turn=NA, day=MONDAY} 		// 2
+// 0.2 + 0.5 = 0.7, sum = 2.5 + 4.5 + 0.7 = 7.7 < FT, Turn.FIRST, Day.MONDAY
+WOInfo{partNumber=PT_3, workOrder=WO_3, runHours=1.4, setupHours=0.5, qty=94, age=4, salesPrice=0.0, turn=NA, day=MONDAY}		// 3
+// setupHours for this should be adjusted to 0.0
+// 1.4 + 0.0 = 1.4, sum = 2.5 + 4.5 + 0.7 + 1.4 = 9.1 > FT, Turn.SECOND, Day.MONDAY
+
+WOInfo{partNumber=PT_5, workOrder=WO_5, runHours=0.7, setupHours=0.5, qty=240, age=6, salesPrice=0.0, turn=NA, day=MONDAY}		// 4
+// 0.7 + 0.5 = 1.2, sum = 2.5 + 4.5 + 0.7 + 1.4 + 1.2 = 10.3 > FT, Turn.SECOND, Day.MONDAY
+
+
+WOInfo{partNumber=PT_10, workOrder=WO_11, runHours=0.5, setupHours=2.5, qty=96, age=6, salesPrice=0.0, turn=NA, day=MONDAY}		// 5
+// 0.5 + 2.5 = 3.0, sum = 2.5 + 4.5 + 0.7 + 1.4 + 1.2 + 3.0 = 13.3 > FT, Turn.SECOND, Day.MONDAY
+WOInfo{partNumber=PT_10, workOrder=WO_10, runHours=0.5, setupHours=2.0, qty=12, age=5, salesPrice=0.0, turn=NA, day=MONDAY}		// 6
+// setupHours for this should be adjusted to 0.0
+// 0.5 + 0.0 = 0.5, sum = 2.5 + 4.5 + 0.7 + 1.4 + 1.2 + 3.0 + 0.5 = 13.8, Turn.SECOND, Day.MONDAY
+
+
+WOInfo{partNumber=PT_4, workOrder=WO_4, runHours=3.4, setupHours=3.3, qty=14, age=5, salesPrice=0.0, turn=NA, day=MONDAY}
+// 3.4 + 3.3 = 6.7, sum = 2.5 + 4.5 + 0.7 + 1.4 + 1.2 + 3.0 + 0.5 + 6.7 > ST, day change, Turn.FIRST, Day.TUESDAY
+WOInfo{partNumber=PT_4, workOrder=WO_4, runHours=5.7, setupHours=3.3, qty=24, age=1, salesPrice=0.0, turn=NA, day=MONDAY}
+// setupHours for this should be adjusted to 0.0
+WOInfo{partNumber=PT_4, workOrder=WO_4, runHours=5.7, setupHours=3.3, qty=24, age=1, salesPrice=0.0, turn=NA, day=MONDAY}
+// setupHours for this should be adjusted to 0.0
