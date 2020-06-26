@@ -310,7 +310,8 @@ el segundo se aprovecha
         return "";
     }
     
-    private static Day nextDay(final Day day, final String part, final String wc) {
+    @Validated
+    public static Day nextDay(final Day day) {
         switch (day) {
             case MONDAY:
                 return Day.TUESDAY;
@@ -368,7 +369,7 @@ el segundo se aprovecha
                 case SECOND -> woInfo.setTurn(Turn.SECOND);
                 case FIRST_NEXT_DAY -> {
                     woInfo.setTurn(Turn.FIRST);
-                    day = nextDay(day, woInfo.getPartNumber(), woInfo.getWorkOrder());
+                    day = nextDay(day);
                     woInfo.setDay(day);
                     turnHours = 0.0D;
                 }
@@ -445,7 +446,7 @@ el segundo se aprovecha
                 case THIRD -> woInfo.setTurn(Turn.THIRD);
                 case FIRST_NEXT_DAY -> {
                     woInfo.setTurn(Turn.FIRST);
-                    day = nextDay(day, woInfo.getPartNumber(), woInfo.getWorkOrder());
+                    day = nextDay(day);
                     woInfo.setDay(day);
                     turnHours = 0.0D;
                 }

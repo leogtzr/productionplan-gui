@@ -992,5 +992,26 @@ public class UtilsTest {
         }
 
     }
+    
+    @Test
+    public void shouldReturnNextDay() {
+        
+        final Object[][] tests = {
+            // current day, expected day
+            {Day.MONDAY, Day.TUESDAY},
+            {Day.TUESDAY, Day.WEDNESDAY},
+            {Day.WEDNESDAY, Day.THURSDAY},
+            {Day.THURSDAY, Day.FRIDAY},
+            {Day.FRIDAY, Day.SATURDAY},
+            {Day.SATURDAY, Day.SUNDAY},
+            {Day.SUNDAY, Day.MONDAY}
+        };
+        
+        for (final Object[] test : tests) {
+            final Day got = Utils.nextDay((Day)test[0]);
+            Assert.assertEquals((Day)test[1], got);
+        }
+        
+    }
 
 }
