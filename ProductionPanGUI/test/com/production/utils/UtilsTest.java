@@ -425,8 +425,6 @@ public class UtilsTest {
         Assert.assertEquals(EXPECTED_ITEMS_SIZE, items.size());
         
         final List<WorkOrderInformation> itemsSortedByAge = Utils.sortAndGroup(items, new AgeComparator());
-        // System.out.println(itemsSortedByAge);
-        // itemsSortedByAge.forEach(System.out::println);
         
         final Object[][] tests = {
             // Index, expected age, expected part number
@@ -437,7 +435,16 @@ public class UtilsTest {
             {4, 6, "PT_5"},
             {5, 6, "PT_10"},
             {6, 5, "PT_10"},
-            // ...
+            {7, 5, "PT_4"},
+            {8, 1, "PT_4"},
+            {9, 1, "PT_4"},
+            {10, 5, "PT_7"},
+            {11, 5, "PT_12"},
+            {12, 4, "PT_8"},
+            {13, 3, "PT_8"},
+            {14, 3, "PT_1"},
+            {15, 3, "PT_11"},
+            {16, 2, "PT_2"},
         };
         
         for (final Object[] test : tests) {
