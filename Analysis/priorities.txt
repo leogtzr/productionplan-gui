@@ -1,0 +1,8 @@
+Cómo afectan los "priorities" al algoritmo actual?
+
+Al tener una lista de prioridades cuya propiedad principal del objeto interno es el
+ "part number".
+
+ Esto nos dice que esas partes deben ir sí o sí antes que todo.
+
+ Un "part number" puede
