@@ -1,7 +1,6 @@
 package com.production.util;
 
 import com.production.domain.AgeByWCFields;
-import com.production.domain.AgeComparator;
 import com.production.domain.Day;
 import com.production.domain.FabLoadByWCFields;
 import com.production.domain.Priority;
