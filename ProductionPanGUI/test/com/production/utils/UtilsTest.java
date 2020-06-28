@@ -602,14 +602,13 @@ public class UtilsTest {
         final List<WorkOrderInformation> items = testItemsWithAge();
         final int EXPECTED_ITEMS_SIZE = 17;
         Assert.assertEquals(EXPECTED_ITEMS_SIZE, items.size());
-
-        final List<WorkOrderInformation> workOrderItems = Utils.sortAndGroup(items, new AgeComparator());
+        
         final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = items.size();
         final String workCenter = Constants.DOBLADO;
         final List<Priority> priorities = List.of();
 
         // Build the plan:
-        final List<WorkOrderInformation> planForTwoTurns = Utils.buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
+        final List<WorkOrderInformation> planForTwoTurns = Utils.buildPlanForTwoTurns(workCenter, items, priorities);
 
         // The list shouldn't be empty ...
         Assert.assertFalse(planForTwoTurns.isEmpty());
@@ -643,6 +642,29 @@ public class UtilsTest {
             Assert.assertEquals((Day) test[3], wo.getDay());
             Assert.assertEquals(test[4].toString(), wo.getPartNumber());
         }
+    }
+    
+    @Test
+    public void shouldBuilPlanForTwoTurnsWithSortedItemsByAgeAndGroupedByPartNumbersAndPriorities() {
+        final List<WorkOrderInformation> items = testItemsWithAge();
+        final int EXPECTED_ITEMS_SIZE = 17;
+        Assert.assertEquals(EXPECTED_ITEMS_SIZE, items.size());
+        
+        final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = items.size();
+        final String workCenter = Constants.DOBLADO;
+        
+        // Our priorities ... 
+        final List<Priority> priorities = List.of(
+            new Priority("PT_2", -1)
+            , new Priority("PT_5", -1)
+        );
+        
+        // Build the plan:
+        final List<WorkOrderInformation> planForTwoTurns = Utils.buildPlanForTwoTurns(workCenter, items, priorities);
+
+        // The list shouldn't be empty ...
+        Assert.assertFalse(planForTwoTurns.isEmpty());
+        // Assert.assertEquals(EXPECTED_NUMBER_OF_ITEMS_IN_PLAN, planForTwoTurns.size());
     }
 
     /*

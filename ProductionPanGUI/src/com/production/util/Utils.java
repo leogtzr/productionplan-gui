@@ -1,6 +1,7 @@
 package com.production.util;
 
 import com.production.domain.AgeByWCFields;
+import com.production.domain.AgeComparator;
 import com.production.domain.Day;
 import com.production.domain.FabLoadByWCFields;
 import com.production.domain.Priority;
@@ -8,7 +9,6 @@ import com.production.domain.SimpleWorkOrderInformation;
 import com.production.domain.Turn;
 import com.production.domain.WorkCenterTurns;
 import com.production.domain.WorkOrderInformation;
-import com.production.domain.WorkOrderWrapper;
 import com.production.lang.MissingTests;
 import com.production.lang.Validated;
 import java.io.File;
@@ -330,14 +330,48 @@ el segundo se aprovecha
         return Day.MONDAY;
     }
     
+    private static void removePrioritizedItemsFromWorkOrderItems(
+            final WorkOrderInformation toBeRemoved
+            , List<WorkOrderInformation> workOrderItems
+    ) {
+        final Iterator<WorkOrderInformation> iterator = workOrderItems.iterator();
+        while (iterator.hasNext()) {
+            final WorkOrderInformation wo = iterator.next();
+            if (wo.getPartNumber().equalsIgnoreCase(toBeRemoved.getPartNumber())) {
+                iterator.remove();
+            }
+        }
+    }
+    
     @Validated
     public static List<WorkOrderInformation> buildPlanForTwoTurns(
         final String workCenter
-        , final List<WorkOrderInformation> workOrderItems
+        , List<WorkOrderInformation> workOrderItems
         , final List<Priority> priorities
     ) {
         
-        final List<WorkOrderWrapper> plan = new ArrayList<>();
+        // Before sorting ... 
+        final List<WorkOrderInformation> priorityWorkOrderItems = new ArrayList<>();
+        for (final Priority priority : priorities) {
+            priorityWorkOrderItems.addAll(
+                workOrderItems.stream()
+                        .filter(wo -> wo.getPartNumber().equalsIgnoreCase(priority.getPartNumber()))
+                        .collect(Collectors.toList())
+            );
+        }
+        System.out.println("Thse are the priorities");
+        System.out.println(priorityWorkOrderItems);
+        System.out.println("----------------------------------------->");
+        
+        workOrderItems.forEach(System.out::println);
+        
+        for (final WorkOrderInformation wo : priorityWorkOrderItems) {
+            removePrioritizedItemsFromWorkOrderItems(wo, workOrderItems);
+        }
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>>>>");
+        workOrderItems.forEach(System.out::println);
+        
+        workOrderItems = sortAndGroup(workOrderItems, new AgeComparator());
         
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
         
@@ -411,9 +445,6 @@ el segundo se aprovecha
         , final List<WorkOrderInformation> workOrderItems
         , final List<Priority> priorities
     ) {
-        
-        // TODO: not used yet ... 
-        final List<WorkOrderWrapper> plan = new ArrayList<>();
         
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
         

@@ -1,0 +1,19 @@
+Criterios de la lista ... 
+
+1) No hay turnos.
+2) Todo es en lista.
+3) Están ordenados por:
+	* Age
+	* Part Numbers
+	* Prioridades
+	
+- Empaque (final y a proveedor) 
+- Ensamble
+- Insertos
+- Time Savers
+- Pulido
+- Soldadura
+- SpotweXX
+- Rebabeo
+- Limpieza
+- Limpieza y luz negra

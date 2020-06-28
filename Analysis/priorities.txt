@@ -33,4 +33,9 @@ La lista de prioridades debe de:
 1) Identificar los items de **workOrderItems**, ponerlos en una lista temporal
 1.1) Con identificar me refiero a obtener los items que tengan en el mismo part number.
 2) Ordenar estos items por age.
+2.1) Agruparlos
+	```java
+	final List<WorkOrderInformation> workOrderItems = Utils.sortAndGroup(items, new AgeComparator());
+	```
+3) Remover los items identificados de la lista original (**workOrderItems**) porque si no quedarían duplicados ...
 
