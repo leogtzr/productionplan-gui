@@ -38,10 +38,13 @@ import static com.production.util.Constants.DOBLADO;
 import static com.production.util.Constants.TAB_SHEET_NAME;
 import static com.production.util.Constants.AGE_BY_WC_SHEET_NAME;
 import static com.production.util.Constants.RUN_EFFICIENCY;
-
 import static com.production.util.Constants.FIRST_TURN_LENGTH;
 import static com.production.util.Constants.SECOND_TURN_LENGTH;
 import static com.production.util.Constants.THIRD_TURN_LENGTH;
+
+import static com.production.domain.Turn.*;
+import static com.production.domain.Day.*;
+
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -313,21 +316,21 @@ el segundo se aprovecha
     public static Day nextDay(final Day day) {
         switch (day) {
             case MONDAY:
-                return Day.TUESDAY;
+                return TUESDAY;
             case TUESDAY:
-                return Day.WEDNESDAY;
+                return WEDNESDAY;
             case WEDNESDAY:
-                return Day.THURSDAY;
+                return THURSDAY;
             case THURSDAY:
-                return Day.FRIDAY;
+                return FRIDAY;
             case FRIDAY:
-                return Day.SATURDAY;
+                return SATURDAY;
             case SATURDAY:
-                return Day.SUNDAY;
+                return SUNDAY;
             case SUNDAY:
-                return Day.MONDAY;
+                return MONDAY;
         }
-        return Day.MONDAY;
+        return MONDAY;
     }
     
     private static void removePrioritizedItemsFromWorkOrderItems(
@@ -375,7 +378,7 @@ el segundo se aprovecha
         
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
         
-        Day day = Day.MONDAY;
+        Day day = MONDAY;
         // The following variable will be used to accumulate
         double turnHours = 0.0D;
         for (final WorkOrderInformation woInfo : workOrderItems) {
@@ -398,10 +401,10 @@ el segundo se aprovecha
             
             final Turn turn = hoursTo2Turns(turnHours);
             switch (turn) {
-                case FIRST -> woInfo.setTurn(Turn.FIRST);
-                case SECOND -> woInfo.setTurn(Turn.SECOND);
+                case FIRST -> woInfo.setTurn(FIRST);
+                case SECOND -> woInfo.setTurn(SECOND);
                 case FIRST_NEXT_DAY -> {
-                    woInfo.setTurn(Turn.FIRST);
+                    woInfo.setTurn(FIRST);
                     day = nextDay(day);
                     woInfo.setDay(day);
                     turnHours = 0.0D;
@@ -415,28 +418,28 @@ el segundo se aprovecha
     @Validated
     public static Turn hoursTo2Turns(final double turnHours) {
         if (turnHours < FIRST_TURN_LENGTH) {
-            return Turn.FIRST;
+            return FIRST;
         } else if ((turnHours > FIRST_TURN_LENGTH) && (turnHours < (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH))) {
-            return Turn.SECOND;
+            return SECOND;
         } else if (turnHours > (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) {
-            return Turn.FIRST_NEXT_DAY;
+            return FIRST_NEXT_DAY;
         }
-        return Turn.NA;
+        return NA;
     }
     
     @Validated
     public static Turn hoursTo3Turns(final double turnHours) {
         if (turnHours < FIRST_TURN_LENGTH) {
-            return Turn.FIRST;
+            return FIRST;
         } else if ((turnHours > FIRST_TURN_LENGTH) && (turnHours < (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH))) {
-            return Turn.SECOND;
+            return SECOND;
         } else if ((turnHours > (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH)) && 
                 (turnHours < (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH + THIRD_TURN_LENGTH))) {
-            return Turn.THIRD;
+            return THIRD;
         } else if ((turnHours > (FIRST_TURN_LENGTH + SECOND_TURN_LENGTH + THIRD_TURN_LENGTH))) {
-            return Turn.FIRST_NEXT_DAY;
+            return FIRST_NEXT_DAY;
         }
-        return Turn.NA;
+        return NA;
     }
     
     @Validated
@@ -448,7 +451,7 @@ el segundo se aprovecha
         
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
         
-        Day day = Day.MONDAY;
+        Day day = MONDAY;
         // The following variable will be used to accumulate
         double turnHours = 0.0D;
         for (final WorkOrderInformation woInfo : workOrderItems) {
@@ -471,11 +474,11 @@ el segundo se aprovecha
             
             final Turn turn = hoursTo3Turns(turnHours);
             switch (turn) {
-                case FIRST -> woInfo.setTurn(Turn.FIRST);
-                case SECOND -> woInfo.setTurn(Turn.SECOND);
-                case THIRD -> woInfo.setTurn(Turn.THIRD);
+                case FIRST -> woInfo.setTurn(FIRST);
+                case SECOND -> woInfo.setTurn(SECOND);
+                case THIRD -> woInfo.setTurn(THIRD);
                 case FIRST_NEXT_DAY -> {
-                    woInfo.setTurn(Turn.FIRST);
+                    woInfo.setTurn(FIRST);
                     day = nextDay(day);
                     woInfo.setDay(day);
                     turnHours = 0.0D;

@@ -34,10 +34,7 @@ import static java.lang.Integer.parseInt;
  * @author lgutierr <leogutierrezramirez@gmail.com>
  */
 public class UtilsTest {
-
-    public UtilsTest() {
-    }
-
+    
     @Test
     public void shouldReturnNumberOfTurnsFromWorkCenter() {
         final Object[][] tests = {
