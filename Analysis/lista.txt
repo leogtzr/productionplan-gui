@@ -17,3 +17,4 @@ Criterios de la lista ...
 - Rebabeo
 - Limpieza
 - Limpieza y luz negra
+- Maquinado CNC
