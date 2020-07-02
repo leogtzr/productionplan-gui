@@ -29,6 +29,7 @@ import java.util.Collections;
 import static java.util.stream.Collectors.toList;
 
 import static java.lang.Integer.parseInt;
+import java.util.Arrays;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -612,7 +613,7 @@ public class UtilsTest {
         Assert.assertEquals(EXPECTED_NUMBER_OF_ITEMS_IN_PLAN, planForTwoTurns.size());
 
         final Object[][] tests = {
-            // Index, setup hours, turn, day
+            // Index, setup hours, turn, day, part number
             {0, 1.5D, Turn.FIRST, Day.MONDAY, "PT_9"},      // 0
             {1, 2.0D, Turn.FIRST, Day.MONDAY, "PT_6"},      // 1
             {2, 0.5D, Turn.FIRST, Day.MONDAY, "PT_3"},      // 2
@@ -651,17 +652,29 @@ public class UtilsTest {
         final String workCenter = Constants.DOBLADO;
         
         // Our priorities ... 
-        final List<Priority> priorities = List.of(
-            new Priority("PT_2", -1)
-            , new Priority("PT_5", -1)
-        );
+        final List<Priority> priorities = List.of(new Priority("PT_2", -1), new Priority("PT_5", -1));
         
         // Build the plan:
         final List<WorkOrderInformation> planForTwoTurns = Utils.buildPlanForTwoTurns(workCenter, items, priorities);
+        // planForTwoTurns.forEach(System.out::println);
 
         // The list shouldn't be empty ...
         Assert.assertFalse(planForTwoTurns.isEmpty());
-        // Assert.assertEquals(EXPECTED_NUMBER_OF_ITEMS_IN_PLAN, planForTwoTurns.size());
+        Assert.assertEquals(EXPECTED_NUMBER_OF_ITEMS_IN_PLAN, planForTwoTurns.size());
+        
+        final Object[][] tests = {
+            // Index, setup hours, turn, day, part number
+            {0, 1.5D, Turn.FIRST, Day.MONDAY, "PT_9"},      // 0
+        };
+        
+        for (final Object[] test : tests) {
+            final WorkOrderInformation wo = planForTwoTurns.get(Integer.parseInt(test[0].toString()));
+            Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.01D);
+            Assert.assertEquals((Turn) test[2], wo.getTurn());
+            Assert.assertEquals((Day) test[3], wo.getDay());
+            Assert.assertEquals(test[4].toString(), wo.getPartNumber());
+        }
+        
     }
 
     /*

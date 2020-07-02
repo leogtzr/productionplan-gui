@@ -354,34 +354,32 @@ el segundo se aprovecha
     ) {
         
         // Before sorting ... 
-        final List<WorkOrderInformation> priorityWorkOrderItems = new ArrayList<>();
+        List<WorkOrderInformation> priorityWorkOrderItems = new ArrayList<>();
         for (final Priority priority : priorities) {
             priorityWorkOrderItems.addAll(
                 workOrderItems.stream()
-                        .filter(wo -> wo.getPartNumber().equalsIgnoreCase(priority.getPartNumber()))
-                        .collect(Collectors.toList())
+                    .filter(wo -> wo.getPartNumber().equalsIgnoreCase(priority.getPartNumber()))
+                    .collect(Collectors.toList())
             );
         }
-        System.out.println("Thse are the priorities");
-        System.out.println(priorityWorkOrderItems);
-        System.out.println("----------------------------------------->");
-        
-        workOrderItems.forEach(System.out::println);
         
         for (final WorkOrderInformation wo : priorityWorkOrderItems) {
             removePrioritizedItemsFromWorkOrderItems(wo, workOrderItems);
         }
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>>>>");
-        workOrderItems.forEach(System.out::println);
         
+        priorityWorkOrderItems = sortAndGroup(priorityWorkOrderItems, new AgeComparator());
         workOrderItems = sortAndGroup(workOrderItems, new AgeComparator());
         
-        final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(workOrderItems);
+        final List<WorkOrderInformation> joined = new ArrayList<>(priorityWorkOrderItems);
+        joined.addAll(workOrderItems);
+        
+        // Before this the lists have to be joined.
+        final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(joined);
         
         Day day = MONDAY;
         // The following variable will be used to accumulate
         double turnHours = 0.0D;
-        for (final WorkOrderInformation woInfo : workOrderItems) {
+        for (final WorkOrderInformation woInfo : joined) {
             
             woInfo.setDay(day);
             
@@ -412,7 +410,7 @@ el segundo se aprovecha
             }
         }
         
-        return workOrderItems;
+        return joined;
     }
     
     @Validated
