@@ -196,3 +196,55 @@ wo17.setSetupHours(3.3D);
 wo17.setQty(24);
 wo17.setAge(1);
 ```
+
+```
+## Primer turno -> 8.5 hrs
+## Segundo turno -> 8.1 hrs
+## Tercer turno -> 5.5 hrs
+```
+
+WOInfo{wcDescription=null, partNumber=PT_5, workOrder=WO_5, runHours=0.7, setupHours=0.5, qty=240, age=6, salesPrice=0.0, turn=FIRST, day=MONDAY, machine=} // 0
+// 0.5 + 0.7 = 1.2,             sum = 1.2 < FT, Turn.FIRST, Day.MONDAY
+WOInfo{wcDescription=null, partNumber=PT_2, workOrder=WO_2, runHours=1.1, setupHours=2.3, qty=20, age=2, salesPrice=0.0, turn=FIRST, day=MONDAY, machine=} // 1
+// 2.3 + 1.1 = 3.4, sum = 1.2 + 3.4 = 4.6 < FT, Turn.FIRST, Day.MONDAY
+WOInfo{wcDescription=null, partNumber=PT_9, workOrder=WO_9, runHours=1.0, setupHours=1.5, qty=45, age=12, salesPrice=0.0, turn=FIRST, day=MONDAY, machine=} // 2
+// 1.5 + 1.0 = 2.5, sum = 1.2 + 3.4 + 2.5 = 7.1 < Turn.FIRST, Day.MONDAY
+WOInfo{wcDescription=null, partNumber=PT_6, workOrder=WO_6, runHours=2.5, setupHours=2.0, qty=55, age=8, salesPrice=0.0, turn=SECOND, day=MONDAY, machine=} // 3
+// 2.0 + 2.5 = 4.5, sum = 1.2 + 3.4 + 2.5 + 4.5 = 11.6 > FT, Turn.SECOND, Day.MONDAY
+WOInfo{wcDescription=null, partNumber=PT_3, workOrder=WO_3, runHours=0.2, setupHours=0.5, qty=14, age=6, salesPrice=0.0, turn=SECOND, day=MONDAY, machine=} // 4
+// 0.5 + 0.2 = 0.7, sum = 1.2 + 3.4 + 2.5 + 4.5 + 0.7 = 12.3 > FT, Turn.SECOND, Day.MONDAY
+WOInfo{wcDescription=null, partNumber=PT_3, workOrder=WO_3, runHours=1.4, setupHours=0.0, qty=94, age=4, salesPrice=0.0, turn=SECOND, day=MONDAY, machine=} // 5
+// 0.0 + 1.4 = 1.4, sum = 1.2 + 3.4 + 2.5 + 4.5 + 0.7 + 1.4 = 13.7 > FT, Turn.SECOND, Day.MONDAY
+
+WOInfo{wcDescription=null, partNumber=PT_10, workOrder=WO_11, runHours=0.5, setupHours=2.5, qty=96, age=6, salesPrice=0.0, turn=FIRST, day=TUESDAY, machine=} // 6
+// 2.5 + 0.5 = 3.0, sum = 1.2 + 3.4 + 2.5 + 4.5 + 0.7 + 1.4 + 3.0 = 16.7 > (FT + ST), day change, Turn.FIRST, Day.TUESDAY
+
+WOInfo{wcDescription=null, partNumber=PT_10, workOrder=WO_10, runHours=0.5, setupHours=0.0, qty=12, age=5, salesPrice=0.0, turn=FIRST, day=TUESDAY, machine=} // 7
+// 0.0 + 0.5 = 0.5, sum = 0.5 < FT, Turn.FIRST, Day.TUESDAY
+
+WOInfo{wcDescription=null, partNumber=PT_4, workOrder=WO_4, runHours=3.4, setupHours=3.3, qty=14, age=5, salesPrice=0.0, turn=FIRST, day=TUESDAY, machine=}  // 8
+// 3.3 + 3.4 = 6.7, sum = 0.5 + 6.7 = 7.2 < FT, Turn.FIRST, Day.TUESDAY
+
+WOInfo{wcDescription=null, partNumber=PT_4, workOrder=WO_4, runHours=5.7, setupHours=0.0, qty=24, age=1, salesPrice=0.0, turn=SECOND, day=TUESDAY, machine=}   // 9
+// 0.0 + 5.7 = 5.7, sum = 0.5 + 6.7 + 5.7 = 12.9 > FT, Turn.SECOND, Day.TUESDAY
+
+WOInfo{wcDescription=null, partNumber=PT_4, workOrder=WO_4, runHours=5.7, setupHours=0.0, qty=24, age=1, salesPrice=0.0, turn=FIRST, day=WEDNESDAY, machine=}   // 10
+// 0.0 + 5.7 = 5.7, sum = 0.5 + 6.7 + 5.7 + 5.7 = 18.6 > (FT + ST), day change, Turn.FIRST, Day.WEDNESDAY
+
+WOInfo{wcDescription=null, partNumber=PT_7, workOrder=WO_7, runHours=0.8, setupHours=0.5, qty=40, age=5, salesPrice=0.0, turn=FIRST, day=WEDNESDAY, machine=}   // 11
+// 0.5 + 0.8 = 1.3, sum = 1.3, Turn.FIRST, Day.WEDNESDAY
+
+WOInfo{wcDescription=null, partNumber=PT_12, workOrder=WO_13, runHours=1.5, setupHours=0.8, qty=47, age=5, salesPrice=0.0, turn=FIRST, day=WEDNESDAY, machine=}     // 12
+// 0.8 + 1.5 = 2.3, sum = 1.3 + 2.3 = 3.6 < FT, Turn.FIRST, Day.WEDNESDAY
+
+WOInfo{wcDescription=null, partNumber=PT_8, workOrder=WO_8, runHours=1.0, setupHours=1.0, qty=30, age=4, salesPrice=0.0, turn=FIRST, day=WEDNESDAY, machine=}       // 13
+// 1.0 + 1.0 = 2.0, sum = 1.3 + 2.3 + 2.0 = 5.6 < FT, Turn.FIRST, Day.WEDNESDAY
+
+WOInfo{wcDescription=null, partNumber=PT_8, workOrder=WO_8, runHours=1.3, setupHours=0.0, qty=39, age=3, salesPrice=0.0, turn=FIRST, day=WEDNESDAY, machine=}           // 14
+// 0.0 + 1.3 = 1.3, sum = 1.3 + 2.3 + 2.0 + 1.3 = 6.9, Turn.FIRST, Day.WEDNESDAY
+
+WOInfo{wcDescription=null, partNumber=PT_1, workOrder=WO_1, runHours=4.2, setupHours=0.3, qty=7, age=3, salesPrice=0.0, turn=SECOND, day=WEDNESDAY, machine=}       // 15
+// 0.3 + 4.2 = 4.5, sum = 1.3 + 2.3 + 2.0 + 1.3 + 4.5 = 11.4 > FT, Turn.SECOND, Day.WEDNESDAY
+
+WOInfo{wcDescription=null, partNumber=PT_11, workOrder=WO_12, runHours=1.1, setupHours=0.8, qty=22, age=3, salesPrice=0.0, turn=SECOND, day=WEDNESDAY, machine=}        // 16
+// 0.8 + 1.1 = 1.9, sum = 1.3 + 2.3 + 2.0 + 1.3 + 4.5 + 1.9 = 13.3 > FT, Turn.FIRST, Day._WEDNESDAY

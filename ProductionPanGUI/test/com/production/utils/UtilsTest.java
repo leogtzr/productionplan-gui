@@ -664,7 +664,23 @@ public class UtilsTest {
         
         final Object[][] tests = {
             // Index, setup hours, turn, day, part number
-            {0, 1.5D, Turn.FIRST, Day.MONDAY, "PT_9"},      // 0
+            {0, 0.5D, Turn.FIRST, Day.MONDAY, "PT_5"},      // 0
+            {1, 2.3D, Turn.FIRST, Day.MONDAY, "PT_2"},      // 1
+            {2, 1.5D, Turn.FIRST, Day.MONDAY, "PT_9"},      // 2
+            {3, 2.0D, Turn.SECOND, Day.MONDAY, "PT_6"},     // 3
+            {4, 0.5D, Turn.SECOND, Day.MONDAY, "PT_3"},     // 4
+            {5, 0.0D, Turn.SECOND, Day.MONDAY, "PT_3"},     // 5
+            {6, 2.5D, Turn.FIRST, Day.TUESDAY, "PT_10"},    // 6
+            {7, 0.0D, Turn.FIRST, Day.TUESDAY, "PT_10"},    // 7
+            {8, 3.3D, Turn.FIRST, Day.TUESDAY, "PT_4"},     // 8
+            {9, 0.0D, Turn.SECOND, Day.TUESDAY, "PT_4"},    // 9
+            {10, 0.0D, Turn.FIRST, Day.WEDNESDAY, "PT_4"},  // 10
+            {11, 0.5D, Turn.FIRST, Day.WEDNESDAY, "PT_7"},  // 11
+            {12, 0.8D, Turn.FIRST, Day.WEDNESDAY, "PT_12"}, // 12
+            {13, 1.0D, Turn.FIRST, Day.WEDNESDAY, "PT_8"},  // 13
+            {14, 0.0D, Turn.FIRST, Day.WEDNESDAY, "PT_8"},  // 14
+            {15, 0.3D, Turn.SECOND, Day.WEDNESDAY, "PT_1"},  // 15
+            {16, 0.8D, Turn.SECOND, Day.WEDNESDAY, "PT_11"}, // 16
         };
         
         for (final Object[] test : tests) {
