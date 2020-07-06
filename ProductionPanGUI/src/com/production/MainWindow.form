@@ -117,6 +117,8 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="generatePlanBtn" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="20" max="32767" attributes="0"/>
@@ -140,8 +142,11 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="wcDescriptions" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="11" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                          <Component id="wcDescriptions" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -252,26 +257,26 @@
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="21">
             <StringItem index="0" value="DOBLADO"/>
-            <StringItem index="1" value="EMPAQUE_A_PROVEEDOR"/>
-            <StringItem index="2" value="EMPAQUE_FINAL"/>
-            <StringItem index="3" value="ENSAMBLE"/>
-            <StringItem index="4" value="INSERTOS_PEM"/>
-            <StringItem index="5" value="INSPECCION_DE_ACABADOS"/>
+            <StringItem index="1" value="PUNZONADO"/>
+            <StringItem index="2" value="SURTIR MATERIAL"/>
+            <StringItem index="3" value="EMPAQUE FINAL"/>
+            <StringItem index="4" value="EMPAQUE A PROVEEDOR"/>
+            <StringItem index="5" value="INSPECCION DE ACABADOS"/>
             <StringItem index="6" value="LASER"/>
-            <StringItem index="7" value="LIMPIEZA"/>
-            <StringItem index="8" value="LIMPIEZA_LUZ_NEGRA"/>
-            <StringItem index="9" value="MAQUINADO_CNC"/>
-            <StringItem index="10" value="MAQUINADO_MANUAL"/>
-            <StringItem index="11" value="PINTURA_EN_POLVO"/>
-            <StringItem index="12" value="PULIDO"/>
-            <StringItem index="13" value="PUNZONADO"/>
-            <StringItem index="14" value="REBABEO"/>
-            <StringItem index="15" value="SERIGRAFIA"/>
-            <StringItem index="16" value="SOLDADURA"/>
-            <StringItem index="17" value="SPOT_WELD"/>
-            <StringItem index="18" value="SURTIR_MATERIAL"/>
-            <StringItem index="19" value="TIME_SAVER"/>
-            <StringItem index="20" value="TRATAMIENTO_QUIMICO"/>
+            <StringItem index="7" value="SOLDADURA"/>
+            <StringItem index="8" value="SPOT WELD"/>
+            <StringItem index="9" value="TIME SAVER"/>
+            <StringItem index="10" value="PULIDO"/>
+            <StringItem index="11" value="REBABEO"/>
+            <StringItem index="12" value="LIMPIEZA"/>
+            <StringItem index="13" value="INSERTOS-PEM"/>
+            <StringItem index="14" value="ENSAMBLE"/>
+            <StringItem index="15" value="MAQUINADO MANUAL"/>
+            <StringItem index="16" value="MAQUINADO CNC"/>
+            <StringItem index="17" value="TRATAMIENTO QUIMICO"/>
+            <StringItem index="18" value="PINTURA EN POLVO"/>
+            <StringItem index="19" value="LIMPIEZA LUZ NEGRA"/>
+            <StringItem index="20" value="SERIGRAFIA"/>
           </StringArray>
         </Property>
       </Properties>
@@ -289,6 +294,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generatePlanBtnActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jButton1"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

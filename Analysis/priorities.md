@@ -244,7 +244,7 @@ WOInfo{wcDescription=null, partNumber=PT_8, workOrder=WO_8, runHours=1.3, setupH
 // 0.0 + 1.3 = 1.3, sum = 1.3 + 2.3 + 2.0 + 1.3 = 6.9, Turn.FIRST, Day.WEDNESDAY
 
 WOInfo{wcDescription=null, partNumber=PT_1, workOrder=WO_1, runHours=4.2, setupHours=0.3, qty=7, age=3, salesPrice=0.0, turn=SECOND, day=WEDNESDAY, machine=}       // 15
-// 0.3 + 4.2 = 4.5, sum = 1.3 + 2.3 + 2.0 + 1.3 + 4.5 = 11.4 > FT, Turn.SECOND, Day.WEDNESDAY
+// 0.3 + 4.2 = 4.5, sum = 1.3 + 2.3 + 2.0 + 1.3 + 4.5 = 11.4 > FT, Turn.SECOND, Day.WEDNESDA
 
 WOInfo{wcDescription=null, partNumber=PT_11, workOrder=WO_12, runHours=1.1, setupHours=0.8, qty=22, age=3, salesPrice=0.0, turn=SECOND, day=WEDNESDAY, machine=}        // 16
 // 0.8 + 1.1 = 1.9, sum = 1.3 + 2.3 + 2.0 + 1.3 + 4.5 + 1.9 = 13.3 > FT, Turn.FIRST, Day._WEDNESDAY

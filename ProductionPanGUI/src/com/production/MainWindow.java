@@ -1,4 +1,3 @@
-// TODO: Think about an strategy on how to select the two files based on the work center ... 
 // TODO: Think about implementing a DB ... 
 // TODO: Plan acumulativo ..., es decir, si aparecen nuevas órdenes ... que cotinue en el día que se quedó ...
 // TODO: recibir un mapeo para Punzonado para private final Map<String, String> partMachineInfo = new HashMap<>();
@@ -108,6 +107,7 @@ public class MainWindow extends javax.swing.JFrame {
         clearButton = new javax.swing.JButton();
         wcDescriptions = new javax.swing.JComboBox<>();
         generatePlanBtn = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFabLoadByWCMenuItem = new javax.swing.JMenuItem();
@@ -205,7 +205,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
     });
 
-    wcDescriptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DOBLADO", "EMPAQUE_A_PROVEEDOR", "EMPAQUE_FINAL", "ENSAMBLE", "INSERTOS_PEM", "INSPECCION_DE_ACABADOS", "LASER", "LIMPIEZA", "LIMPIEZA_LUZ_NEGRA", "MAQUINADO_CNC", "MAQUINADO_MANUAL", "PINTURA_EN_POLVO", "PULIDO", "PUNZONADO", "REBABEO", "SERIGRAFIA", "SOLDADURA", "SPOT_WELD", "SURTIR_MATERIAL", "TIME_SAVER", "TRATAMIENTO_QUIMICO" }));
+    wcDescriptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DOBLADO", "PUNZONADO", "SURTIR MATERIAL", "EMPAQUE FINAL", "EMPAQUE A PROVEEDOR", "INSPECCION DE ACABADOS", "LASER", "SOLDADURA", "SPOT WELD", "TIME SAVER", "PULIDO", "REBABEO", "LIMPIEZA", "INSERTOS-PEM", "ENSAMBLE", "MAQUINADO MANUAL", "MAQUINADO CNC", "TRATAMIENTO QUIMICO", "PINTURA EN POLVO", "LIMPIEZA LUZ NEGRA", "SERIGRAFIA" }));
     wcDescriptions.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             wcDescriptionsActionPerformed(evt);
@@ -217,6 +217,13 @@ public class MainWindow extends javax.swing.JFrame {
     generatePlanBtn.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             generatePlanBtnActionPerformed(evt);
+        }
+    });
+
+    jButton1.setText("jButton1");
+    jButton1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jButton1ActionPerformed(evt);
         }
     });
 
@@ -285,7 +292,9 @@ public class MainWindow extends javax.swing.JFrame {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(18, 18, 18)
-                            .addComponent(generatePlanBtn)))
+                            .addComponent(generatePlanBtn)
+                            .addGap(18, 18, 18)
+                            .addComponent(jButton1)))
                     .addContainerGap(20, Short.MAX_VALUE))))
     );
     layout.setVerticalGroup(
@@ -301,8 +310,10 @@ public class MainWindow extends javax.swing.JFrame {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(wcDescriptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jButton1)
+                        .addComponent(wcDescriptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addComponent(moveToSelectedPrioritiesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -496,8 +507,8 @@ public class MainWindow extends javax.swing.JFrame {
             
             if (fabLoadByWCFile.exists() && ageByWCFile.exists()) {
                 // Clean the tables ... 
-                cleanTable(this.workOrderTable);
-                cleanTable(this.selectedPrioritiesTable);
+                this.cleanTable(this.workOrderTable);
+                this.cleanTable(this.selectedPrioritiesTable);
                 
                 this.fabLoadFilePath = fabLoadByWCFile;
                 this.ageByWCFilePath = ageByWCFile;
@@ -536,7 +547,7 @@ public class MainWindow extends javax.swing.JFrame {
                  .stream()
                  .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                  .forEach(item -> {
-                     // TODO: invoke the new method here ... 
+                     // TODO: invoke the new method here ... which new method?
                     final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
                     final Object[] data = {
                         item.getPartNumber()
@@ -554,7 +565,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         final String selectedWorkCenter = this.wcDescriptions.getSelectedItem().toString();
         this.workOrderInformationItems.ifPresent(workOrderItems -> {
-            cleanTable(this.workOrderTable);
+            this.cleanTable(this.workOrderTable);
             updateTableWithWCDescription(selectedWorkCenter, workOrderItems, this.workOrderTable);
         });
     }//GEN-LAST:event_wcDescriptionsActionPerformed
@@ -577,6 +588,16 @@ public class MainWindow extends javax.swing.JFrame {
             
         });
     }//GEN-LAST:event_generatePlanBtnActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        workOrderInformationItems.ifPresent(workOrderItems -> {
+            // workOrderItems.forEach(wo -> System.out.println(wo.getWcDescription()));
+            workOrderItems.stream().map(WorkOrderInformation::getWcDescription)
+                    .distinct().forEach(System.out::println);
+        });
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -612,6 +633,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem findFilesInCurrentPathMenuItem;
     private javax.swing.JButton generatePlanBtn;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenuBar menuBar;

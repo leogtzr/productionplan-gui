@@ -301,6 +301,7 @@ el segundo se aprovecha
             case 0:                 // Build a simple list ... 
                                     // TODO: How is the list built?
                 // HOW: alv
+                System.out.println("A simple list ... ");
                 break;
             case 2:                 // Only two turns ...
                 buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
