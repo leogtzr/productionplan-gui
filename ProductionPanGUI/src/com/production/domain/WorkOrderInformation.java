@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
  */
-public final class WorkOrderInformation {
+public final class WorkOrderInformation implements Cloneable {
     
     private String wcDescription;
     private String partNumber;
@@ -18,6 +18,25 @@ public final class WorkOrderInformation {
     private Turn turn = Turn.NA;
     private Day day = Day.MONDAY;
     private String machine = "";
+    
+    @Override
+    public WorkOrderInformation clone() throws CloneNotSupportedException {
+        return (WorkOrderInformation)super.clone();
+    }
+    
+    public WorkOrderInformation(final WorkOrderInformation other) {
+        this.wcDescription = other.wcDescription;
+        this.partNumber = other.partNumber;
+        this.workOrder = other.workOrder;
+        this.runHours = other.runHours;
+        this.setupHours = other.setupHours;
+        this.qty = other.qty;
+        this.age = other.age;
+        this.salesPrice = other.salesPrice;
+        this.turn = other.turn;
+        this.day = other.day;
+        this.machine = other.machine;
+    }
 
     public WorkOrderInformation() { }
     
