@@ -30,6 +30,7 @@ import static java.util.stream.Collectors.toList;
 
 import static java.lang.Integer.parseInt;
 import java.util.Arrays;
+import org.hamcrest.CoreMatchers;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -1060,6 +1061,25 @@ public class UtilsTest {
             Assert.assertEquals((Day)test[1], got);
         }
         
+    }
+    
+    @Test
+    public void shouldCopyWorkOrderItemsList() {
+        final List<WorkOrderInformation> source = List.of(
+            new WorkOrderInformation.Builder("pt1", "wo1").age(1).day(Day.MONDAY).machine("m1").runHours(0.2).build(),
+            new WorkOrderInformation.Builder("pt2", "wo2").age(1).day(Day.TUESDAY).machine("m2").runHours(0.3).build(),
+            new WorkOrderInformation.Builder("pt3", "wo3").age(1).day(Day.WEDNESDAY).machine("m3").runHours(0.5).build()
+        );
+        
+        final List<WorkOrderInformation> dest = new ArrayList<>();
+        dest.add(new WorkOrderInformation.Builder("pt4", "wo2").age(1).day(Day.MONDAY).machine("m1").runHours(0.2).build());
+        
+        Utils.copyWorkOrderItems(dest, source);
+        
+        final int EXPECTED_LIST_SIZE = 3;
+        
+        Assert.assertEquals(EXPECTED_LIST_SIZE, dest.size());
+        Assert.assertThat(source, CoreMatchers.is(dest));
     }
 
 }

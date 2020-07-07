@@ -530,6 +530,12 @@ el segundo se aprovecha
         return other;
     }
     
+    @Validated
+    public static void copyWorkOrderItems(final List<WorkOrderInformation> dest, final List<WorkOrderInformation> source) {
+        dest.clear();
+        source.forEach(woItem -> dest.add(new WorkOrderInformation(woItem)));
+    }
+    
     private Utils() {}
     
 }

@@ -52,6 +52,7 @@ public class MainWindow extends javax.swing.JFrame {
     private Map<String, String> dobladoPartMachineInfo = new HashMap<>();
     private Map<String, String> laserAndPunchPartMachineInfo = new HashMap<>();
     private Optional<List<WorkOrderInformation>> workOrderInformationItems = Optional.empty();
+    private List<WorkOrderInformation> backupWorkOrderItems = new ArrayList<>();
     
     public MainWindow() {
         initComponents();
@@ -107,13 +108,14 @@ public class MainWindow extends javax.swing.JFrame {
         clearButton = new javax.swing.JButton();
         wcDescriptions = new javax.swing.JComboBox<>();
         generatePlanBtn = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openFabLoadByWCMenuItem = new javax.swing.JMenuItem();
         openAgeByWCFileItem = new javax.swing.JMenuItem();
         findFilesInCurrentPathMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
+        operationsMenu = new javax.swing.JMenu();
+        rollbackMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -220,13 +222,6 @@ public class MainWindow extends javax.swing.JFrame {
         }
     });
 
-    jButton1.setText("jButton1");
-    jButton1.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jButton1ActionPerformed(evt);
-        }
-    });
-
     fileMenu.setText("File");
 
     openFabLoadByWCMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
@@ -261,6 +256,20 @@ public class MainWindow extends javax.swing.JFrame {
     editMenu.setText("Edit");
     menuBar.add(editMenu);
 
+    operationsMenu.setMnemonic('O');
+    operationsMenu.setText("Operations");
+
+    rollbackMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+    rollbackMenuItem.setText("Rollback");
+    rollbackMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            rollbackMenuItemActionPerformed(evt);
+        }
+    });
+    operationsMenu.add(rollbackMenuItem);
+
+    menuBar.add(operationsMenu);
+
     helpMenu.setMnemonic('H');
     helpMenu.setText("Help");
     menuBar.add(helpMenu);
@@ -292,9 +301,7 @@ public class MainWindow extends javax.swing.JFrame {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(18, 18, 18)
-                            .addComponent(generatePlanBtn)
-                            .addGap(18, 18, 18)
-                            .addComponent(jButton1)))
+                            .addComponent(generatePlanBtn)))
                     .addContainerGap(20, Short.MAX_VALUE))))
     );
     layout.setVerticalGroup(
@@ -310,9 +317,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton1)
-                        .addComponent(wcDescriptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(wcDescriptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -364,6 +369,7 @@ public class MainWindow extends javax.swing.JFrame {
             , final List<WorkOrderInformation> workOrderItems) throws IOException, InvalidFormatException {
         Utils.reconcileInformationFromAgeFile(file.getAbsolutePath(), workOrderItems);
         this.updateTable(workOrderItems, this.workOrderTable);
+        Utils.copyWorkOrderItems(this.backupWorkOrderItems, workOrderItems);
     }
     
     private void openAgeByWCFileItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openAgeByWCFileItemActionPerformed
@@ -589,15 +595,12 @@ public class MainWindow extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_generatePlanBtnActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        workOrderInformationItems.ifPresent(workOrderItems -> {
-            // workOrderItems.forEach(wo -> System.out.println(wo.getWcDescription()));
-            workOrderItems.stream().map(WorkOrderInformation::getWcDescription)
-                    .distinct().forEach(System.out::println);
-        });
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void rollbackMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rollbackMenuItemActionPerformed
+        if (this.backupWorkOrderItems.isEmpty()) {
+            return;
+        }
+        this.workOrderInformationItems.ifPresent(woItems -> Utils.copyWorkOrderItems(woItems, this.backupWorkOrderItems));
+    }//GEN-LAST:event_rollbackMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -633,13 +636,14 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem findFilesInCurrentPathMenuItem;
     private javax.swing.JButton generatePlanBtn;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JButton moveToSelectedPrioritiesButton;
     private javax.swing.JMenuItem openAgeByWCFileItem;
     private javax.swing.JMenuItem openFabLoadByWCMenuItem;
+    private javax.swing.JMenu operationsMenu;
+    private javax.swing.JMenuItem rollbackMenuItem;
     private javax.swing.JTable selectedPrioritiesTable;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JButton testButton;
