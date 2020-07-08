@@ -370,9 +370,6 @@ el segundo se aprovecha
         final List<WorkOrderInformation> joined = new ArrayList<>(priorityWorkOrderItems);
         joined.addAll(workOrderItems);
         
-        //System.out.println(joined);
-        //joined.forEach(System.out::println);
-        
         // Before this the lists have to be joined.
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(joined);
         
