@@ -40,6 +40,7 @@ import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
+import org.apache.poi.xdgf.util.Util;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -588,8 +589,14 @@ public class MainWindow extends javax.swing.JFrame {
                     .stream()
                     .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                     .collect(Collectors.toList());
-            final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
+            // TODO: get HTML content or a list of items ...
             
+            // Utils.numberOfTurnsFromWorkCenter(wcDescription)
+            final String wcDescriptionSanitized = Utils.sanitizeWorkCenterName(wcDescription);
+            
+            showWarningMessage(String.format("[%s] - [%s]", wcDescription, wcDescriptionSanitized), "DEBUG");
+            
+            final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
         }, () -> {
             
         });

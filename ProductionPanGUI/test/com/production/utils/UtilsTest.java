@@ -29,7 +29,6 @@ import java.util.Collections;
 import static java.util.stream.Collectors.toList;
 
 import static java.lang.Integer.parseInt;
-import java.util.Arrays;
 import org.hamcrest.CoreMatchers;
 
 /**
@@ -993,11 +992,6 @@ public class UtilsTest {
     }
 
     @Test
-    public void shouldBuildForTwoTurnsWithPriorities() {
-
-    }
-
-    @Test
     public void shouldUpdateMachineByWorkCenter() {
 
         // Test items:
@@ -1080,6 +1074,49 @@ public class UtilsTest {
         
         Assert.assertEquals(EXPECTED_LIST_SIZE, dest.size());
         Assert.assertThat(source, CoreMatchers.is(dest));
+    }
+    
+    @Test
+    public void shouldBuildPlanList() {
+        final List<WorkOrderInformation> items = testItemsWithAge();
+        final int EXPECTED_ITEMS_SIZE = 17;
+        Assert.assertEquals(EXPECTED_ITEMS_SIZE, items.size());
+        
+        items.forEach(item -> item.setWcDescription("LIMPIEZA"));
+        
+        final List<Priority> priorities = List.of();
+        
+        final List<WorkOrderInformation> plan = Utils.buildPlanList("LIMPIEZA", items, priorities);
+        Assert.assertFalse("Plan should not be empty", plan.isEmpty());
+        
+        final Object[][] tests = {
+            // Index, setup hours, age, part number
+            {0, 1.5D, 12, "PT_9"},      // 0
+            {1, 2.0D, 8, "PT_6"},       // 1
+            {2, 0.5D, 6, "PT_3"},       // 2
+            {3, 0.0D, 4, "PT_3"},       // 3
+            {4, 0.5D, 6, "PT_5"},       // 4
+            {5, 2.5D, 6, "PT_10"},      // 5
+            {6, 0.0D, 5, "PT_10"},      // 6
+            {7, 3.3D, 5, "PT_4"},       // 7
+            {8, 0.0D, 1, "PT_4"},       // 8
+            {9, 0.0D, 1, "PT_4"},       // 9
+            {10, 0.5D, 5, "PT_7"},      // 10
+            {11, 0.8D, 5, "PT_12"},     // 11
+            {12, 1.0D, 4, "PT_8"},      // 12
+            {13, 0.0D, 3, "PT_8"},      // 13
+            {14, 0.3D, 3, "PT_1"},      // 14
+            {15, 0.8D, 3, "PT_11"},     // 15
+            {16, 2.3D, 2, "PT_2"},      // 16
+        };
+        
+        for (final Object[] test : tests) {
+            final WorkOrderInformation wo = plan.get(Integer.parseInt(test[0].toString()));
+            Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.01D);
+            final int EXPECTED_AGE = (Integer) test[2];
+            Assert.assertEquals(String.format("Wrong age with: %s,%s", wo.getPartNumber(), wo.getWorkOrder()), EXPECTED_AGE, wo.getAge());
+            Assert.assertEquals(test[3].toString(), wo.getPartNumber());
+        }
     }
 
 }

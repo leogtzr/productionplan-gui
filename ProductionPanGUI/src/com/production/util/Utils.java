@@ -299,9 +299,6 @@ el segundo se aprovecha
         
         switch (numberOfTurns) {
             case 0:                 // Build a simple list ... 
-                                    // TODO: How is the list built?
-                // HOW: alv
-                System.out.println("A simple list ... ");
                 break;
             case 2:                 // Only two turns ...
                 buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
@@ -345,6 +342,54 @@ el segundo se aprovecha
                 iterator.remove();
             }
         }
+    }
+    
+    @MissingTests
+    public static List<WorkOrderInformation> buildPlanList(
+            final String workCenter
+            , List<WorkOrderInformation> workOrderItems
+            , final List<Priority> priorities
+    ) {
+        // Before sorting ... 
+        List<WorkOrderInformation> priorityWorkOrderItems = new ArrayList<>();
+        for (final Priority priority : priorities) {
+            priorityWorkOrderItems.addAll(
+                workOrderItems.stream()
+                    .filter(wo -> wo.getPartNumber().equalsIgnoreCase(priority.getPartNumber()))
+                    .collect(Collectors.toList())
+            );
+        }
+        
+        for (final WorkOrderInformation wo : priorityWorkOrderItems) {
+            removePrioritizedItemsFromWorkOrderItems(wo, workOrderItems);
+        }
+        
+        priorityWorkOrderItems = sortAndGroup(priorityWorkOrderItems, new AgeComparator());
+        workOrderItems = sortAndGroup(workOrderItems, new AgeComparator());
+        
+        final List<WorkOrderInformation> joined = new ArrayList<>(priorityWorkOrderItems);
+        joined.addAll(workOrderItems);
+        
+        //System.out.println(joined);
+        //joined.forEach(System.out::println);
+        
+        // Before this the lists have to be joined.
+        final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(joined);
+        
+        for (final WorkOrderInformation woInfo : joined) {
+            
+            final String partNumber = woInfo.getPartNumber();
+            final List<WorkOrderInformation> partNumbers = workOrderItemsPerPartNumber.get(partNumber);
+            // Check if a part number has more than one element so we can adjust the setup time after the first element.
+            if (partNumbers.size() > 1) {
+                for (int i = 1; i < partNumbers.size(); i++) {
+                    final WorkOrderInformation wo = partNumbers.get(i);
+                    wo.setSetupHours(0.0D);
+                }
+            }
+        }
+        
+        return joined;
     }
     
     @Validated
