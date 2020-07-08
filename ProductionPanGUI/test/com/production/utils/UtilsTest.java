@@ -656,7 +656,6 @@ public class UtilsTest {
         
         // Build the plan:
         final List<WorkOrderInformation> planForTwoTurns = Utils.buildPlanForTwoTurns(workCenter, items, priorities);
-        // planForTwoTurns.forEach(System.out::println);
 
         // The list shouldn't be empty ...
         Assert.assertFalse(planForTwoTurns.isEmpty());
@@ -1077,7 +1076,7 @@ public class UtilsTest {
     }
     
     @Test
-    public void shouldBuildPlanList() {
+    public void shouldBuildListPlan() {
         final List<WorkOrderInformation> items = testItemsWithAge();
         final int EXPECTED_ITEMS_SIZE = 17;
         Assert.assertEquals(EXPECTED_ITEMS_SIZE, items.size());
@@ -1117,6 +1116,83 @@ public class UtilsTest {
             Assert.assertEquals(String.format("Wrong age with: %s,%s", wo.getPartNumber(), wo.getWorkOrder()), EXPECTED_AGE, wo.getAge());
             Assert.assertEquals(test[3].toString(), wo.getPartNumber());
         }
+    }
+    
+    @Test
+    public void shouldBuildListPlanWithPriorities() {
+        final List<WorkOrderInformation> items = testItemsWithAge();
+        final int EXPECTED_ITEMS_SIZE = 17;
+        final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = items.size();
+        Assert.assertEquals(EXPECTED_ITEMS_SIZE, items.size());
+        final String WORK_CENTER = "LIMPIEZA";
+        items.forEach(item -> item.setWcDescription("LIMPIEZA"));
+        // Our priorities ... 
+        final List<Priority> priorities = List.of(new Priority("PT_2", -1), new Priority("PT_5", -1));
+        
+        // Build the plan:
+        final List<WorkOrderInformation> plan = Utils.buildPlanList(WORK_CENTER, items, priorities);
+        Assert.assertFalse("Plan should not be empty", plan.isEmpty());
+        Assert.assertEquals(EXPECTED_NUMBER_OF_ITEMS_IN_PLAN, plan.size());
+        
+        final Object[][] tests = {
+            // Index, setup hours, age, part number
+            {0, 0.5D, 6, "PT_5"},       // 0
+            {1, 2.3D, 2, "PT_2"},       // 1
+            {2, 1.5D, 12, "PT_9"},      // 2
+            {3, 2.0D, 8, "PT_6"},       // 3
+            {4, 0.5D, 6, "PT_3"},       // 4
+            {5, 0.0D, 4, "PT_3"},      // 5
+            {6, 2.5D, 6, "PT_10"},      // 6
+            {7, 0.0D, 5, "PT_10"},      // 7
+        };
+        
+        for (final Object[] test : tests) {
+            final WorkOrderInformation wo = plan.get(Integer.parseInt(test[0].toString()));
+            Assert.assertEquals(test[3].toString(), wo.getPartNumber());
+            Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.01D);
+            final int EXPECTED_AGE = (Integer) test[2];
+            Assert.assertEquals(String.format("Wrong age with: %s,%s", wo.getPartNumber(), wo.getWorkOrder()), EXPECTED_AGE, wo.getAge());
+        }
+        
+    }
+    
+    @Test
+    public void shouldBuildListPlanWithPriorities2() {
+        final List<WorkOrderInformation> items = testItemsWithAge();
+        final int EXPECTED_ITEMS_SIZE = 17;
+        final int EXPECTED_NUMBER_OF_ITEMS_IN_PLAN = items.size();
+        Assert.assertEquals(EXPECTED_ITEMS_SIZE, items.size());
+        final String WORK_CENTER = "LIMPIEZA";
+        items.forEach(item -> item.setWcDescription("LIMPIEZA"));
+        // Our priorities ... 
+        final List<Priority> priorities = List.of(new Priority("PT_4", -1));
+        
+        // Build the plan:
+        final List<WorkOrderInformation> plan = Utils.buildPlanList(WORK_CENTER, items, priorities);
+        Assert.assertFalse("Plan should not be empty", plan.isEmpty());
+        Assert.assertEquals(EXPECTED_NUMBER_OF_ITEMS_IN_PLAN, plan.size());
+        
+        final Object[][] tests = {
+            // Index, setup hours, age, part number
+            {0, 3.3D, 5, "PT_4"},      // 0
+            {1, 0.0D, 1, "PT_4"},      // 1
+            {2, 0.0D, 1, "PT_4"},      // 2
+            {3, 1.5D, 12, "PT_9"},     // 3
+            {4, 2.0D, 8, "PT_6"},       // 4
+            {5, 0.5D, 6, "PT_3"},      // 5
+            {6, 0.0D, 4, "PT_3"},      // 6
+            {7, 0.5D, 6, "PT_5"},      // 7
+            // ... 
+        };
+        
+        for (final Object[] test : tests) {
+            final WorkOrderInformation wo = plan.get(Integer.parseInt(test[0].toString()));
+            Assert.assertEquals(test[3].toString(), wo.getPartNumber());
+            Assert.assertEquals((double) test[1], wo.getSetupHours(), 0.01D);
+            final int EXPECTED_AGE = (Integer) test[2];
+            Assert.assertEquals(String.format("Wrong age with: %s,%s", wo.getPartNumber(), wo.getWorkOrder()), EXPECTED_AGE, wo.getAge());
+        }
+        
     }
 
 }

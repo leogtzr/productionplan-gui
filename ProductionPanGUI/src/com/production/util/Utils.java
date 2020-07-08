@@ -344,7 +344,7 @@ el segundo se aprovecha
         }
     }
     
-    @MissingTests
+    @Validated
     public static List<WorkOrderInformation> buildPlanList(
             final String workCenter
             , List<WorkOrderInformation> workOrderItems
