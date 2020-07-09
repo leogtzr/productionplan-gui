@@ -589,9 +589,14 @@ public class MainWindow extends javax.swing.JFrame {
                     .stream()
                     .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                     .collect(Collectors.toList());
-            final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
+            try {
+                final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
+                // TODO: do something with the content ... 
+            } catch (final IOException ex) {
+                showErrorMessage(ex.getMessage(), "ERROR");
+            }
         }, () -> {
-            
+            showErrorMessage("There are no Work Order information to build the plan", "ERROR");
         });
     }//GEN-LAST:event_generatePlanBtnActionPerformed
 

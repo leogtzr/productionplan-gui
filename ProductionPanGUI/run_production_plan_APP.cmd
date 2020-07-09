@@ -19,6 +19,8 @@ rem "%JAVA_BIN%" -jar "%JAR_FILE_NAME%"
 
 rem copy "dist\%JAR_FILE_NAME%" run\
 copy run\* dist\
+mkdir dist\templates
+copy html-templates\* dist\templates
 cd dist\
 "%JAVA_BIN%" -jar "%JAR_FILE_NAME%"
 cd ..

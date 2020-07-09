@@ -44,6 +44,9 @@ import static com.production.util.Constants.THIRD_TURN_LENGTH;
 
 import static com.production.domain.Turn.*;
 import static com.production.domain.Day.*;
+import com.production.util.html.HTMLFormat;
+import java.net.URLDecoder;
+import java.nio.file.Path;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -287,7 +290,7 @@ public final class Utils {
     public static String buildHtmlContent(
             final String workCenter
             , final List<WorkOrderInformation> workOrderItems
-            , final List<Priority> priorities) {
+            , final List<Priority> priorities) throws IOException {
         
         // Items in the "priorities" list will go first.
         final int numberOfTurns = numberOfTurnsFromWorkCenter(workCenter);
@@ -299,6 +302,26 @@ el segundo se aprovecha
         
         switch (numberOfTurns) {
             case 0:                 // Build a simple list ... 
+                
+                final List<WorkOrderInformation> planItems = Utils.buildPlanList(workCenter, workOrderItems, priorities);
+                
+                // TODO: ... needs some refactoring ... 
+                final String jarFilepath = Utils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+                final File jf = new File(jarFilepath);
+                final String jarDirectoryPath = URLDecoder.decode(jf.getParent(), "UTF-8");
+                // System.out.println(String.format());
+                System.out.printf("The file is in [%s]\n", jarDirectoryPath);
+                final Path templateHTMLPath = Paths.get(jarDirectoryPath, "templates", "index.html");
+                final File htmlFile = templateHTMLPath.toFile();
+                System.out.printf("The file is in [%s]\n", htmlFile.getAbsolutePath());
+                System.out.printf("Exists -> [%b]\n", htmlFile.exists());
+                
+                if (htmlFile.exists()) {
+                    String templateHTMLContent = Files.readString(templateHTMLPath);
+                    final String htmlPlan = HTMLFormat.generateHTMLContentForListPlan(templateHTMLContent, planItems);
+                    System.out.println(htmlPlan);
+                }
+                
                 break;
             case 2:                 // Only two turns ...
                 buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
@@ -313,20 +336,27 @@ el segundo se aprovecha
     @Validated
     public static Day nextDay(final Day day) {
         switch (day) {
-            case MONDAY:
+            case MONDAY -> {
                 return TUESDAY;
-            case TUESDAY:
+            }
+            case TUESDAY -> {
                 return WEDNESDAY;
-            case WEDNESDAY:
+            }
+            case WEDNESDAY -> {
                 return THURSDAY;
-            case THURSDAY:
+            }
+            case THURSDAY -> {
                 return FRIDAY;
-            case FRIDAY:
+            }
+            case FRIDAY -> {
                 return SATURDAY;
-            case SATURDAY:
+            }
+            case SATURDAY -> {
                 return SUNDAY;
-            case SUNDAY:
+            }
+            case SUNDAY -> {
                 return MONDAY;
+            }
         }
         return MONDAY;
     }

@@ -43,29 +43,10 @@
             <h1><a href="#">@TITLE@</a></h1>
             <table class="table">
                 <thead>
-                  <tr>
-                    <th scope='col'>#</th>
-                    <th scope='col'>Part Number</th>
-                    <th scope='col'>WO</th>
-                    <th scope='col'>HRS</th>
-                    <th scope='col'>Setup</th>
-                    <th scope='col'>PZAS/HR (META)</th>
-                    <th scope='col'>PZAS X HACER</th>
-                    <th scope='col'>Comentarios</th>
-                  </tr>
+                  @TABLE.HEAD@
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Turno</td>
-                    <td>Pt number</td>
-                    <td>WO</td>
-                    <td>HRS</td>
-                    <td>Setup</td>
-                    <td>PZAS/HR (META)</td>
-                    <td>PZAS X HACER</td>
-                    <td>Comentarios
-                    </td>
-                  </tr>
+                  @TABLE.ROWS@
                 </tbody>
               </table>
         </div>
