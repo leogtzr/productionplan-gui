@@ -589,13 +589,6 @@ public class MainWindow extends javax.swing.JFrame {
                     .stream()
                     .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                     .collect(Collectors.toList());
-            // TODO: get HTML content or a list of items ...
-            
-            // Utils.numberOfTurnsFromWorkCenter(wcDescription)
-            final String wcDescriptionSanitized = Utils.sanitizeWorkCenterName(wcDescription);
-            
-            showWarningMessage(String.format("[%s] - [%s]", wcDescription, wcDescriptionSanitized), "DEBUG");
-            
             final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
         }, () -> {
             
