@@ -591,6 +591,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .collect(Collectors.toList());
             try {
                 final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
+                showDialog(wcDescription, htmlContent);
                 // TODO: do something with the content ... 
             } catch (final IOException ex) {
                 showErrorMessage(ex.getMessage(), "ERROR");
@@ -600,6 +601,20 @@ public class MainWindow extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_generatePlanBtnActionPerformed
 
+    private void showDialog(
+            final String workCenter
+            , final String htmlContent
+    ) throws IOException {
+        final JFileChooser saveFileChooser = Utils
+                .createFileChooser(String.format("Save plan for '%s'", workCenter), "HTML files", ".html");
+        final int option = saveFileChooser.showSaveDialog(this);
+ 
+        if (option == JFileChooser.APPROVE_OPTION) {
+            final File fileToSave = saveFileChooser.getSelectedFile();
+            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+        }
+    }
+    
     private void rollbackMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rollbackMenuItemActionPerformed
         if (this.backupWorkOrderItems.isEmpty()) {
             return;
@@ -656,6 +671,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTable workOrderTable;
     // End of variables declaration//GEN-END:variables
 
+    @MissingTests
     private List<Priority> buildPrioritiesFromTable(final DefaultTableModel model) {
         final int rowCount = model.getRowCount();
         if (rowCount <= 0) {

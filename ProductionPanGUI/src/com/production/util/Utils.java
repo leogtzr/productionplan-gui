@@ -45,7 +45,6 @@ import static com.production.util.Constants.THIRD_TURN_LENGTH;
 import static com.production.domain.Turn.*;
 import static com.production.domain.Day.*;
 import com.production.util.html.HTMLFormat;
-import java.net.URLDecoder;
 import java.nio.file.Path;
 
 import java.util.Collections;
@@ -68,6 +67,20 @@ public final class Utils {
         jfc.setDialogTitle("Select a .XLS file");
         jfc.setAcceptAllFileFilterUsed(false);
         final FileNameExtensionFilter filter = new FileNameExtensionFilter("XLS files", "xls");
+        jfc.addChoosableFileFilter(filter);
+        return jfc;
+    }
+    
+    @Validated
+    public static JFileChooser createFileChooser(
+            final String dialogTitle
+            , final String fileNameDescription
+            , final String fileExtensions
+    ) {
+        final JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        jfc.setDialogTitle(dialogTitle);
+        jfc.setAcceptAllFileFilterUsed(false);
+        final FileNameExtensionFilter filter = new FileNameExtensionFilter(fileNameDescription, fileExtensions);
         jfc.addChoosableFileFilter(filter);
         return jfc;
     }
@@ -294,32 +307,17 @@ public final class Utils {
         
         // Items in the "priorities" list will go first.
         final int numberOfTurns = numberOfTurnsFromWorkCenter(workCenter);
-        /*
-tomar en cuenta que cuando hay partes iguales en un WorkCenter ... un mismo setup aplica para ello.
-Es decir: si hay dos part numbers iguales, solo el primero tendrïa un setup ...
-el segundo se aprovecha
-        */
         
         switch (numberOfTurns) {
             case 0:                 // Build a simple list ... 
                 
                 final List<WorkOrderInformation> planItems = Utils.buildPlanList(workCenter, workOrderItems, priorities);
+                final Path templateHTMLPath = TemplateFileUtils.getTemplatesDirPath();
                 
-                // TODO: ... needs some refactoring ... 
-                final String jarFilepath = Utils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-                final File jf = new File(jarFilepath);
-                final String jarDirectoryPath = URLDecoder.decode(jf.getParent(), "UTF-8");
-                // System.out.println(String.format());
-                System.out.printf("The file is in [%s]\n", jarDirectoryPath);
-                final Path templateHTMLPath = Paths.get(jarDirectoryPath, "templates", "index.html");
-                final File htmlFile = templateHTMLPath.toFile();
-                System.out.printf("The file is in [%s]\n", htmlFile.getAbsolutePath());
-                System.out.printf("Exists -> [%b]\n", htmlFile.exists());
-                
-                if (htmlFile.exists()) {
+                if (templateHTMLPath.toFile().exists()) {
                     String templateHTMLContent = Files.readString(templateHTMLPath);
                     final String htmlPlan = HTMLFormat.generateHTMLContentForListPlan(templateHTMLContent, planItems);
-                    System.out.println(htmlPlan);
+                    return htmlPlan;
                 }
                 
                 break;
