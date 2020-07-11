@@ -8,6 +8,8 @@ import com.production.util.html.HTMLFormat;
 import org.junit.Assert;
 
 import java.util.List;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
@@ -118,6 +120,38 @@ public class HTMLFormatTest {
         Assert.assertFalse("html content shouldn't be empty", html.isEmpty());
         Assert.assertTrue(String.format("[%s] should be in the content replaced.", EXPECTED_HTML_OUTPUT), 
                 html.contains(EXPECTED_HTML_OUTPUT));        
+    }
+    
+    @Test
+    public void shouldGenerateHTMLContentForListPlan() {
+        final WorkOrderInformation wo1 = new WorkOrderInformation.Builder("pt1", "wo1")
+                .runHours(0.0D)
+                .setupHours(1.2D)
+                .qty(13)
+                .machine("mch1")
+                .build()
+                ;
+        
+        final WorkOrderInformation wo2 = new WorkOrderInformation.Builder("pt2", "wo2")
+                .runHours(2.3D)
+                .setupHours(3.5D)
+                .qty(8)
+                .machine("mch2")
+                .build()
+                ;
+        
+        final List<WorkOrderInformation> items = List.of(wo1, wo2);
+        
+        final StringBuilder sb = new StringBuilder();
+        sb.append(HTMLConstants.TABLE_HEAD_MARK);
+        sb.append(HTMLConstants.TABLE_ROWS_MARK);
+        sb.append(HTMLConstants.TABLE_TITLE_MARK);
+        
+        final String html = HTMLFormat.generateHTMLContentForListPlan(sb.toString(), "EMPAQUE A PROVEEDOR", items);
+        Assert.assertFalse("HTML content shouldn't be empty", html.isEmpty());        
+        Assert.assertThat(html, not(containsString(HTMLConstants.TABLE_HEAD_MARK)));
+        Assert.assertThat(html, not(containsString(HTMLConstants.TABLE_ROWS_MARK)));
+        Assert.assertThat(html, not(containsString(HTMLConstants.TABLE_TITLE_MARK)));
     }
     
 }

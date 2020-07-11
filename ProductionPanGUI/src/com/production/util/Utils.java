@@ -309,20 +309,30 @@ public final class Utils {
         final int numberOfTurns = numberOfTurnsFromWorkCenter(workCenter);
         
         switch (numberOfTurns) {
-            case 0:                 // Build a simple list ... 
-                final List<WorkOrderInformation> planItems = Utils.buildPlanList(workCenter, workOrderItems, priorities);
-                final Path templateHTMLPath = TemplateFileUtils.getTemplatesDirPath();
-                
-                if (templateHTMLPath.toFile().exists()) {
-                    final String templateHTMLContent = Files.readString(templateHTMLPath);
-                    final String htmlPlan = HTMLFormat
-                            .generateHTMLContentForListPlan(templateHTMLContent, workCenter, planItems);
-                    return htmlPlan;
+            case 0: {
+                    final List<WorkOrderInformation> planItems = buildPlanList(workCenter, workOrderItems, priorities);
+                    final Path templateHTMLPath = TemplateFileUtils.getTemplatesDirPath();
+
+                    if (templateHTMLPath.toFile().exists()) {
+                        final String templateHTMLContent = Files.readString(templateHTMLPath);
+                        final String htmlPlan = HTMLFormat
+                                .generateHTMLContentForListPlan(templateHTMLContent, workCenter, planItems);
+                        return htmlPlan;
+                    }
                 }
                 
                 break;
-            case 2:                 // Only two turns ...
-                buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
+            case 2: {
+                    final List<WorkOrderInformation> planItems = buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
+                    final Path templateHTMLPath = TemplateFileUtils.getTemplatesDirPath();
+
+                    if (templateHTMLPath.toFile().exists()) {
+                        final String templateHTMLContent = Files.readString(templateHTMLPath);
+//                        final String htmlPlan = HTMLFormat
+//                                .generateHTMLContentForListPlan(templateHTMLContent, workCenter, planItems);
+//                        return htmlPlan;
+                    }
+                }
                 break;
             case 3:                 // Use three turns ...
                 buildPlanForThreeTurns(workCenter, workOrderItems, priorities);
@@ -594,7 +604,7 @@ public final class Utils {
         Collections.sort(items, comparator);
         final List<WorkOrderInformation> other = new ArrayList<>();
 
-        final Map<String, List<WorkOrderInformation>> group = Utils.workOrderItemsPerPartNumber(items);
+        final Map<String, List<WorkOrderInformation>> group = workOrderItemsPerPartNumber(items);
         group.forEach((pt, wos) -> other.addAll(wos));
         
         return other;

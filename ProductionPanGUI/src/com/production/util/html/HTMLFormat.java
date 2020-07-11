@@ -61,17 +61,7 @@ public final class HTMLFormat {
         return sb.toString();
     }
     
-    /*
     @Validated
-    public static String replaceTableHeaderInTemplate(
-            final String htmlTemplateContent
-            , final String mark
-    , final String tableHeader) {
-        return htmlTemplateContent.replace(mark, tableHeader);
-    }
-    */
-    
-    @MissingTests
     public static String generateHTMLContentForListPlan(
             final String htmlTemplate
             , final String workCenter
