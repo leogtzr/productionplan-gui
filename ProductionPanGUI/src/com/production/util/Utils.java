@@ -310,13 +310,13 @@ public final class Utils {
         
         switch (numberOfTurns) {
             case 0:                 // Build a simple list ... 
-                
                 final List<WorkOrderInformation> planItems = Utils.buildPlanList(workCenter, workOrderItems, priorities);
                 final Path templateHTMLPath = TemplateFileUtils.getTemplatesDirPath();
                 
                 if (templateHTMLPath.toFile().exists()) {
-                    String templateHTMLContent = Files.readString(templateHTMLPath);
-                    final String htmlPlan = HTMLFormat.generateHTMLContentForListPlan(templateHTMLContent, planItems);
+                    final String templateHTMLContent = Files.readString(templateHTMLPath);
+                    final String htmlPlan = HTMLFormat
+                            .generateHTMLContentForListPlan(templateHTMLContent, workCenter, planItems);
                     return htmlPlan;
                 }
                 

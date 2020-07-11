@@ -72,14 +72,15 @@ public final class HTMLFormat {
     */
     
     @MissingTests
-    public static String generateHTMLContentForListPlan(final String htmlTemplate, final List<WorkOrderInformation> items) {
-        
+    public static String generateHTMLContentForListPlan(
+            final String htmlTemplate
+            , final String workCenter
+            , final List<WorkOrderInformation> items) {
         final String header = replaceTableHeaderInTemplate(htmlTemplate, TABLE_HEAD_MARK, TR_HEAD_LIST_PLAN);
         final String trs = getTRForWorkOrderItemsLitPlan(items);
-        
         final String html = header.replace(TABLE_ROWS_MARK, trs);
         
-        return html;
+        return html.replace(TABLE_TITLE_MARK, workCenter);
     }
     
 }

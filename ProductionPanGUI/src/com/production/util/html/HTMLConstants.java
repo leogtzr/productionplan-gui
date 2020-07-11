@@ -17,6 +17,7 @@ public final class HTMLConstants {
     
     public static final String TABLE_HEAD_MARK = "@TABLE.HEAD@";
     public static final String TABLE_ROWS_MARK = "@TABLE.ROWS@";
+    public static final String TABLE_TITLE_MARK = "@TITLE@";
     
     private HTMLConstants() {}
     

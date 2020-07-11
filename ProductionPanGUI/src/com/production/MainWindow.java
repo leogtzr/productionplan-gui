@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.event.TableModelListener;
 import javax.swing.event.TableModelEvent;
@@ -38,14 +39,17 @@ import static com.production.util.Constants.DOBLADO_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
+import java.io.BufferedWriter;
+import java.io.UTFDataFormatException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
-import org.apache.poi.xdgf.util.Util;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>
  */
-public class MainWindow extends javax.swing.JFrame {
+public class MainWindow extends JFrame {
     
     private File fabLoadFilePath = null;
     private File ageByWCFilePath = null;
@@ -591,8 +595,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .collect(Collectors.toList());
             try {
                 final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
-                showDialog(wcDescription, htmlContent);
-                // TODO: do something with the content ... 
+                showSaveDialog(wcDescription, htmlContent);
             } catch (final IOException ex) {
                 showErrorMessage(ex.getMessage(), "ERROR");
             }
@@ -601,17 +604,16 @@ public class MainWindow extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_generatePlanBtnActionPerformed
 
-    private void showDialog(
-            final String workCenter
-            , final String htmlContent
-    ) throws IOException {
+    private void showSaveDialog(final String workCenter, final String htmlContent) throws IOException {
         final JFileChooser saveFileChooser = Utils
                 .createFileChooser(String.format("Save plan for '%s'", workCenter), "HTML files", ".html");
         final int option = saveFileChooser.showSaveDialog(this);
  
         if (option == JFileChooser.APPROVE_OPTION) {
             final File fileToSave = saveFileChooser.getSelectedFile();
-            System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+            try (final BufferedWriter newBufferedWriter = Files.newBufferedWriter(fileToSave.toPath(), StandardCharsets.UTF_8)) {
+                newBufferedWriter.write(htmlContent);
+            }
         }
     }
     
