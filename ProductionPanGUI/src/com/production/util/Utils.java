@@ -616,6 +616,13 @@ public final class Utils {
         source.forEach(woItem -> dest.add(new WorkOrderInformation(woItem)));
     }
     
+    @Validated
+    public static boolean shouldTheFilesBeSplit(final String workCenter) {
+        final String sanitizedWorkCenter = sanitizeWorkCenterName(workCenter);
+        return sanitizedWorkCenter.equalsIgnoreCase(Constants.DOBLADO) ||
+                sanitizedWorkCenter.equalsIgnoreCase(Constants.PUNZONADO);
+    }
+    
     private Utils() {}
     
 }

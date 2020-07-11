@@ -1215,5 +1215,23 @@ public class UtilsTest {
         
         Assert.assertEquals(EXPECTED_EXTENSION, filter.getExtensions()[0]);
     }
+    
+    @Test
+    public void shouldIdentifyWorkCentersSplit() {
+        final Object[][] tests = {
+            {Constants.PUNZONADO, true},
+            {Constants.DOBLADO, true},
+            {Constants.LASER, false},
+            {"Other", false}
+        };
+        
+        for (final Object[] test : tests) {
+            final String workCenter = test[0].toString();
+            final boolean got = Utils.shouldTheFilesBeSplit(workCenter);
+            final boolean expected = Boolean.valueOf(test[1].toString());
+            Assert.assertEquals(expected, got);
+        }
+        
+    }
 
 }

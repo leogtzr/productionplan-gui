@@ -40,7 +40,6 @@ import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NA
 import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import java.io.BufferedWriter;
-import java.io.UTFDataFormatException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;

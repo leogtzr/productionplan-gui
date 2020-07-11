@@ -22,6 +22,8 @@ public final class Constants {
     public static final double THIRD_TURN_LENGTH = 5.5D;
     
     public static final String DOBLADO = "DOBLADO";
+    public static final String PUNZONADO = "PUNZONADO";
+    public static final String LASER = "LASER";
     
     public static final int ALLOWED_COLUMN_NUMBER_TO_BE_EDITED = 4;
     
