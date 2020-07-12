@@ -311,7 +311,7 @@ public final class Utils {
         switch (numberOfTurns) {
             case 0: {
                     final List<WorkOrderInformation> planItems = buildPlanList(workCenter, workOrderItems, priorities);
-                    final Path templateHTMLPath = TemplateFileUtils.getTemplatesDirPath();
+                    final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("list-template.html");
 
                     if (templateHTMLPath.toFile().exists()) {
                         final String templateHTMLContent = Files.readString(templateHTMLPath);
@@ -324,7 +324,8 @@ public final class Utils {
                 break;
             case 2: {
                     final List<WorkOrderInformation> planItems = buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
-                    final Path templateHTMLPath = TemplateFileUtils.getTemplatesDirPath();
+                    // TODO: change the following line for the one for the 
+                    final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("two-template.html");
 
                     if (templateHTMLPath.toFile().exists()) {
                         final String templateHTMLContent = Files.readString(templateHTMLPath);

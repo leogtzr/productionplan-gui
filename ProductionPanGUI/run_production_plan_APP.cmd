@@ -1,4 +1,5 @@
 @echo off
+:: author: Leo Gutiérrez <leogutierrezramirez@autozone.com>
 
 if "%JAVA_HOME%"=="" (
 	echo error: JAVA_HOME variable is not defined

@@ -13,11 +13,11 @@ import java.nio.file.Paths;
 public final class TemplateFileUtils {
     
     @MissingTests
-    public static Path getTemplatesDirPath() throws IOException {
+    public static Path getTemplateFilePath(final String templateFileName) throws IOException {
         final String jarFilepath = TemplateFileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         final File jf = new File(jarFilepath);
         final String jarDirectoryPath = URLDecoder.decode(jf.getParent(), "UTF-8");
-        final Path templateHTMLPath = Paths.get(jarDirectoryPath, "templates", "index.html");
+        final Path templateHTMLPath = Paths.get(jarDirectoryPath, "templates", templateFileName);
         return templateHTMLPath;
     }
     

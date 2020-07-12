@@ -56,7 +56,7 @@ public class MainWindow extends JFrame {
     private Map<String, String> dobladoPartMachineInfo = new HashMap<>();
     private Map<String, String> laserAndPunchPartMachineInfo = new HashMap<>();
     private Optional<List<WorkOrderInformation>> workOrderInformationItems = Optional.empty();
-    private List<WorkOrderInformation> backupWorkOrderItems = new ArrayList<>();
+    private final List<WorkOrderInformation> backupWorkOrderItems = new ArrayList<>();
     
     public MainWindow() {
         initComponents();
@@ -108,7 +108,6 @@ public class MainWindow extends JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         selectedPrioritiesTable = new javax.swing.JTable();
         moveToSelectedPrioritiesButton = new javax.swing.JButton();
-        testButton = new javax.swing.JButton();
         clearButton = new javax.swing.JButton();
         wcDescriptions = new javax.swing.JComboBox<>();
         generatePlanBtn = new javax.swing.JButton();
@@ -193,13 +192,6 @@ public class MainWindow extends JFrame {
     moveToSelectedPrioritiesButton.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             moveToSelectedPrioritiesButtonActionPerformed(evt);
-        }
-    });
-
-    testButton.setText("Test");
-    testButton.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            testButtonActionPerformed(evt);
         }
     });
 
@@ -294,8 +286,7 @@ public class MainWindow extends JFrame {
                             .addComponent(wcDescriptions, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(clearButton)
-                            .addGap(18, 18, 18)
-                            .addComponent(testButton))
+                            .addGap(90, 90, 90))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -315,7 +306,6 @@ public class MainWindow extends JFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap(24, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(testButton)
                         .addComponent(clearButton)
                         .addComponent(generatePlanBtn))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
@@ -417,49 +407,6 @@ public class MainWindow extends JFrame {
         });
     }
     
-    // TODO: this method should be removed ... 
-    private void testButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testButtonActionPerformed
-        
-        final Object[] contentToAdd = {
-            "4022.637.70102   ",
-            "7.2",
-            "0.4",
-            "5",
-            "3"
-        };
-        
-        final Object[] contentToAdd2 = {
-            "3022.637.70102   ",
-            "7.2",
-            "0.4",
-            "5",
-            "3"
-        };
-        
-        final Object[] contentToAdd3 = {
-            "5022.637.70102   ",
-            "7.2",
-            "0.4",
-            "5",
-            "3"
-        };
-        
-        final Object[] contentToAdd4 = {
-            "7022.637.70102   ",
-            "7.2",
-            "0.4",
-            "5",
-            "3"
-        };
-        
-        final DefaultTableModel workOrdersModel = (DefaultTableModel) this.workOrderTable.getModel();
-        
-        workOrdersModel.addRow(contentToAdd);
-        workOrdersModel.addRow(contentToAdd2);
-        workOrdersModel.addRow(contentToAdd3);
-        workOrdersModel.addRow(contentToAdd4);
-    }//GEN-LAST:event_testButtonActionPerformed
-
     private void moveToSelectedPrioritiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToSelectedPrioritiesButtonActionPerformed
         
         final int[] rowIndexesToRemove = this.workOrderTable.getSelectedRows();
@@ -673,7 +620,6 @@ public class MainWindow extends JFrame {
     private javax.swing.JMenuItem rollbackMenuItem;
     private javax.swing.JTable selectedPrioritiesTable;
     private javax.swing.JLabel statusLabel;
-    private javax.swing.JButton testButton;
     private javax.swing.JComboBox<String> wcDescriptions;
     private javax.swing.JTable workOrderTable;
     // End of variables declaration//GEN-END:variables
