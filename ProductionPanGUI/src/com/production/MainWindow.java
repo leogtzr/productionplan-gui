@@ -398,6 +398,7 @@ public class MainWindow extends JFrame {
         final DefaultTableModel workOrdersModel = (DefaultTableModel) table.getModel();
         // "#Part", "Hr", "Stup", "P/Hac", "Máquina"
         workOrderItems.forEach(item -> {
+            // TODO: change the following code to use -> Utils.getMachineFromMachineInfoMaps(...)
             final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
             item.setMachine(machine);
             final Object[] data = {
