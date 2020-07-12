@@ -396,10 +396,15 @@ public class MainWindow extends JFrame {
     @MissingTests
     private void updateTable(final List<WorkOrderInformation> workOrderItems, final JTable table) {        
         final DefaultTableModel workOrdersModel = (DefaultTableModel) table.getModel();
+        
+        final String selectedWorkCenter = this.wcDescriptions.getSelectedItem().toString();
+        final String workCenter = Utils.sanitizeWorkCenterName(selectedWorkCenter);
+        
         // "#Part", "Hr", "Stup", "P/Hac", "Máquina"
         workOrderItems.forEach(item -> {
-            // TODO: change the following code to use -> Utils.getMachineFromMachineInfoMaps(...)
-            final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
+            final String machine = Utils.getMachineFromMachineInfoMaps(
+                workCenter, item.getPartNumber(), this.dobladoPartMachineInfo, this.laserAndPunchPartMachineInfo
+            );
             item.setMachine(machine);
             final Object[] data = {
                 item.getPartNumber()
