@@ -1233,5 +1233,71 @@ public class UtilsTest {
         }
         
     }
+    
+    @Test
+    public void shouldGetMachineFromMaps() {
+        // Build the maps ... 
+        final Map<String, String> doblado = Map.of(
+            "pt1", "2"
+            , "pt2", "3"
+        );
+        
+        final Map<String, String> laserAndPunch = Map.of(
+            "pt3", "3"
+            , "pt4", "DURMA"
+        );
+        
+        final Object[][] tests = {
+            // [Work Center], [Part Number to use], [Machine to get], [if it should get something]
+            {Constants.DOBLADO, "pt1", "2", true},
+            {Constants.PUNZONADO, "pt4", "DURMA", true},
+            
+            // PUNZONADO is a valid work center but the "pt5" part number doesn't have any machine associated with it.
+            // so we are expecting empty here ... 
+            {Constants.PUNZONADO, "pt5", "DURMA", false},
+            
+            // Here we shouldn't look up in the maps:
+            {"Other", "N/A", "N/A", false},
+        };
+        
+        for (final Object[] test : tests) {
+            final String workCenter = test[0].toString();
+            final String partNumber = test[1].toString();
+            final String got = Utils.getMachineFromMachineInfoMaps(workCenter, partNumber, doblado, laserAndPunch);
+            final boolean shouldHaveFoundSomething = !got.isBlank();
+            Assert.assertEquals(shouldHaveFoundSomething, !got.isBlank());
+        }
+    }
+    
+    @Test
+    public void shouldGetMachineFromMaps2() {
+        // Build the maps ... 
+        final Map<String, String> doblado = Map.of(
+            "pt1", "2"
+            , "pt2", "3"
+        );
+        
+        final Map<String, String> laserAndPunch = Map.of(
+            "pt3", "3"
+            , "pt4", "DURMA"
+        );
+        
+        final Object[][] tests = {
+            // [Work Center], [Part Number to use], [Machine to get], [if it should get something]
+            {Constants.DOBLADO, "pt1", "2", true},
+            {Constants.PUNZONADO, "pt4", "DURMA", true},
+            
+            // PUNZONADO is a valid work center but the "pt5" part number doesn't have any machine associated with it.
+            // so we are expecting empty here ... 
+            {Constants.PUNZONADO, "pt5", "", false},
+        };
+        
+        for (final Object[] test : tests) {
+            final String workCenter = test[0].toString();
+            final String partNumber = test[1].toString();
+            final String got = Utils.getMachineFromMachineInfoMaps(workCenter, partNumber, doblado, laserAndPunch);
+            Assert.assertEquals(test[2].toString(), got);
+        }
+    }
 
 }

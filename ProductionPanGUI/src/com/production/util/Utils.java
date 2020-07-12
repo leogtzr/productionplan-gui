@@ -623,6 +623,26 @@ public final class Utils {
                 sanitizedWorkCenter.equalsIgnoreCase(Constants.PUNZONADO);
     }
     
+    @Validated
+    public static String getMachineFromMachineInfoMaps(
+            final String workCenter
+            , final String partNumber
+            , final Map<String, String> doblado
+            , final Map<String, String> laserAndPunch
+    ) {
+        final String sanitizedWorkCenter = sanitizeWorkCenterName(workCenter);
+        String result = "";
+        switch (sanitizedWorkCenter) {
+            case Constants.DOBLADO:
+                result = doblado.getOrDefault(partNumber, "");
+                break;
+            case Constants.PUNZONADO:
+                result = laserAndPunch.getOrDefault(partNumber, "");
+                break;
+        }
+        return result;
+    }
+    
     private Utils() {}
     
 }
