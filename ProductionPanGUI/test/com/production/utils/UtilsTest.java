@@ -1299,5 +1299,20 @@ public class UtilsTest {
             Assert.assertEquals(test[2].toString(), got);
         }
     }
+    
+    @Test
+    public void shouldGetXLSFileChooser() {
+        final JFileChooser genericXLSFileChooser = Utils.genericXLSFileChooser();
+        Assert.assertEquals("Select a .XLS file", genericXLSFileChooser.getDialogTitle());
+        
+        final String EXPECTED_DESCRIPTION = "XLS files";
+        final String EXPECTED_EXTENSION = "xls";
+        
+        final FileFilter[] choosableFileFilters = genericXLSFileChooser.getChoosableFileFilters();
+        Assert.assertEquals(1, choosableFileFilters.length);
+        
+        final FileNameExtensionFilter filter = (FileNameExtensionFilter)choosableFileFilters[0];
+        Assert.assertEquals(EXPECTED_DESCRIPTION, filter.getDescription());
+    }
 
 }

@@ -319,8 +319,7 @@ public final class Utils {
             }
         } else {
             final List<WorkOrderInformation> planItems = buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
-            // TODO: change the following line for the one for the 
-            final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("two-template.html");
+            final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("turns-template.html");
 
             if (templateHTMLPath.toFile().exists()) {
                 final String templateHTMLContent = Files.readString(templateHTMLPath);

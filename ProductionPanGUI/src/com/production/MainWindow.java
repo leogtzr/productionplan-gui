@@ -1,7 +1,6 @@
 // TODO: Think about implementing a DB ... 
 // TODO: Plan acumulativo ..., es decir, si aparecen nuevas órdenes ... que cotinue en el día que se quedó ...
 // TODO: recibir un mapeo para Punzonado para private final Map<String, String> partMachineInfo = new HashMap<>();
-// TODO: think about how the files will be generated ...
 package com.production;
 
 import com.production.domain.Priority;
@@ -327,7 +326,6 @@ public class MainWindow extends JFrame {
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    @NeedsRefactoring
     private void extractWorkOrderItemsFromFile(final File file) throws IOException, InvalidFormatException {
         final List<WorkOrderInformation> workOrdersFromSheetFile = extractWorkOrdersFromSheetFile(file.getAbsolutePath());
         this.workOrderInformationItems = Optional.of(workOrdersFromSheetFile);
