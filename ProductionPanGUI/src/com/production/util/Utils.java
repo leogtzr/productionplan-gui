@@ -644,6 +644,28 @@ public final class Utils {
         return result;
     }
     
+    @Validated
+    public static List<List<WorkOrderInformation>> groupWorkItemsByDay(final List<WorkOrderInformation> items) {
+        final List<List<WorkOrderInformation>> result = new ArrayList<>();
+        List<WorkOrderInformation> lst = new ArrayList<>();
+        
+        for (int i = 0; i < (items.size() - 1); i++) {
+            WorkOrderInformation c = items.get(i);
+            WorkOrderInformation nxt = items.get(i + 1);
+            lst.add(c);
+            
+            if (!c.getDay().equals(nxt.getDay())) {
+                result.add(new ArrayList(lst));
+                lst.clear();
+            }
+        }
+        
+        lst.add(items.get(items.size() - 1));
+        result.add(new ArrayList(lst));
+        
+        return result;
+    }
+    
     private Utils() {}
     
 }
