@@ -308,36 +308,25 @@ public final class Utils {
         // Items in the "priorities" list will go first.
         final int numberOfTurns = numberOfTurnsFromWorkCenter(workCenter);
         
-        switch (numberOfTurns) {
-            case 0: {
-                    final List<WorkOrderInformation> planItems = buildPlanList(workCenter, workOrderItems, priorities);
-                    final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("list-template.html");
+        if (numberOfTurns == 0) {
+            final List<WorkOrderInformation> planItems = buildPlanList(workCenter, workOrderItems, priorities);
+            final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("list-template.html");
 
-                    if (templateHTMLPath.toFile().exists()) {
-                        final String templateHTMLContent = Files.readString(templateHTMLPath);
-                        final String htmlPlan = HTMLFormat
-                                .generateHTMLContentForListPlan(templateHTMLContent, workCenter, planItems);
-                        return htmlPlan;
-                    }
-                }
-                
-                break;
-            case 2: {
-                    final List<WorkOrderInformation> planItems = buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
-                    // TODO: change the following line for the one for the 
-                    final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("two-template.html");
+            if (templateHTMLPath.toFile().exists()) {
+                final String templateHTMLContent = Files.readString(templateHTMLPath);
+                final String htmlPlan = HTMLFormat.generateHTMLContentForListPlan(templateHTMLContent, workCenter, planItems);
+                return htmlPlan;
+            }
+        } else {
+            final List<WorkOrderInformation> planItems = buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
+            // TODO: change the following line for the one for the 
+            final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("two-template.html");
 
-                    if (templateHTMLPath.toFile().exists()) {
-                        final String templateHTMLContent = Files.readString(templateHTMLPath);
-//                        final String htmlPlan = HTMLFormat
-//                                .generateHTMLContentForListPlan(templateHTMLContent, workCenter, planItems);
-//                        return htmlPlan;
-                    }
-                }
-                break;
-            case 3:                 // Use three turns ...
-                buildPlanForThreeTurns(workCenter, workOrderItems, priorities);
-                break;
+            if (templateHTMLPath.toFile().exists()) {
+                final String templateHTMLContent = Files.readString(templateHTMLPath);
+                final String htmlPlan = HTMLFormat.generateHTMLContentForTwoTurns(templateHTMLContent, workCenter, planItems);
+                return htmlPlan;
+            }
         }
         return "";
     }
