@@ -446,7 +446,7 @@ public class HTMLFormatTest {
                 .build()
                 ;
         
-        final WorkOrderInformation wo2 = new WorkOrderInformation.Builder("pt1", "wo1")
+        final WorkOrderInformation wo2 = new WorkOrderInformation.Builder("pt2", "wo2")
                 .setupHours(1.2)
                 .qty(13)
                 .machine("mch1")
@@ -455,7 +455,7 @@ public class HTMLFormatTest {
                 .build()
                 ;
         
-        final WorkOrderInformation wo3 = new WorkOrderInformation.Builder("pt1", "wo1")
+        final WorkOrderInformation wo3 = new WorkOrderInformation.Builder("pt3", "wo3")
                 .setupHours(1.2)
                 .qty(13)
                 .machine("mch1")
@@ -464,7 +464,7 @@ public class HTMLFormatTest {
                 .build()
                 ;
         
-        final WorkOrderInformation wo4 = new WorkOrderInformation.Builder("pt1", "wo1")
+        final WorkOrderInformation wo4 = new WorkOrderInformation.Builder("pt4", "wo4")
                 .setupHours(1.2)
                 .qty(13)
                 .machine("mch1")
@@ -473,15 +473,24 @@ public class HTMLFormatTest {
                 .build()
                 ;
         
+        // MONDAY
+        // TUESDAY
+        // TUESDAY
+        // WEDNESDAY
+        
         final List<WorkOrderInformation> items = new ArrayList<>();
         items.add(wo1);
         items.add(wo2);
         items.add(wo3);
         items.add(wo4);
         
-        final String html = HTMLFormat.generateHTMLContentForTwoTurns("", Constants.DOBLADO, items);
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
-        System.out.println(html);
+        final String html = HTMLFormat.generateHTMLContentForTwoTurns("@TITLE@\n@CONTENT@", Constants.DOBLADO, items);
+        
+        Assert.assertThat(html, not(containsString(HTMLConstants.TABLE_HEAD_MARK)));
+        Assert.assertThat(html, not(containsString(HTMLConstants.TABLE_ROWS_MARK)));
+        Assert.assertThat(html, not(containsString(HTMLConstants.TABLE_TITLE_MARK)));
+        Assert.assertThat(html, not(containsString(HTMLConstants.TABLE_TITLE_MARK)));
+        Assert.assertThat(html, not(containsString(HTMLConstants.CONTENT_MARK)));
     }
     
     @Test

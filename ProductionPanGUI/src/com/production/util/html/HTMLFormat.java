@@ -4,6 +4,7 @@ import com.production.domain.Day;
 import com.production.domain.WorkOrderInformation;
 import com.production.lang.MissingTests;
 import com.production.lang.Validated;
+import com.production.util.Utils;
 import java.util.List;
 
 import static com.production.util.html.HTMLConstants.*;
@@ -96,9 +97,9 @@ public final class HTMLFormat {
         return html.replace(TABLE_TITLE_MARK, workCenter);
     }
     
-    @MissingTests
+    @Validated
     public static String generateHTMLContentForTwoTurns(
-        final String htmlTemplate
+        String htmlTemplate
         , final String workCenter
         , final List<WorkOrderInformation> items
     ) {
@@ -107,54 +108,41 @@ public final class HTMLFormat {
             return "";
         }
         
+        final List<List<WorkOrderInformation>> byDay = Utils.groupWorkItemsByDay(items);
+        
         /*
 public static final String DAY_CONTENT = "@DAY@\n@TABLE.DAY.CONTENT@";
 public static final String DAY_CONTENT_MARK = "@TABLE.DAY.CONTENT@";
 public static final String DAY_MARK = "@DAY@";
         */
         
+        htmlTemplate = htmlTemplate.replace(HTMLConstants.TABLE_TITLE_MARK, String.format("<h1>%s</h1>", workCenter));
+        
         final StringBuilder tableRows = new StringBuilder();
         final StringBuilder result = new StringBuilder();
-        Day day = items.get(0).getDay();
         
-//        for (int i = 0; i < (items.size() - 1); i++) {
-//            final WorkOrderInformation current = items.get(i);
-//            final WorkOrderInformation next = items.get(i + 1);
-//            
-//            // Check day change ... 
-//            if (current.getDay().equals(next.getDay())) {
-//                String dayContent = getTableDayTemplateContent(day);
-//                dayContent = dayContent.replace(TABLE_ROWS_MARK, tableRows.toString());
-//                result.append(dayContent).append("\n");
-//                tableRows.delete(0, tableRows.length());
-//            } else {
-//                final String tr = HTMLFormat.workOrderToTrForTurnPlan(current);
-//                tableRows.append(tr).append("\n");
-//            }
-//        }
-        
-        for (final WorkOrderInformation wo : items) {
-            if (wo.getDay().equals(day)) {
-                final String tr = HTMLFormat.workOrderToTrForTurnPlan(wo);
-                tableRows.append(tr).append("\n");
-            } else {
-                String dayContent = getTableDayTemplateContent(day);
-                dayContent = dayContent.replace(TABLE_ROWS_MARK, tableRows.toString());
-                result.append(dayContent).append("\n");
-                day = wo.getDay();
-                tableRows.delete(0, tableRows.length());
+        for (final List<WorkOrderInformation> woItems : byDay) {
+            final Day day = woItems.get(0).getDay();
+            String dayContent = getTableDayTemplateContent(day);
+            
+            tableRows.delete(0, tableRows.length());
+            // Generate the <TR>'s:
+            for (final WorkOrderInformation wo : woItems) {
+                final String tr = workOrderToTrForTurnPlan(wo);
+                tableRows.append("\t").append(tr);
             }
+            dayContent = dayContent.replace(HTMLConstants.TABLE_ROWS_MARK, tableRows.toString());
+            result.append(dayContent).append("\n\n");
         }
         
-        System.out.println(tableRows.toString());
-        
-        return result.toString();
+        htmlTemplate = htmlTemplate.replace(HTMLConstants.CONTENT_MARK, result.toString());
+        return htmlTemplate;
     }
     
     @MissingTests
     public static String getTableDayTemplateContent(final Day day) {
         String dayContent = HTMLConstants.DAY_CONTENT;
-        dayContent = dayContent.replace(HTMLConstants.DAY_MARK, String.format("<h1>%s</h1>", day.toString()));
+        dayContent = dayContent.replace(HTMLConstants.DAY_MARK, String.format("<h2>%s</h2>", day.toString()));
         dayContent = dayContent.replace(HTMLConstants.DAY_CONTENT_MARK, HTMLConstants.TABLE_DAY_CONTENT);
         dayContent = dayContent.replace(HTMLConstants.TABLE_HEAD_MARK, HTMLConstants.TR_HEAD_TURNS_PLAN);
         return dayContent;

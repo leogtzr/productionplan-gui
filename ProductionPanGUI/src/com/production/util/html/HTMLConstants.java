@@ -41,6 +41,8 @@ public final class HTMLConstants {
     public static final String DAY_CONTENT_MARK = "@TABLE.DAY.CONTENT@";
     public static final String DAY_MARK = "@DAY@";
     
+    public static final String CONTENT_MARK = "@CONTENT@";
+    
     private HTMLConstants() {}
     
 }
