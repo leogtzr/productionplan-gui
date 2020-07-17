@@ -6,7 +6,6 @@ package com.production;
 import com.production.domain.Priority;
 import com.production.domain.WorkOrderInformation;
 import com.production.lang.MissingTests;
-import com.production.lang.NeedsRefactoring;
 import com.production.util.Constants;
 import com.production.util.Utils;
 
@@ -39,8 +38,11 @@ import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NA
 import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Properties;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 
@@ -56,12 +58,37 @@ public class MainWindow extends JFrame {
     private Map<String, String> laserAndPunchPartMachineInfo = new HashMap<>();
     private Optional<List<WorkOrderInformation>> workOrderInformationItems = Optional.empty();
     private final List<WorkOrderInformation> backupWorkOrderItems = new ArrayList<>();
+    private final Properties configProps = new Properties();
     
     public MainWindow() {
         initComponents();
         Utils.updateStatusBar(this.statusLabel, this.fabLoadFilePath, this.ageByWCFilePath);
         loadDobladoPartMachineInformation();
         loadLaserAndPunchPartMachineInformation();
+        loadPropertiesFile(configProps);
+    }
+    
+    private void loadPropertiesFile(final Properties properties) {
+        try {
+            final String jarFilepath = MainWindow.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+            final File jf = new File(jarFilepath);
+            this.jarPath = URLDecoder.decode(jf.getParent(), "UTF-8");
+            
+            final Path configFilePath = Paths.get(this.jarPath, Constants.CONFIG_PROPERTIES_FILE_NAME);
+            final File configFile = configFilePath.toFile();
+            
+            if (configFile.exists()) {
+                try (final InputStream inputStream = new FileInputStream(configFile.getAbsolutePath())) {
+                    properties.load(inputStream);
+                }
+            } else {
+                showErrorMessage(
+                    String.format("%s not found", Constants.CONFIG_PROPERTIES_FILE_NAME), "ERROR loading configuration."
+                );
+            }
+        } catch (IOException ex) {
+            showErrorMessage(ex.getMessage(), "ERROR loading configuration.");
+        }
     }
     
     private void loadDobladoPartMachineInformation() {
@@ -101,6 +128,8 @@ public class MainWindow extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        optionsDialog = new javax.swing.JDialog();
+        saveOptionsButton = new javax.swing.JButton();
         statusLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         workOrderTable = new javax.swing.JTable();
@@ -118,7 +147,40 @@ public class MainWindow extends JFrame {
         editMenu = new javax.swing.JMenu();
         operationsMenu = new javax.swing.JMenu();
         rollbackMenuItem = new javax.swing.JMenuItem();
+        toolsMenu = new javax.swing.JMenu();
+        optionsMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
+
+        optionsDialog.setTitle("Options");
+        optionsDialog.setMaximumSize(new java.awt.Dimension(600, 400));
+        optionsDialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        optionsDialog.setResizable(false);
+        optionsDialog.setSize(new java.awt.Dimension(600, 400));
+
+        saveOptionsButton.setMnemonic('S');
+        saveOptionsButton.setText("Save");
+        saveOptionsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveOptionsButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout optionsDialogLayout = new javax.swing.GroupLayout(optionsDialog.getContentPane());
+        optionsDialog.getContentPane().setLayout(optionsDialogLayout);
+        optionsDialogLayout.setHorizontalGroup(
+            optionsDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, optionsDialogLayout.createSequentialGroup()
+                .addContainerGap(513, Short.MAX_VALUE)
+                .addComponent(saveOptionsButton)
+                .addGap(15, 15, 15))
+        );
+        optionsDialogLayout.setVerticalGroup(
+            optionsDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, optionsDialogLayout.createSequentialGroup()
+                .addContainerGap(362, Short.MAX_VALUE)
+                .addComponent(saveOptionsButton)
+                .addGap(16, 16, 16))
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Production Plan Priorities");
@@ -217,6 +279,7 @@ public class MainWindow extends JFrame {
         }
     });
 
+    fileMenu.setMnemonic('F');
     fileMenu.setText("File");
 
     openFabLoadByWCMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_1, java.awt.event.InputEvent.CTRL_DOWN_MASK));
@@ -248,6 +311,7 @@ public class MainWindow extends JFrame {
 
     menuBar.add(fileMenu);
 
+    editMenu.setMnemonic('E');
     editMenu.setText("Edit");
     menuBar.add(editMenu);
 
@@ -264,6 +328,19 @@ public class MainWindow extends JFrame {
     operationsMenu.add(rollbackMenuItem);
 
     menuBar.add(operationsMenu);
+
+    toolsMenu.setMnemonic('T');
+    toolsMenu.setText("Tools");
+
+    optionsMenuItem.setText("Options");
+    optionsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            optionsMenuItemActionPerformed(evt);
+        }
+    });
+    toolsMenu.add(optionsMenuItem);
+
+    menuBar.add(toolsMenu);
 
     helpMenu.setMnemonic('H');
     helpMenu.setText("Help");
@@ -574,6 +651,15 @@ public class MainWindow extends JFrame {
         this.workOrderInformationItems.ifPresent(woItems -> Utils.copyWorkOrderItems(woItems, this.backupWorkOrderItems));
     }//GEN-LAST:event_rollbackMenuItemActionPerformed
 
+    private void optionsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsMenuItemActionPerformed
+        this.optionsDialog.setVisible(true);
+    }//GEN-LAST:event_optionsMenuItemActionPerformed
+
+    private void saveOptionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOptionsButtonActionPerformed
+        // TODO:
+        this.optionsDialog.setVisible(false);
+    }//GEN-LAST:event_saveOptionsButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -615,9 +701,13 @@ public class MainWindow extends JFrame {
     private javax.swing.JMenuItem openAgeByWCFileItem;
     private javax.swing.JMenuItem openFabLoadByWCMenuItem;
     private javax.swing.JMenu operationsMenu;
+    private javax.swing.JDialog optionsDialog;
+    private javax.swing.JMenuItem optionsMenuItem;
     private javax.swing.JMenuItem rollbackMenuItem;
+    private javax.swing.JButton saveOptionsButton;
     private javax.swing.JTable selectedPrioritiesTable;
     private javax.swing.JLabel statusLabel;
+    private javax.swing.JMenu toolsMenu;
     private javax.swing.JComboBox<String> wcDescriptions;
     private javax.swing.JTable workOrderTable;
     // End of variables declaration//GEN-END:variables

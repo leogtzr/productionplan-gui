@@ -26,6 +26,8 @@ public final class Constants {
     public static final String LASER = "LASER";
     
     public static final int ALLOWED_COLUMN_NUMBER_TO_BE_EDITED = 4;
+        
+    public static final String CONFIG_PROPERTIES_FILE_NAME = "prodplan.properties";
     
     private Constants() {}
     
