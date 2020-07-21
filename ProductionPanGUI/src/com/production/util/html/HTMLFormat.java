@@ -39,11 +39,12 @@ public final class HTMLFormat {
         return sb.toString();
     }
     
-    @MissingTests
+    @Validated
     public static String workOrderToTrForTurnPlan(final WorkOrderInformation wo) {
         final StringBuilder sb = new StringBuilder();
         sb.append("<tr>");
-        sb.append("<td>").append(wo.getTurn()).append("</td>");
+        final String tdTurn = HTMLFormat.getTurnTDWithCSSTurnClass(wo);
+        sb.append(tdTurn);
         // Part number:
         sb.append("<td>").append(wo.getPartNumber()).append("</td>");
         // Work Order:
@@ -59,6 +60,22 @@ public final class HTMLFormat {
         sb.append("</tr>");
         sb.append("\n");
         return sb.toString();
+    }
+    
+    @MissingTests
+    public static String getTurnTDWithCSSTurnClass(final WorkOrderInformation wo) {
+        switch (wo.getTurn()) {
+            case FIRST -> {
+                return "<td class='first-turn'>" + wo.getTurn() + "</td>";
+            }
+            case SECOND -> {
+                return "<td class='second-turn'>" + wo.getTurn() + "</td>";
+            }
+            case THIRD -> {
+                return "<td class='third-turn'>" + wo.getTurn() + "</td>";
+            }
+        }
+        return "<td>" + wo.getTurn() + "</td>";
     }
     
     @Validated
@@ -109,13 +126,6 @@ public final class HTMLFormat {
         }
         
         final List<List<WorkOrderInformation>> byDay = Utils.groupWorkItemsByDay(items);
-        
-        /*
-public static final String DAY_CONTENT = "@DAY@\n@TABLE.DAY.CONTENT@";
-public static final String DAY_CONTENT_MARK = "@TABLE.DAY.CONTENT@";
-public static final String DAY_MARK = "@DAY@";
-        */
-        
         htmlTemplate = htmlTemplate.replace(HTMLConstants.TABLE_TITLE_MARK, String.format("<h1>%s</h1>", workCenter));
         
         final StringBuilder tableRows = new StringBuilder();
