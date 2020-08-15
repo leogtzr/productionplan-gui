@@ -1,4 +1,3 @@
-// TODO: Think about implementing a DB ... 
 // TODO: Plan acumulativo ..., es decir, si aparecen nuevas órdenes ... que cotinue en el día que se quedó ...
 // TODO: recibir un mapeo para Punzonado para private final Map<String, String> partMachineInfo = new HashMap<>();
 package com.production;
@@ -86,7 +85,7 @@ public class MainWindow extends JFrame {
                     String.format("%s not found", Constants.CONFIG_PROPERTIES_FILE_NAME), "ERROR loading configuration."
                 );
             }
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             showErrorMessage(ex.getMessage(), "ERROR loading configuration.");
         }
     }
@@ -152,7 +151,6 @@ public class MainWindow extends JFrame {
         helpMenu = new javax.swing.JMenu();
 
         optionsDialog.setTitle("Options");
-        optionsDialog.setMaximumSize(new java.awt.Dimension(600, 400));
         optionsDialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         optionsDialog.setResizable(false);
         optionsDialog.setSize(new java.awt.Dimension(600, 400));
@@ -186,7 +184,6 @@ public class MainWindow extends JFrame {
         setTitle("Production Plan Priorities");
         setMaximumSize(new java.awt.Dimension(1000, 625));
         setMinimumSize(new java.awt.Dimension(1000, 625));
-        setPreferredSize(new java.awt.Dimension(1000, 625));
         setResizable(false);
 
         statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -373,14 +370,14 @@ public class MainWindow extends JFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addGap(18, 18, 18)
                             .addComponent(generatePlanBtn)))
-                    .addContainerGap(20, Short.MAX_VALUE))))
+                    .addContainerGap(34, Short.MAX_VALUE))))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addContainerGap(24, Short.MAX_VALUE)
+                    .addContainerGap(17, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(clearButton)
                         .addComponent(generatePlanBtn))

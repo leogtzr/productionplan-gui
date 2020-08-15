@@ -9,7 +9,6 @@ public final class Constants {
     public static final String AGE_BY_WC_SHEET_NAME = "Age  by WC";
     public static final String DOBLADO_PART_MACHINE_FILE_NAME = "part-machine.csv";
     public static final String LASER_AND_PUNCH_PART_MACHINE_FILE_NAME = "part-machine2.csv";
-    // public static final String 
     
     // TODO: the value of following constant will have to be changed eventually:
     public static final String FAB_LOAD_FILE_NAME = "FAB Load by WC Leo.xls";

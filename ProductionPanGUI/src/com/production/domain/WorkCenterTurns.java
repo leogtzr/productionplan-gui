@@ -9,7 +9,8 @@ public enum WorkCenterTurns {
     // Segundo turno: 8.1 hrs
     // Tercer turno: 5.5 hrs
     
-    DOBLADO(3), PUNZONADO(3), MAQUINADO_MANUAL(2), LASER(2)
+    DOBLADO(3), PUNZONADO(3)
+    , MAQUINADO_MANUAL(2), LASER(2)         // no se separan por archivos, una sola máquina
     , EMPAQUE_A_PROVEEDOR(0), EMPAQUE_FINAL(0), ENSAMBLE(0), INSERTOS_PEM(0)
     , INSPECCION_DE_ACABADOS(0), LIMPIEZA(0), LIMPIEZA_LUZ_NEGRA(0), MAQUINADO_CNC(0)
     , PINTURA_EN_POLVO(0), PULIDO(0), REBABEO(0), SERIGRAFIA(0), SOLDADURA(0)
