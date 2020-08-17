@@ -37,3 +37,30 @@ if o.hours() > FT; then
 	efficiency = 6.5 * (220 / 15.9)
 	... efficiency = 89.93 ... rounded to 90.0
 fi
+
+
+woHours = wo.getHours()
+
+Parece que he olvidado el algoritmo que traía en la cabeza ...
+
+=======> Va de nuevo <=======
+
+Hrs = 15.9
+Setup = 2.0
+Piezas por hacer 220 ...
+Turnos = 3
+
+
+Empezamos por el primer turno ... <- aunque si estuvieramos analizando una segunda orden, es decir, no empezando por la primera
+empezaríamos por el turno provisto por un argumento o parámetro en la firma del método.
+
+wo = workOrderInformation <- la orden recibia como parámetro.
+totalHours = wo.hours()
+setupHours = wo.runHours()
+hours = totalHours				// Esto también puede ser configurado basado en algún parámetro.
+
+while (hours > 0.0D) {							//
+ 	// en qué turno estoy?
+ 	// esto es importante porque ayudará a calcular el remanente.
+}
+ 

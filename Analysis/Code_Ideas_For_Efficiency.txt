@@ -1,0 +1,9 @@
+// mientras X siempre sea mayor a 0.0 significa que debemos eficientar ... 
+// Note: las comparaciones con decimales son siempre tricky ... 
+while (x > 0.0D) {
+	
+}
+
+// Hay varias cosas que se deben de tomar en cuenta en todo momento:
+// 1) ¿Cuántos turnos?
+// 2) 
