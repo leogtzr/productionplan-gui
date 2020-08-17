@@ -120,6 +120,7 @@ if (remainderHours > currentTurn.get()) {
 
 	remainderHours = 15.9 - (8.5 - 2.0)
 	remainderHours = 15.9 - 6.5
+	// Este 6.5 es especialmente importante porque nos servirá para crear la nueva orden con dicho valor y calcular las piezas por hacer ...
 	remainderHours = 9.4
 }
 ```
@@ -143,8 +144,37 @@ if (remainderHours > currentTurn.get()) {
 	// if (saveSetupHours) { 				<----- false
 	remainderHours = remainderHours - currentTurn.get()
 	remainderHours = 9.4 - 8.1
+	// Este 8.1 es especialmente importante porque nos servirá para crear la nueva orden con dicho valor y calcular las piezas por hacer ...
 	remainderHours = 1.3
 }
 ```
 
-De nuevo hemos abarcado todo el turno ... 
+De nuevo hemos abarcado todo el turno..., podemos pasar al siguiente.
+
+```java
+turn = nextTurn(currentTurn, numberOfTurns)
+```
+
+```java
+turn = TT				// 5.5
+```
+
+```java
+if (remainderHours > currentTurn.get()) {
+```
+
+En el caso anterior ahora la evaluación nos da como resultado **"false"**.
+¿Qué agregaremos ahora de *else* clause?
+
+```java
+} else {
+	// ...
+	newOrder = createOrder(remainderHours, currentTurn)
+	remainderHours = 0.0D
+}
+```
+
+En el code snippet anterior **remainderHours** fue menos a el tiempo del turno
+actual (TT : 5.5), entonces usamos dicho **remainderHours**
+
+Poner la variable en 0.0 debería hacernos salir del **loop**.
