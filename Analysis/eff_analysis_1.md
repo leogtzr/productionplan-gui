@@ -57,10 +57,6 @@ Va tomando forma ...
 
 
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Esta vez intentando ponerle más control y usar código que se acerque más a la realidad.
 
 Hrs = 15.9
@@ -72,10 +68,83 @@ FT = 8.5            (First Turn)
 ST = 8.1            (Second Turn)
 TT = 5.5            (Third Turn)
 
+```
 final totalHours = 15.9
-remainderHours = totalHours				<- esta es la variable que iremos decrementando basado en algunos cálculos ...
+remainderHours = totalHours			 
+remainderHours = totalHours
+currentTurn = FT 			// Initial turn.
+setupHours = wo.setup()
+saveSetupHours = true
+```
 
 Potential method signature ... 
+```java
 List<WorkOrderInformation> splitOrders(final WorkOrderInformation wo)
+```
 
-Iteration 1) 
+# 1) Iteration
+```java
+while (remainderHours > 0.0D) 
+```
+
+### Idea
+Podemos comparar si **remainderHours** cabe en el turno actual.
+
+```java
+if (remainderHours > currentTurn.get()) {
+
+}
+```
+
+Si lo anterior es **true** entonces podemos abarcar todo ese turno
+
+```java
+if (remainderHours > currentTurn.get()) {
+	remainderHours -= (currentTurn.get() - setupHours)
+} else {
+	// ...ya veremos ...
+}
+```
+
+
+sustiyendo las variables ...
+```java
+if (remainderHours > currentTurn.get()) {
+	// La primera iteración "saveSetupHours" será true ... 
+	if (saveSetupHours) {
+		remainderHours = remainderHours - (currentTurn.get() - setupHours)
+		saveSetupHours = false
+	} else {
+		remainderHours = remainderHours - currentTurn.get()
+	}
+
+	remainderHours = 15.9 - (8.5 - 2.0)
+	remainderHours = 15.9 - 6.5
+	remainderHours = 9.4
+}
+```
+
+como abarcamos todo el turno podemos pasar al siguiente ... 
+```java
+turn = nextTurn(currentTurn, numberOfTurns)
+```
+
+```java
+turn = ST				// 8.1
+```
+
+Podemos volver a preguntar 
+```java
+if (remainderHours > currentTurn.get()) {
+```
+
+```java
+if (remainderHours > currentTurn.get()) {
+	// if (saveSetupHours) { 				<----- false
+	remainderHours = remainderHours - currentTurn.get()
+	remainderHours = 9.4 - 8.1
+	remainderHours = 1.3
+}
+```
+
+De nuevo hemos abarcado todo el turno ... 
