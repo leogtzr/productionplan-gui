@@ -106,7 +106,6 @@ if (remainderHours > currentTurn.get()) {
 }
 ```
 
-
 sustiyendo las variables ...
 ```java
 if (remainderHours > currentTurn.get()) {
@@ -257,9 +256,80 @@ Turnos = 3
 
 ```java
 orders = splitOrders(
-	workOrder :: O(15.9, 2.0, 220, 3 :: turns)
+	workOrder :: Order(15.9, 2.0, 220, 3 :: turns)
 	, initialHours :: 0
 	, maxTurnHours :: 22.1
 	, 3
 );
 ```
+
+Primero me pregunto, ¿para qué es el initialHours o para qué lo pensaste? Quizás con algunas iteraciones se haga un poco más evidente, por lo pronto no tiene forma aún en mi cabeza.
+Update 1: Se me ha ocurrido que *initialHours* servirá por lo pronto para calcular en qué turno estoy, aunque bien podría recibirse como argumento.
+
+```
+final int numberOfTurns = 3;
+final totalHours = 15.9
+remainderHours = totalHours
+remainderHours = totalHours
+currentTurn = FT 			// Initial turn.
+setupHours = wo.setup()
+saveSetupHours = true
+```
+
+### it-1 Ord1
+
+```java
+turnFromInitial = calculateTurnFromHours(initialHours, numberOfTurns)
+~turnFromInitial = FT
+```
+```java
+while (remainderHours > 0.0D) {
+```
+¿Qué papel juega initialHours en esta parte específica del algoritmo?
+Ya volveremos a ello ...
+```java
+if (remainderHours > currentTurn.get()) {
+~ if (15.9 > 8.5) {
+~ true
+```
+En este caso remainderHours = 15.9 por lo cuál es true la evaluación.
+```java
+// La primera iteración "saveSetupHours" será true ... 
+	if (saveSetupHours) {
+		remainderHours = remainderHours - (currentTurn.get() - setupHours)
+		~remainderHours = 15.9 - (8.5 - 2.0)
+		~remainderHours = 15.9 - (8.5 - 2.0)
+		~remainderHours = 9.4
+		saveSetupHours = false
+		orders.add(new Order(current.get(), 2.0))
+	} else {
+		// remainderHours = remainderHours - currentTurn.get()
+		// pending ... 
+	}
+```
+
+### it-2 Ord1
+
+```java
+currentTurn = nextTurn(currentTurn, numberOfTurns)
+```
+
+```java
+while (remainderHours > 0.0D) { 			// <- true
+~while (9.4 > 0.0D) {
+~while (true) {
+```
+
+```java
+	if (saveSetupHours) {
+	~if (false) {
+```
+
+```java
+	} else {
+		remainderHours = remainderHours - currentTurn.get()
+		~remainderHours = 9.4 - currentTurn.get()
+	}
+```
+
+// continuará ... 
