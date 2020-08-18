@@ -247,3 +247,19 @@ final List<EfficiencyWorkOrderInformation> orders = splitOrders(
 	, 3
 );
 ```
+
+```
+Hrs = 15.9
+Setup = 2.0
+Piezas por hacer 220 ...
+Turnos = 3
+```
+
+```java
+orders = splitOrders(
+	workOrder :: O(15.9, 2.0, 220, 3 :: turns)
+	, initialHours :: 0
+	, maxTurnHours :: 22.1
+	, 3
+);
+```
