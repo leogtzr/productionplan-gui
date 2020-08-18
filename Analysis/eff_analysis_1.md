@@ -82,7 +82,7 @@ Potential method signature ...
 List<WorkOrderInformation> splitOrders(final WorkOrderInformation wo)
 ```
 
-# 1) Iteration
+## 1) Iteration
 ```java
 while (remainderHours > 0.0D) 
 ```
@@ -177,4 +177,73 @@ En el caso anterior ahora la evaluación nos da como resultado **"false"**.
 En el code snippet anterior **remainderHours** fue menos a el tiempo del turno
 actual (TT : 5.5), entonces usamos dicho **remainderHours**
 
-Poner la variable en 0.0 debería hacernos salir del **loop**.
+Poner la variable en 0.0 debería hacernos salir del **loop**, algo así:
+
+```java
+while (remainderHours > 0.0D) {
+```
+
+Sigue la cuestión de los días y de cómo se debe continuar, es decir, hay varios casos, o mejor dicho cómo se debe continuar el análisis.
+
+```
+[Orden Inicial][Orden que necesita análisis de eficiencia][Otra Orden ... ]
+```
+
+Lo anterior parece obligarnos a pensar en introducir parámetros al método para llevar
+*track* de la suma de horas.
+
+## Algoritmo con *track* de horas globales
+
+```java
+public static List<EfficiencyWorkOrderInformation> splitOrders(
+	final WorkOrderInformation wo,
+	final double initialHours,
+	final double maxTurnHours,
+	final int numberOfTurns
+)
+```
+
+### Primera Orden
+
+```
+Hrs = 15.9
+Setup = 2.0
+Piezas por hacer 220 ...
+Turnos = 3
+```
+
+### Segunda Orden
+```
+Hrs = 6.7
+Setup = 1.3
+Piezas por hacer 88 ...
+Turnos = 3
+```
+
+### Tercer Orden
+
+```
+Hrs = 4.5
+Setup = 0.7
+Piezas por hacer 45 ...
+Turnos = 3
+```
+
+## Corrida con Orden #1
+
+```java
+final int numberOfTurns = 3;
+final int maxTurnHours = 8.5 + 8.1 + 5.5; 		// 22.1
+// 22.1
+double initialHours = 0.0D;
+// Empezando desde 0.
+```
+
+```java
+final List<EfficiencyWorkOrderInformation> orders = splitOrders(
+	workOrder
+	, initialHours
+	, maxTurnHours
+	, 3
+);
+```
