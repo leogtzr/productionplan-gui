@@ -1355,5 +1355,32 @@ public class UtilsTest {
             Assert.assertEquals("wrong hours", got, expectedHours, 0.01);
         }
     }
+    
+    @Test
+    public void shouldReturnWorkOrderInfoWithSetup() {
+        final WorkOrderInformation wo = new WorkOrderInformation.Builder("pt1", "wo1")
+                .turn(Turn.THIRD)
+                .runHours(2.3D)
+                .setupHours(4.5D)
+                .build()
+                ;
+        
+        final Object[][] tests = {
+            {Turn.FIRST, 1.2D, 2.3D},
+        };
+        
+        for (final Object[] test : tests) {
+            final Turn turn = (Turn)test[0];
+            final double runHours = (Double)test[1];
+            final double setupHours = (Double)test[2];
+            
+            final WorkOrderInformation got = Utils.workOrderInfoWithSetup(wo, runHours, setupHours, turn);
+            
+            Assert.assertEquals(turn, got.getTurn());
+            Assert.assertEquals(runHours, got.getRunHours(), 0.001D);
+            Assert.assertEquals(setupHours, got.getSetupHours(), 0.001D);
+        }
+                
+    }
 
 }

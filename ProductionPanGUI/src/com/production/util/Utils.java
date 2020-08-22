@@ -654,7 +654,7 @@ public final class Utils {
         return result;
     }
     
-    @MissingTests
+    @Validated
     public static Turn nextTurn(final Turn turn, final int numberOfTurns) {
         if (numberOfTurns == 2) {
             switch (turn) {
@@ -681,7 +681,7 @@ public final class Utils {
         return NA;
     }
     
-    @MissingTests
+    @Validated
     public static double turnHours(final Turn turn) {
         switch (turn) {
             case FIRST:
@@ -692,6 +692,22 @@ public final class Utils {
                 return Constants.THIRD_TURN_LENGTH;
         }
         return 0.0D;
+    }
+    
+    @Validated
+    public static WorkOrderInformation workOrderInfoWithSetup(
+        final WorkOrderInformation wo
+        , final double newRunHours
+        , final double newSetupHours
+        , final Turn newTurn
+    ) {
+        
+        final WorkOrderInformation newWorkOrderInfo = new WorkOrderInformation(wo);
+        newWorkOrderInfo.setTurn(newTurn);
+        newWorkOrderInfo.setRunHours(newRunHours);
+        newWorkOrderInfo.setSetupHours(newSetupHours);
+        
+        return newWorkOrderInfo;
     }
     
     private Utils() {}

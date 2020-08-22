@@ -14,7 +14,7 @@ public class EfficiencyUtils {
     public static EfficiencyInformation splitWithEfficiency(
             final WorkOrderInformation workOrderInfo
             , final double initHours
-            , final Turn initTurn) {
+            , Turn currTurn) {
         
         final EfficiencyInformation efficiencyInformation = new EfficiencyInformation();
         final List<WorkOrderInformation> orders = new ArrayList<>();
@@ -29,6 +29,9 @@ public class EfficiencyUtils {
                 // Especial para es la primera orden.
                 if (savingSetupHours) {
                     savingSetupHours = false;
+                    final double newRunHours = Utils.turnHours(currTurn) - workOrderInfo.getSetupHours();
+                    r = r - newRunHours;
+                    
                 } else {
                     
                 }
