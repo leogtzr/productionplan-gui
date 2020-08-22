@@ -681,6 +681,19 @@ public final class Utils {
         return NA;
     }
     
+    @MissingTests
+    public static double turnHours(final Turn turn) {
+        switch (turn) {
+            case FIRST:
+                return Constants.FIRST_TURN_LENGTH;
+            case SECOND:
+                return Constants.SECOND_TURN_LENGTH;
+            case THIRD:
+                return Constants.THIRD_TURN_LENGTH;
+        }
+        return 0.0D;
+    }
+    
     private Utils() {}
     
 }

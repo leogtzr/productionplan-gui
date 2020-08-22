@@ -1338,5 +1338,22 @@ public class UtilsTest {
         }
         
     }
+    
+    @Test
+    public void shouldReturnTurnHours() {
+        final Object[][] tests = {
+            // 
+            {Turn.FIRST, Constants.FIRST_TURN_LENGTH},
+            {Turn.SECOND, Constants.SECOND_TURN_LENGTH},
+            {Turn.THIRD, Constants.THIRD_TURN_LENGTH},
+        };
+        
+        for (final Object[] test : tests) {
+            final Turn turn = (Turn)test[0];
+            final double expectedHours = (Double)test[1];
+            final double got = Utils.turnHours(turn);
+            Assert.assertEquals("wrong hours", got, expectedHours, 0.01);
+        }
+    }
 
 }
