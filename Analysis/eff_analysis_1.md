@@ -312,6 +312,8 @@ En este caso remainderHours = 15.9 por lo cuál es true la evaluación.
 
 ```java
 currentTurn = nextTurn(currentTurn, numberOfTurns)
+~currentTurn = ST
+~currentTurn = 8.1
 ```
 
 ```java
@@ -329,6 +331,8 @@ while (remainderHours > 0.0D) { 			// <- true
 	} else {
 		remainderHours = remainderHours - currentTurn.get()
 		~remainderHours = 9.4 - currentTurn.get()
+		~remainderHours = 9.4 - 8.1
+		~remainderHours = 1.3
 	}
 ```
 

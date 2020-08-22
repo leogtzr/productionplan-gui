@@ -1314,5 +1314,29 @@ public class UtilsTest {
         final FileNameExtensionFilter filter = (FileNameExtensionFilter)choosableFileFilters[0];
         Assert.assertEquals(EXPECTED_DESCRIPTION, filter.getDescription());
     }
+    
+    @Test
+    public void shouldReturnValidNextTurn() {
+        final Object[][] tests = {
+            // Turn, number of turns, expected next turn
+            {Turn.NA, 2, Turn.FIRST},
+            {Turn.FIRST, 2, Turn.SECOND},
+            {Turn.SECOND, 2, Turn.FIRST},
+            
+            {Turn.NA, 3, Turn.FIRST},
+            {Turn.FIRST, 3, Turn.SECOND},
+            {Turn.SECOND, 3, Turn.THIRD},
+            {Turn.THIRD, 3, Turn.FIRST},
+        };
+        
+        for (final Object[] test : tests) {
+            final Turn turn = (Turn)test[0];
+            final int numberOfTurns = (Integer)test[1];
+            final Turn expectedTurn = (Turn)test[2];
+            final Turn got = Utils.nextTurn(turn, numberOfTurns);
+            Assert.assertEquals("invalid turn", expectedTurn, got);
+        }
+        
+    }
 
 }

@@ -654,6 +654,33 @@ public final class Utils {
         return result;
     }
     
+    @MissingTests
+    public static Turn nextTurn(final Turn turn, final int numberOfTurns) {
+        if (numberOfTurns == 2) {
+            switch (turn) {
+                case NA:
+                    return FIRST;
+                case FIRST:
+                    return SECOND;
+                case SECOND:
+                    return FIRST;
+            }
+        } else {
+            switch (turn) {
+                case NA:
+                    return FIRST;
+                case FIRST:
+                    return SECOND;
+                case SECOND:
+                    return THIRD;
+                case THIRD:
+                    return FIRST;
+            }
+        }
+        
+        return NA;
+    }
+    
     private Utils() {}
     
 }
