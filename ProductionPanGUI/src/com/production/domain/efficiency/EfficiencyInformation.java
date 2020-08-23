@@ -50,7 +50,7 @@ public class EfficiencyInformation {
 
     @Override
     public String toString() {
-        return "EfficiencyInformation{" + "orders=" + orders + ", outputTurn=" + outputTurn + ", initHours=" + initHours + '}';
+        return "EfI{" + "orders=" + orders + ", outputTurn=" + outputTurn + ", initHours=" + initHours + '}';
     }
 
     @Override
