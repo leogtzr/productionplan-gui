@@ -300,6 +300,124 @@ public class EfficiencyUtils {
         return efficiencyInformation;
     }
     
+    @MissingTests
+    public static EfficiencyInformation algo1(
+            final WorkOrderInformation workOrderInfo
+            , double initHours
+            , Turn currTurn) {
+        
+        final EfficiencyInformation efficiencyInformation = new EfficiencyInformation();
+        final List<WorkOrderInformation> orders = new ArrayList<>();
+        
+        double available = initHours == 0.0D ? Utils.turnHours(currTurn) : (Utils.turnHours(currTurn) - initHours);
+        
+        // TODO: need some calculations here to check where do we need to start.
+        // TODO: perhaps based on initHours ...
+        double remHours = available;
+        double remSetup = workOrderInfo.getSetupHours();
+        
+        pln("remHours: " + remHours);
+        
+        // remHours = remSetup = 0.0D;
+        
+        
+        outer:
+        while ((remHours != 0.0D) || (remSetup != 0.0D)) {
+            double turnHours = Utils.turnHours(currTurn);
+            
+            pln("DIAGNOSTICS, remHours: " + remHours);
+            pln("DIAGNOSTICS, remSetup: " + remSetup);
+            
+            if ((remHours != 0.0D) && (remSetup == 0.0D)) {
+                pln("X(1) need to adjust runHours");
+                //              Qué casos podría haber aquí?
+                // Que remHours sea menor a turnHours
+                // Que remHours sea mayor a turnHours
+                if (remHours > turnHours) {
+                    pln("X(1.1) remHours > turnHours, remHours: " + remHours + ", remHours: " + remHours);
+                } else if (remHours < turnHours) {
+                    pln("X(1.2) remHours < turnHours, remHours: " + remHours + ", remHours: " + remHours);
+                } else {
+                    // we might have all the turn available ...
+                    pln("X(1.3) other ... ");
+                    pln("X(1.3)DIAGNOSTICS, remHours: " + remHours);
+                    pln("X(1.3)DIAGNOSTICS, remSetup: " + remSetup);
+                    double runHours = workOrderInfo.getRunHours();
+                    if (runHours > remHours) {
+                        pln("X(1.4) runHours > remHours, runHours: " + runHours + ", remHours: " + remHours);
+                    } else if (runHours < remHours) {
+                        pln("X(1.5) runHours < remHours, runHours: " + runHours + ", remHours: " + remHours);
+                        final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, runHours, 0.0D, currTurn);
+                        orders.add(wo);
+                        
+                    } else {
+                        pln("X(1.6) runHours == remHours?, runHours: " + runHours + ", remHours: " + remHours);
+                    }
+                }
+                
+            } else if ((remHours == 0.0D) && (remSetup != 0.0D)) {
+                pln("X(2) need to adjust setup hours.");
+                
+                if (remHours > turnHours) {
+                    pln("X(2.1) remHours > turnHours, remHours: " + remHours + ", remHours: " + remHours);
+                } else if (remHours < turnHours) {
+                    pln("X(2.2) remHours < turnHours, remHours: " + remHours + ", remHours: " + remHours);
+                } else {
+                    pln("X(2.3) other ... ");
+                    pln("X(2.3) DIAGNOSTICS, remHours: " + remHours);
+                    pln("X(2.3) DIAGNOSTICS, remSetup: " + remSetup);
+                }
+            } else {
+                // In this specific case we have to take into consideration runHours and setupHours together for the available time.
+                pln("X(3) other");
+                
+                double runHours = workOrderInfo.getRunHours();
+                double stp = workOrderInfo.getSetupHours();
+                double both = runHours + stp;
+                
+                // What scenarios could we have?
+                // runHours > remHours and both > remHours - 3.1
+                // runHours < remHours and both > remHours - 3.2
+                // runHours < remHours and both < remHours - 3.3
+                    // 3.3 could mean that we are good to use runHours and setup ... 
+                if ((runHours > remHours) && (both > remHours)) {
+                    pln("X(3.1), runHours: " + runHours + ", remHours: " + remHours + ", both: " + both + ", setup: " + stp);
+                    // Need more analysis here ...
+                    // Based on above's conditions we might need to check these scenarios:
+                        // can we allocate only the setup?
+                        if (stp < remHours) {
+                            pln("X(3.1.1), stp: " + stp + ", remHours: " + remHours);
+                        } else if (stp > remHours) {
+                            // Let's allocate only what we have available.
+                            pln("X(3.1.2), stp: " + stp + ", remHours: " + remHours);
+                            final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, 0.0D, remHours, currTurn);
+                            orders.add(wo);
+                            // We ran out of hours in the current turn so we have to move to the next one ... 
+                            currTurn = Utils.nextTurn(currTurn, 3);
+                        } else {
+                            pln("X(3.1.3), stp: " + stp + ", remHours: " + remHours);
+                        }
+                } else if ((runHours < remHours) && (both > remHours)) {
+                    pln("X(3.2), runHours: " + runHours + ", remHours: " + remHours + ", both: " + both);
+                } else if ((runHours < remHours) && (both < remHours)) {
+                    pln("X(3.3), runHours: " + runHours + ", remHours: " + remHours + ", both: " + both);
+                    final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, runHours, stp, currTurn);
+                    // TODO: need to update initHours here ... 
+                    pln("X(3.3) initHours before update is: " + initHours);
+                    initHours += both;
+                    pln("X(3.3) initHours after update is: " + initHours);
+                    orders.add(wo);
+                }
+            }
+            break;
+        }
+        
+        efficiencyInformation.setOrders(orders);
+        efficiencyInformation.setOutputTurn(currTurn);
+        efficiencyInformation.setInitHours(initHours);
+        return efficiencyInformation;
+    }
+    
     private EfficiencyUtils() {}
     
 }

@@ -107,4 +107,49 @@ public class EfficiencyUtilsTest {
         
     }
     
+    @Test
+    public void algo_two_variables_remHours_and_remSetup() {
+        final WorkOrderInformation workOrderInfo1 = new WorkOrderInformation.Builder("pt1", "wo1")
+                .runHours(4.3D)
+                .setupHours(1.2D)
+                .qty(37)
+                .build();
+        
+        final WorkOrderInformation workOrderInfo2 = new WorkOrderInformation.Builder("pt2", "wo2")
+                .runHours(2.2D)
+                .setupHours(0.4D)
+                .qty(22)
+                .build();
+        
+        final WorkOrderInformation workOrderInfo3 = new WorkOrderInformation.Builder("pt3", "wo3")
+                .runHours(5.4D)
+                .setupHours(0.8D)
+                .qty(16)
+                .build();
+        
+        final WorkOrderInformation workOrderInfo4 = new WorkOrderInformation.Builder("pt4", "wo4")
+                .runHours(6.8D)
+                .setupHours(3.0D)
+                .qty(10)
+                .build();
+        
+        System.out.println("1) ~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
+        
+        final EfficiencyInformation splitOrdersForOrder1 = EfficiencyUtils.algo1(workOrderInfo1, 0D, Turn.FIRST);
+        System.out.println(splitOrdersForOrder1);
+        
+        System.out.println("\n2) ~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
+        
+        final EfficiencyInformation splitOrdersForOrder2 = 
+                EfficiencyUtils.algo1(workOrderInfo2, splitOrdersForOrder1.getInitHours(), splitOrdersForOrder1.getOutputTurn());
+        System.out.println(splitOrdersForOrder2);
+        
+        System.out.println("\n3) ~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
+        
+        final EfficiencyInformation splitOrdersForOrder3 = 
+                EfficiencyUtils.algo1(workOrderInfo3, splitOrdersForOrder2.getInitHours(), splitOrdersForOrder2.getOutputTurn());
+        System.out.println(splitOrdersForOrder3);
+        
+    }
+    
 }
