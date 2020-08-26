@@ -335,5 +335,3 @@ while (remainderHours > 0.0D) { 			// <- true
 		~remainderHours = 1.3
 	}
 ```
-
-// continuará ... 
