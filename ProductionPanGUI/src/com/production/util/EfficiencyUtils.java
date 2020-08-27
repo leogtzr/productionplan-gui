@@ -49,7 +49,6 @@ public class EfficiencyUtils {
         
         pln("remHours: " + remHours);
         
-        
         outer:
         while ((remHours != 0.0D) || (remSetup != 0.0D)) {
             it++;
@@ -129,7 +128,21 @@ public class EfficiencyUtils {
                     // Based on above's conditions we might need to check these scenarios:
                         // can we allocate only the setup?
                         if (stp < remHours) {
-                            pln("X(3.1.1), stp: " + stp + ", remHours: " + remHours);
+                            // EXPL: being here means that we have room for the setup but not for both
+                            // meaning that we need to make some calculations ...
+                            pln("X(3.1.1), stp: " + stp + ", remHours: " + remHours + ", remSetup: " + remSetup);
+                            if (remSetup < remHours) {
+                                pln("X(3.1.1.2), remSetup < remHours, remSetup: " + remSetup + ", remHours: " + remHours);
+                                // Podemos ocupar todo el setup.
+                                final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, remHours - remSetup, remHours, currTurn);
+                                orders.add(wo);
+                                
+                                remHours = 0.0D;
+                                
+                                
+                            } else {
+                                pln("X(3.1.1.3) ... ");
+                            }
                         } else if (stp > remHours) {
                             // Let's allocate only what we have available.
                             pln("X(3.1.2), stp: " + stp + ", remHours: " + remHours + ", remSetup: " + remSetup);
@@ -156,13 +169,15 @@ public class EfficiencyUtils {
                     pln("X(3.2), runHours: " + runHours + ", remHours: " + remHours + ", both: " + both);
                 } else if ((runHours < remHours) && (both < remHours)) {
                     pln("X(3.3), runHours: " + runHours + ", remHours: " + remHours + ", both: " + both);
-                    final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, runHours, stp, currTurn);
+                    pln("X(3.3), stp is: " + stp);
+                    pln("X(3.3), remSetup is: " + remSetup);
+                    final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, runHours, remSetup, currTurn);
                     // TODO: need to update initHours here ... 
-                    pln("X(3.3) initHours before update is: " + initHours);
-                    initHours += both;
+                    pln("X(3.3) initHours before update is: " + initHours + ", remHours: " + remHours + ", remSetup: " + remSetup);
+                    initHours += runHours + remSetup;
                     pln("X(3.3) initHours after update is: " + initHours);
                     orders.add(wo);
-                    // currTurn = Utils.nextTurn(currTurn, 3);
+                    
                     remHours = 0.0D;
                     remSetup = 0.0D;
                 } else {
