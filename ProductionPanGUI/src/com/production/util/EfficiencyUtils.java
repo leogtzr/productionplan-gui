@@ -72,8 +72,24 @@ public class EfficiencyUtils {
                 // Que remHours sea mayor a turnHours
                 if (remHours > turnHours) {
                     pln("X(1.1) remHours > turnHours, remHours: " + remHours + ", remHours: " + remHours);
+                    
+                    pln("X(1.1), turnHours: " + turnHours);
+                    final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, turnHours, 0.0D, currTurn);
+                    orders.add(wo);
+                    System.out.printf("X(1.1) created: %s\n", wo.toShortString());
+                    
+                    remHours -= turnHours;
+                    
+                    currTurn = Utils.nextTurn(currTurn, 3);
+                    initHours = remHours;
+                    
                 } else if (remHours < turnHours) {
                     pln("X(1.2) remHours < turnHours, remHours: " + remHours + ", remHours: " + remHours);
+                    final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, remHours, 0.0D, currTurn);
+                    orders.add(wo);
+                    System.out.printf("X(1.2) created: %s\n", wo.toShortString());
+                    initHours += 0.0D;
+                    remHours = 0.0D;
                 } else {
                     // we might have all the turn available ...
                     pln("X(1.3) other ... ");
@@ -84,8 +100,10 @@ public class EfficiencyUtils {
                         pln("X(1.4) runHours > remHours, runHours: " + runHours + ", remHours: " + remHours);
                     } else if (runHours < remHours) {
                         pln("X(1.5) runHours < remHours, runHours: " + runHours + ", remHours: " + remHours);
+                        pln("X(1.5) creating order");
                         final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, runHours, 0.0D, currTurn);
                         orders.add(wo);
+                        System.out.printf("X(1.5) created: %s\n", wo.toShortString());
                         
                     } else {
                         pln("X(1.6) runHours == remHours?, runHours: " + runHours + ", remHours: " + remHours);
@@ -134,11 +152,30 @@ public class EfficiencyUtils {
                             if (remSetup < remHours) {
                                 pln("X(3.1.1.2), remSetup < remHours, remSetup: " + remSetup + ", remHours: " + remHours);
                                 // Podemos ocupar todo el setup.
-                                final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, remHours - remSetup, remHours, currTurn);
+                                pln("X(3.1.1.2) creating order");
+                                final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, remHours - remSetup, remSetup, currTurn);
                                 orders.add(wo);
                                 
-                                remHours = 0.0D;
+                                System.out.printf("X(3.1.1.2) created: %s\n", wo.toShortString());
                                 
+                                
+                                pln("X(3.1.1.2), remHours: " + remHours);
+                                pln("X(3.1.1.2), remSetup: " + remSetup);
+                                pln("X(3.1.1.2), runHours: " + runHours);
+                                
+                                runHours -= (remHours - remSetup);
+                                remHours = runHours;
+                                // remHours = 0.0D;
+                                // remHours = runHours;
+                                remSetup = 0.0D;
+                                
+                                pln("X(3.1.1.2)");
+                                pln("X(3.1.1.2), remHours: " + remHours);
+                                pln("X(3.1.1.2), remSetup: " + remSetup);
+                                pln("X(3.1.1.2), runHours: " + runHours);
+                                
+                                initHours = 0.0D;
+                                currTurn = Utils.nextTurn(currTurn, 3);
                                 
                             } else {
                                 pln("X(3.1.1.3) ... ");
@@ -146,8 +183,11 @@ public class EfficiencyUtils {
                         } else if (stp > remHours) {
                             // Let's allocate only what we have available.
                             pln("X(3.1.2), stp: " + stp + ", remHours: " + remHours + ", remSetup: " + remSetup);
+                            pln("X(3.1.2) creating order");
                             final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, 0.0D, remHours, currTurn);
                             orders.add(wo);
+                            
+                            System.out.printf("X(3.1.2) created: %s\n", wo.toShortString());
                             // We ran out of hours in the current turn so we have to move to the next one ... 
                             // currTurn = Utils.nextTurn(currTurn, 3);
                             // break;
@@ -171,7 +211,9 @@ public class EfficiencyUtils {
                     pln("X(3.3), runHours: " + runHours + ", remHours: " + remHours + ", both: " + both);
                     pln("X(3.3), stp is: " + stp);
                     pln("X(3.3), remSetup is: " + remSetup);
+                    pln("X(3.3) creating order");
                     final WorkOrderInformation wo = Utils.workOrderInfoWithSetup(workOrderInfo, runHours, remSetup, currTurn);
+                    System.out.printf("X(3.3) created: %s\n", wo.toShortString());
                     // TODO: need to update initHours here ... 
                     pln("X(3.3) initHours before update is: " + initHours + ", remHours: " + remHours + ", remSetup: " + remSetup);
                     initHours += runHours + remSetup;

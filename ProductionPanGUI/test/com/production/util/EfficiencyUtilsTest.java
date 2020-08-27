@@ -3,6 +3,7 @@ package com.production.util;
 import com.production.domain.Turn;
 import com.production.domain.WorkOrderInformation;
 import com.production.domain.efficiency.EfficiencyInformation;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 //import java.util.List;
@@ -110,6 +111,9 @@ public class EfficiencyUtilsTest {
 //    
     @Test
     public void algo_two_variables_remHours_and_remSetup() {
+        
+        final int EXPECTED_NUMBER_OF_SPLIT_ORDERS = 4;
+        
         final WorkOrderInformation workOrderInfo1 = new WorkOrderInformation.Builder("pt1", "wo1")
                 .runHours(4.3D)
                 .setupHours(1.2D)
@@ -134,7 +138,22 @@ public class EfficiencyUtilsTest {
                 .qty(10)
                 .build();
         
-        final List<WorkOrderInformation> inputWorkOrders = List.of(workOrderInfo1, workOrderInfo2, workOrderInfo3, workOrderInfo4);
+//        final List<WorkOrderInformation> inputWorkOrders = List.of(workOrderInfo1, workOrderInfo2, workOrderInfo3, workOrderInfo4);
+//        final List<EfficiencyInformation> results = new ArrayList<>();
+//        
+//        final EfficiencyInformation splitOrdersForOrder1 = EfficiencyUtils.algo2(inputWorkOrders.get(0), 0D, Turn.FIRST);
+//        results.add(splitOrdersForOrder1);
+//        
+//        for (int i = 1; i < inputWorkOrders.size(); i++) {
+//            final EfficiencyInformation split = EfficiencyUtils.algo2(inputWorkOrders.get(i), results.get(i - 1).getInitHours(), results.get(i - 1).getOutputTurn());
+//            results.add(split);
+//            // System.out.println(split);
+//        }
+//        
+//        // System.out.println(results);
+//        results.forEach(ef -> {
+//            ef.getOrders().forEach(System.out::println);
+//        });
         
         System.out.println("1) ~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
         
@@ -147,11 +166,15 @@ public class EfficiencyUtilsTest {
                 EfficiencyUtils.algo2(workOrderInfo2, splitOrdersForOrder1.getInitHours(), splitOrdersForOrder1.getOutputTurn());
         System.out.println(splitOrdersForOrder2);
 //        
-        System.out.println("\n3) ~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
+        System.out.println("\n4) ~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
         
         final EfficiencyInformation splitOrdersForOrder3 = 
                 EfficiencyUtils.algo2(workOrderInfo3, splitOrdersForOrder2.getInitHours(), splitOrdersForOrder2.getOutputTurn());
         System.out.println(splitOrdersForOrder3);
+        
+        final EfficiencyInformation splitOrdersForOrder4 = 
+                EfficiencyUtils.algo2(workOrderInfo4, splitOrdersForOrder3.getInitHours(), splitOrdersForOrder3.getOutputTurn());
+        System.out.println(splitOrdersForOrder4);
         
     }
     

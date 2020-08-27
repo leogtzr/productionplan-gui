@@ -220,6 +220,12 @@ public final class WorkOrderInformation implements Cloneable {
                 ", machine=" + machine + '}';
     }
     
+    public String toShortString() {
+        return String.format("WO[pt: %s, order: %s, runHours: %.2f, setupHours: %.2f, turn: %s, day: %s]"
+                , this.partNumber, this.workOrder, this.runHours, this.setupHours, this.turn, this.day
+                );
+    }
+    
     public static class Builder {
         
         private String wcDescription;
