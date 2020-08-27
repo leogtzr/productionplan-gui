@@ -683,6 +683,9 @@ public final class Utils {
     
     @Validated
     public static double turnHours(final Turn turn) {
+        if (turn == null) {
+            return Constants.FIRST_TURN_LENGTH;
+        }
         switch (turn) {
             case FIRST:
                 return Constants.FIRST_TURN_LENGTH;
@@ -708,6 +711,17 @@ public final class Utils {
         newWorkOrderInfo.setSetupHours(newSetupHours);
         
         return newWorkOrderInfo;
+    }
+    
+    @MissingTests
+    public static double availableHoursInTurn(final Turn turn, final double initHours) {
+        double available;
+        if (initHours == 0.0D) {
+            available = Utils.turnHours(turn);
+        } else {
+            available = Utils.turnHours(turn) - initHours;
+        }
+        return available;
     }
     
     private Utils() {}

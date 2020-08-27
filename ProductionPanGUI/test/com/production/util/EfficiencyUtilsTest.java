@@ -135,20 +135,26 @@ public class EfficiencyUtilsTest {
         
         System.out.println("1) ~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
         
-        final EfficiencyInformation splitOrdersForOrder1 = EfficiencyUtils.algo1(workOrderInfo1, 0D, Turn.FIRST);
+        final EfficiencyInformation splitOrdersForOrder1 = EfficiencyUtils.algo2(workOrderInfo1, 0D, Turn.FIRST);
         System.out.println(splitOrdersForOrder1);
         
         System.out.println("\n2) ~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
         
         final EfficiencyInformation splitOrdersForOrder2 = 
-                EfficiencyUtils.algo1(workOrderInfo2, splitOrdersForOrder1.getInitHours(), splitOrdersForOrder1.getOutputTurn());
+                EfficiencyUtils.algo2(workOrderInfo2, splitOrdersForOrder1.getInitHours(), splitOrdersForOrder1.getOutputTurn());
         System.out.println(splitOrdersForOrder2);
-        
+//        
         System.out.println("\n3) ~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
         
         final EfficiencyInformation splitOrdersForOrder3 = 
-                EfficiencyUtils.algo1(workOrderInfo3, splitOrdersForOrder2.getInitHours(), splitOrdersForOrder2.getOutputTurn());
+                EfficiencyUtils.algo2(workOrderInfo3, splitOrdersForOrder2.getInitHours(), splitOrdersForOrder2.getOutputTurn());
         System.out.println(splitOrdersForOrder3);
+        
+//        System.out.println("\n4) ~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
+//        
+//        final EfficiencyInformation splitOrdersForOrder4 = 
+//                EfficiencyUtils.algo2(workOrderInfo4, splitOrdersForOrder3.getInitHours(), splitOrdersForOrder3.getOutputTurn());
+//        System.out.println(splitOrdersForOrder4);
         
     }
     
