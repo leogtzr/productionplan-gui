@@ -3,6 +3,7 @@ package com.production.util;
 import com.production.domain.Turn;
 import com.production.domain.WorkOrderInformation;
 import com.production.domain.efficiency.EfficiencyInformation;
+import com.production.domain.efficiency.Progress;
 import com.production.lang.MissingTests;
 import java.util.ArrayList;
 import java.util.List;
@@ -244,6 +245,97 @@ public class EfficiencyUtils {
         // TODO: check a good way of calculating this ... 
         efficiencyInformation.setInitHours(initHours);
         return efficiencyInformation;
+    }
+    
+    @MissingTests
+    public static EfficiencyInformation efficiency(
+            final WorkOrderInformation ord, final Progress progress) {
+        
+        final EfficiencyInformation efficiencyInformation = new EfficiencyInformation();
+        final List<WorkOrderInformation> orders = new ArrayList<>();
+        final int numberOfTurns = 3;
+        
+        final double whereWeAre = progress.getFactor();
+        
+        System.out.printf("\t@@@@@@@ Progress received (%s turn): %f\n", progress.getTurn(), whereWeAre);        
+        double hInTurn = Utils.turnHours(progress.getTurn());
+        
+        hInTurn -= whereWeAre;
+        
+        System.out.printf("\tWhat we have left: %f (%s)\n", hInTurn, progress.getTurn());
+	System.out.printf("\tWorking with: O('%s'), rh: %f, stp: %f\n", ord.getWorkOrder(), ord.getRunHours(), ord.getSetupHours());
+        
+        int it = 0;
+        
+        double xs = 0.0;
+        double xr = 0.0;
+        
+        System.out.printf("Before to work: %s\n", ord);
+        
+        while (ord.getRunHours() != 0.0 || ord.getSetupHours() != 0.0) {
+
+            it++;
+            if (it >= 10) {
+                System.out.printf("MAX point reached. ord.RunHours(%.3f), ord.Setup(%.3f)\n", ord.getRunHours(), ord.getSetupHours());
+                break;
+            }
+
+            if ((hInTurn - ord.getSetupHours()) >= 0.0) {
+                System.out.printf("d1. hInTurn(%.2f) - ord.Setup(%.2f) (= %.2f) > 0.0\n", hInTurn, ord.getSetupHours(), hInTurn-ord.getSetupHours());
+                xs = ord.getSetupHours();
+                hInTurn -= ord.getSetupHours();
+            } else {
+                xs = hInTurn;
+                hInTurn = 0.0;
+            }
+
+            System.out.printf("d2. hInTurn=%.2f\n", hInTurn);
+
+            if ((hInTurn - ord.getRunHours()) >= 0.0) {
+                System.out.printf("d3. hInTurn(%.2f) - ord.RunHours(%.2f) (= %.2f) > 0.0\n", hInTurn, ord.getRunHours(), hInTurn-ord.getRunHours());
+                hInTurn -= ord.getRunHours();
+                xr = ord.getRunHours();
+            } else {
+                xr = hInTurn;
+                hInTurn = 0.0;
+            }
+
+            System.out.printf("d4. hInTurn=%.2f\n", hInTurn);
+
+            final WorkOrderInformation o = OrderUtils.from(ord, xr, xs, progress.getTurn());
+            debugOrderCreation("c", o);
+            // orders = append(orders, o);
+            orders.add(o);
+
+            if (hInTurn == 0.0) {
+                System.out.println("d5 -> hInTurn is 0.0, changing turn.");
+                // nextTurn(progress);
+                progress.setTurn(Utils.nextTurn(progress.getTurn(), numberOfTurns));
+                hInTurn = Utils.turnHours(progress.getTurn());
+                System.out.printf("d6. Turn is now: %.1f\n", hInTurn);
+            }
+
+            System.out.printf("1) O{r: %.2f, s: %.2f}\n", ord.getRunHours(), ord.getSetupHours());
+
+            ord.setRunHours(ord.getRunHours() - xr);
+            // ord.RunHours -= xr;
+            ord.setSetupHours(ord.getSetupHours() - xs);
+            // ord.Setup -= xs;
+
+            System.out.printf("2) O{r: %.2f, s: %.2f}\n", ord.getRunHours(), ord.getSetupHours());
+
+            xr = 0.0;
+            xs = 0.0;
+
+	}
+
+        
+        efficiencyInformation.setOrders(orders);
+        return efficiencyInformation;
+    }
+    
+    private static void debugOrderCreation(String suffix, WorkOrderInformation ord) {
+	System.out.printf("\t\t#Case-%s - Order to be created with runHours: %.3f, setupHours: %.3f (%s)\n", suffix, ord.getRunHours(), ord.getSetupHours(), ord.getTurn());
     }
     
     private EfficiencyUtils() {}
