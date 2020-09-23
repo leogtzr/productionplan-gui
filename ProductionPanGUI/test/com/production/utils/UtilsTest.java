@@ -1425,6 +1425,36 @@ public class UtilsTest {
                         new WorkOrderInformation.Builder("p2", "o2").runHours(1.0D).setupHours(0.5D).turn(Turn.FIRST).build()
                     ),
                     6.0
+            ),
+            new testCase(
+                    List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).turn(Turn.FIRST).build()
+                    ),
+                    4.3 + 1.2
+            ),
+            new testCase(
+                    List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).setupHours(0.4D).turn(Turn.FIRST).build()
+                    ),
+                    (4.3 + 1.2) + (2.2 + 0.4)
+            ),
+            new testCase(
+                    List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).setupHours(0.4D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p3", "o3").runHours(0.0D).setupHours(0.4D).turn(Turn.FIRST).build()
+                    ),
+                    (4.3 + 1.2) + (2.2 + 0.4) + (0.0 + 0.4)
+            ),
+            new testCase(
+                    List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).setupHours(0.4D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p3", "o3").runHours(0.0D).setupHours(0.4D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p4", "o4").runHours(5.4D).setupHours(0.4D).turn(Turn.SECOND).build()
+                    ),
+                    5.4 + 0.4                       // we want to calculate only over the SECOND turn.
             )
         );
         
