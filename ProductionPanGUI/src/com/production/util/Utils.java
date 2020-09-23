@@ -724,7 +724,7 @@ public final class Utils {
         return available;
     }
     
-    @MissingTests
+    @Validated
     public static double progressFactor(final List<WorkOrderInformation> orders) {
         
         int n = orders.size();

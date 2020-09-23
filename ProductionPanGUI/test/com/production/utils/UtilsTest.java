@@ -1458,10 +1458,7 @@ public class UtilsTest {
             )
         );
         
-        for (final testCase tc : tests) {
-            final double factor = Utils.progressFactor(tc.orders);
-            Assert.assertEquals(factor, tc.want, 0.00001);
-        }
+        tests.forEach(tc -> Assert.assertEquals(Utils.progressFactor(tc.orders), tc.want, 0.00001));
         
     }
 
