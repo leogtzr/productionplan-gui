@@ -724,6 +724,21 @@ public final class Utils {
         return available;
     }
     
+    @MissingTests
+    public static double progressFactor(final List<WorkOrderInformation> orders) {
+        
+        int n = orders.size();
+        final Turn lastTurn = orders.get(n - 1).getTurn();
+        
+        double sum = 0.0;
+        
+        for (int i = n - 1; i >= 0 && lastTurn == orders.get(i).getTurn(); i--) {
+            sum += orders.get(i).getRunHours() + orders.get(i).getSetupHours();
+        }
+        
+        return sum;
+    }
+    
     private Utils() {}
     
 }

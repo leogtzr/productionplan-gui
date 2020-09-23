@@ -193,6 +193,8 @@ public class EfficiencyUtilsTest {
         final EfficiencyInformation splitOrdersForOrder1 = EfficiencyUtils.algo2(workOrderInfo1, 0D, Turn.FIRST);
         System.out.println(splitOrdersForOrder1);
         
+        System.out.println("Byeeeeeeee");
+        
     }
     
 }

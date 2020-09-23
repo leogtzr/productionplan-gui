@@ -1382,5 +1382,57 @@ public class UtilsTest {
         }
                 
     }
+    
+    @Test
+    public void shouldReturnProgressFactor1() {
+        
+        class testCase {
+            List<WorkOrderInformation> orders;
+            double want;
+            testCase(List<WorkOrderInformation> orders, double want) {
+                this.orders = orders;
+                this.want = want;
+            }
+        }
+        
+        final List<testCase> tests = List.of(
+            new testCase(
+                        List.of(
+                            new WorkOrderInformation.Builder("p1", "o1").runHours(8.5D).setupHours(0.0D).turn(Turn.FIRST).build(),
+                            new WorkOrderInformation.Builder("p2", "o2").runHours(8.1D).setupHours(0.0D).turn(Turn.SECOND).build(),
+                            new WorkOrderInformation.Builder("p3", "o3").runHours(1.1D).setupHours(0.2D).turn(Turn.THIRD).build(),
+                            new WorkOrderInformation.Builder("p4", "o4").runHours(1.3D).setupHours(0.3D).turn(Turn.THIRD).build(),
+                            new WorkOrderInformation.Builder("p5", "o5").runHours(1.5D).setupHours(0.4D).turn(Turn.THIRD).build()
+                        ),
+                        4.8
+            ),
+            new testCase(
+                    List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p2", "o2").runHours(1.1D).setupHours(0.5D).turn(Turn.FIRST).build()
+                    ),
+                    7.1
+            ),
+            new testCase(
+                    List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.7D).turn(Turn.FIRST).build()
+                    ),
+                    6.0
+            ),
+            new testCase(
+                    List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(3.2D).setupHours(1.3D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p2", "o2").runHours(1.0D).setupHours(0.5D).turn(Turn.FIRST).build()
+                    ),
+                    6.0
+            )
+        );
+        
+        for (final testCase tc : tests) {
+            final double factor = Utils.progressFactor(tc.orders);
+            Assert.assertEquals(factor, tc.want, 0.00001);
+        }
+        
+    }
 
 }
