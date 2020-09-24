@@ -101,14 +101,14 @@ public class Algorithm1Test {
                         .day(Day.MONDAY)
                         .build(),
                     List.of(
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(1.2999999999999998D).setupHours(7.2D).turn(Turn.FIRST).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.1D).setupHours(0.0D).turn(Turn.SECOND).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(5.5D).setupHours(0.0D).turn(Turn.THIRD).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.5D).setupHours(0.0D).turn(Turn.FIRST).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.1D).setupHours(0.0D).turn(Turn.SECOND).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(5.5D).setupHours(0.0D).turn(Turn.THIRD).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.5D).setupHours(0.0D).turn(Turn.FIRST).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(7.5D).setupHours(0.0D).turn(Turn.SECOND).build()
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(1.2999999999999998D).setupHours(7.2D).turn(Turn.FIRST).day(Day.MONDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.1D).setupHours(0.0D).turn(Turn.SECOND).day(Day.MONDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(5.5D).setupHours(0.0D).turn(Turn.THIRD).day(Day.MONDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.5D).setupHours(0.0D).turn(Turn.FIRST).day(Day.TUESDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.1D).setupHours(0.0D).turn(Turn.SECOND).day(Day.TUESDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(5.5D).setupHours(0.0D).turn(Turn.THIRD).day(Day.TUESDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.5D).setupHours(0.0D).turn(Turn.FIRST).day(Day.WEDNESDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(7.5D).setupHours(0.0D).turn(Turn.SECOND).day(Day.WEDNESDAY).build()
                     )
                 )
         );
