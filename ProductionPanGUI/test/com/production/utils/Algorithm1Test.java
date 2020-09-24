@@ -1,5 +1,6 @@
 package com.production.utils;
 
+import com.production.domain.Day;
 import com.production.domain.Turn;
 import com.production.domain.WorkOrderInformation;
 import com.production.domain.efficiency.EfficiencyInformation;
@@ -61,7 +62,7 @@ public class Algorithm1Test {
                 )
         );
         
-        Progress progress = new Progress(Turn.FIRST, 0.0D);
+        Progress progress = new Progress(Turn.FIRST, 0.0D, Day.MONDAY);
         for (final testCase tc : tests) {
             final List<WorkOrderInformation> result = new ArrayList<>();
             
@@ -84,7 +85,6 @@ public class Algorithm1Test {
             printDebugOrders(result);
             
             Assert.assertEquals(tc.want, result);
-            
         }
         
     }
@@ -98,6 +98,7 @@ public class Algorithm1Test {
                     new WorkOrderInformation.Builder("p1", "o1")
                         .runHours(53.0D)
                         .setupHours(7.2D)
+                        .day(Day.MONDAY)
                         .build(),
                     List.of(
                         new WorkOrderInformation.Builder("p1", "o1").runHours(1.2999999999999998D).setupHours(7.2D).turn(Turn.FIRST).build(),
@@ -113,7 +114,8 @@ public class Algorithm1Test {
         );
         
         for (final testCaseSingleOrder tc : tests) {
-            final Progress progress = new Progress(Turn.FIRST, 0.0D);
+            
+            final Progress progress = new Progress(Turn.FIRST, 0.0D, tc.order.getDay());
             final EfficiencyInformation efficiency = EfficiencyUtils.efficiency(tc.order, progress);
             printDebugOrders(efficiency.getOrders());
            

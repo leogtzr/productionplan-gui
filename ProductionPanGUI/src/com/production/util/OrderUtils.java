@@ -1,7 +1,7 @@
 package com.production.util;
 
-import com.production.domain.Turn;
 import com.production.domain.WorkOrderInformation;
+import com.production.domain.efficiency.Progress;
 import com.production.lang.MissingTests;
 
 /**
@@ -15,7 +15,7 @@ public class OrderUtils {
             final WorkOrderInformation wo, 
             final double newRunHours,
             final double newSetupHours,
-            final Turn newTurn
+            final Progress progress
             ) {
         
         final WorkOrderInformation newOrder = new WorkOrderInformation();
@@ -27,10 +27,9 @@ public class OrderUtils {
         newOrder.setQty(wo.getQty());
         newOrder.setAge(wo.getAge());
         newOrder.setSalesPrice(wo.getSalesPrice());
-        newOrder.setTurn(wo.getTurn());
-        newOrder.setDay(wo.getDay());
         newOrder.setMachine(wo.getMachine());
-        newOrder.setTurn(newTurn);
+        newOrder.setTurn(progress.getTurn());
+        newOrder.setDay(progress.getDay());
         
         return newOrder;
     }

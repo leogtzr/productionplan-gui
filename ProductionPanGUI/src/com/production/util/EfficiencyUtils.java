@@ -1,5 +1,6 @@
 package com.production.util;
 
+import com.production.domain.Day;
 import com.production.domain.Turn;
 import com.production.domain.WorkOrderInformation;
 import com.production.domain.efficiency.EfficiencyInformation;
@@ -303,14 +304,26 @@ public class EfficiencyUtils {
 
             System.out.printf("d4. hInTurn=%.2f\n", hInTurn);
 
-            final WorkOrderInformation o = OrderUtils.from(ord, xr, xs, progress.getTurn());
+            final WorkOrderInformation o = OrderUtils.from(ord, xr, xs, progress);
             debugOrderCreation("c", o);
             orders.add(o);
 
             if (hInTurn == 0.0) {
                 System.out.println("d5 -> hInTurn is 0.0, changing turn.");
-                // nextTurn(progress);
-                progress.setTurn(Utils.nextTurn(progress.getTurn(), numberOfTurns));
+                final Turn beforeTurn = progress.getTurn();
+                final Turn nextTurn = Utils.nextTurn(progress.getTurn(), numberOfTurns);
+                progress.setTurn(nextTurn);
+                
+                if (nextTurn.equals(Turn.FIRST) && beforeTurn.equals(Turn.THIRD)) {
+                    System.out.printf("A change of day!\n");
+                    final Day day = progress.getDay();
+                    final Day nextDay = Utils.nextDay(day);
+                    System.out.printf("Day change (turns): %s:beforeTurn, nextTurn:%s!\n", beforeTurn, nextTurn);
+                    System.out.printf("Day change: %s:before, next:%s!\n", day, nextDay);
+                    o.setDay(day);
+                    progress.setDay(nextDay);
+                }
+                
                 hInTurn = Utils.turnHours(progress.getTurn());
                 System.out.printf("d6. Turn is now: %.1f\n", hInTurn);
             }
