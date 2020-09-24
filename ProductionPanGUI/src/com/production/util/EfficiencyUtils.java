@@ -6,6 +6,7 @@ import com.production.domain.WorkOrderInformation;
 import com.production.domain.efficiency.EfficiencyInformation;
 import com.production.domain.efficiency.Progress;
 import com.production.lang.MissingTests;
+import com.production.lang.Validated;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,6 +111,14 @@ public class EfficiencyUtils {
     private static void debugOrderCreation(String suffix, WorkOrderInformation ord) {
 	System.out.printf("\t\t#Case-%s - Order to be created with runHours: %.3f, setupHours: %.3f (%s)\n", suffix, 
                 ord.getRunHours(), ord.getSetupHours(), ord.getTurn());
+    }
+    
+    /**
+     * The following method returns the "PZAS x HACER" value.
+     */
+    @Validated
+    public static long qtyGoalPerTurn(final int qty, final double hoursWithEfficiency, final double totalHours) {
+        return Math.round((double)qty * hoursWithEfficiency / totalHours);
     }
     
     private EfficiencyUtils() {}
