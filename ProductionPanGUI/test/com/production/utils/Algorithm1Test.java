@@ -56,7 +56,7 @@ public class Algorithm1Test {
                         new WorkOrderInformation.Builder("p3", "o3").runHours(5.4D).setupHours(0.3999999999999997D).turn(Turn.SECOND).build(),
                         new WorkOrderInformation.Builder("p4", "o4").runHours(0.0D).setupHours(2.3D).turn(Turn.SECOND).build(),
                         new WorkOrderInformation.Builder("p4", "o4").runHours(4.8D).setupHours(0.7000000000000002D).turn(Turn.THIRD).build(),
-                        new WorkOrderInformation.Builder("p4", "o4").runHours(2.0D).setupHours(0.0D).turn(Turn.FIRST).build()
+                        new WorkOrderInformation.Builder("p4", "o4").runHours(2.0D).setupHours(0.0D).turn(Turn.FIRST).day(Day.TUESDAY).build()
                             
                     )
                 )
