@@ -20,6 +20,8 @@ public class EfficiencyUtils {
     public static EfficiencyInformation efficiency(
             final WorkOrderInformation ord, final Progress progress) {
         
+        final int qty = ord.getQty();
+        final double totalHours = ord.getRunHours();
         final EfficiencyInformation efficiencyInformation = new EfficiencyInformation();
         final List<WorkOrderInformation> orders = new ArrayList<>();
         final int numberOfTurns = 3;
@@ -72,6 +74,8 @@ public class EfficiencyUtils {
             System.out.printf("d4. hInTurn=%.2f\n", hInTurn);
 
             final WorkOrderInformation o = OrderUtils.from(ord, xr, xs, progress);
+            final long qtyGoalPerTurn = qtyGoalPerTurn(qty, xr, totalHours);
+            o.setQty((int)qtyGoalPerTurn);
             debugOrderCreation("c", o);
             orders.add(o);
 
@@ -114,7 +118,11 @@ public class EfficiencyUtils {
     }
     
     /**
-     * The following method returns the "PZAS x HACER" value.
+     *
+     * @param qty
+     * @param hoursWithEfficiency
+     * @param totalHours
+     * @return
      */
     @Validated
     public static long qtyGoalPerTurn(final int qty, final double hoursWithEfficiency, final double totalHours) {

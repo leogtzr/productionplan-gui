@@ -43,19 +43,19 @@ public class Algorithm1Test {
         final List<testCase> tests = List.of(
             new testCase(
                 List.of(
-                    new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).build(),
-                    new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).setupHours(0.4D).build(),
-                    new WorkOrderInformation.Builder("p3", "o3").runHours(5.4D).setupHours(0.8D).build(),
-                    new WorkOrderInformation.Builder("p4", "o4").runHours(6.8D).setupHours(3.0D).build()
+                    new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).qty(37).setupHours(1.2D).build(),
+                    new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).qty(22).setupHours(0.4D).build(),
+                    new WorkOrderInformation.Builder("p3", "o3").runHours(5.4D).qty(16).setupHours(0.8D).build(),
+                    new WorkOrderInformation.Builder("p4", "o4").runHours(6.8D).qty(10).setupHours(3.0D).build()
                 ),
                 List.of(
-                    new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).turn(Turn.FIRST).day(Day.MONDAY).build(),
-                    new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).setupHours(0.4D).turn(Turn.FIRST).day(Day.MONDAY).build(),
-                    new WorkOrderInformation.Builder("p3", "o3").runHours(0.0D).setupHours(0.40000000000000036D).day(Day.MONDAY).turn(Turn.FIRST).build(),
-                    new WorkOrderInformation.Builder("p3", "o3").runHours(5.4D).setupHours(0.3999999999999997D).day(Day.MONDAY).turn(Turn.SECOND).build(),
-                    new WorkOrderInformation.Builder("p4", "o4").runHours(0.0D).setupHours(2.3D).turn(Turn.SECOND).day(Day.MONDAY).build(),
-                    new WorkOrderInformation.Builder("p4", "o4").runHours(4.8D).setupHours(0.7000000000000002D).turn(Turn.THIRD).day(Day.MONDAY).build(),
-                    new WorkOrderInformation.Builder("p4", "o4").runHours(2.0D).setupHours(0.0D).turn(Turn.FIRST).day(Day.TUESDAY).build()
+                    new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).qty(37).turn(Turn.FIRST).day(Day.MONDAY).build(),
+                    new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).setupHours(0.4D).qty(22).turn(Turn.FIRST).day(Day.MONDAY).build(),
+                    new WorkOrderInformation.Builder("p3", "o3").runHours(0.0D).setupHours(0.40000000000000036D).qty(0).day(Day.MONDAY).turn(Turn.FIRST).build(),
+                    new WorkOrderInformation.Builder("p3", "o3").runHours(5.4D).setupHours(0.3999999999999997D).qty(16).day(Day.MONDAY).turn(Turn.SECOND).build(),
+                    new WorkOrderInformation.Builder("p4", "o4").runHours(0.0D).setupHours(2.3D).turn(Turn.SECOND).qty(0).day(Day.MONDAY).build(),
+                    new WorkOrderInformation.Builder("p4", "o4").runHours(4.8D).setupHours(0.7000000000000002D).qty(7).turn(Turn.THIRD).day(Day.MONDAY).build(),
+                    new WorkOrderInformation.Builder("p4", "o4").runHours(2.0D).setupHours(0.0D).turn(Turn.FIRST).qty(3).day(Day.TUESDAY).build()
 
                 )
             )
@@ -91,23 +91,71 @@ public class Algorithm1Test {
     @Test
     public void shouldRunAlgo2() {
         
-        
         final List<testCaseSingleOrder> tests = List.of(
                 new testCaseSingleOrder(
                     new WorkOrderInformation.Builder("p1", "o1")
                         .runHours(53.0D)
                         .setupHours(7.2D)
                         .day(Day.MONDAY)
+                        .qty(200)
                         .build(),
                     List.of(
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(1.2999999999999998D).setupHours(7.2D).turn(Turn.FIRST).day(Day.MONDAY).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.1D).setupHours(0.0D).turn(Turn.SECOND).day(Day.MONDAY).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(5.5D).setupHours(0.0D).turn(Turn.THIRD).day(Day.MONDAY).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.5D).setupHours(0.0D).turn(Turn.FIRST).day(Day.TUESDAY).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.1D).setupHours(0.0D).turn(Turn.SECOND).day(Day.TUESDAY).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(5.5D).setupHours(0.0D).turn(Turn.THIRD).day(Day.TUESDAY).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.5D).setupHours(0.0D).turn(Turn.FIRST).day(Day.WEDNESDAY).build(),
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(7.5D).setupHours(0.0D).turn(Turn.SECOND).day(Day.WEDNESDAY).build()
+                        new WorkOrderInformation.Builder("p1", "o1")
+                                .runHours(1.2999999999999998D)
+                                .setupHours(7.2D)
+                                .qty(5)
+                                .turn(Turn.FIRST)
+                                .day(Day.MONDAY)
+                                .build(),
+                        new WorkOrderInformation.Builder("p1", "o1")
+                                .runHours(8.1D)
+                                .setupHours(0.0D)
+                                .qty(31)
+                                .turn(Turn.SECOND)
+                                .day(Day.MONDAY)
+                                .build(),
+                        new WorkOrderInformation.Builder("p1", "o1")
+                                .runHours(5.5D)
+                                .setupHours(0.0D)
+                                .qty(21)
+                                .turn(Turn.THIRD)
+                                .day(Day.MONDAY)
+                                .build(),
+                        new WorkOrderInformation.Builder("p1", "o1")
+                                .runHours(8.5D)
+                                .setupHours(0.0D)
+                                .qty(32)
+                                .turn(Turn.FIRST)
+                                .day(Day.TUESDAY)
+                                .build(),
+                        new WorkOrderInformation.Builder("p1", "o1")
+                                .runHours(8.1D)
+                                .setupHours(0.0D)
+                                .qty(31)
+                                .turn(Turn.SECOND)
+                                .day(Day.TUESDAY)
+                                .build(),
+                        new WorkOrderInformation.Builder("p1", "o1")
+                                .runHours(5.5D)
+                                .setupHours(0.0D)
+                                .qty(21)
+                                .turn(Turn.THIRD)
+                                .day(Day.TUESDAY)
+                                .build(),
+                        new WorkOrderInformation.Builder("p1", "o1")
+                                .runHours(8.5D)
+                                .setupHours(0.0D)
+                                .qty(32)
+                                .turn(Turn.FIRST)
+                                .day(Day.WEDNESDAY)
+                                .build(),
+                        new WorkOrderInformation.Builder("p1", "o1")
+                                .runHours(7.5D)
+                                .setupHours(0.0D)
+                                .qty(28)
+                                .turn(Turn.SECOND)
+                                .day(Day.WEDNESDAY)
+                                .build()
                     )
                 )
         );
@@ -123,6 +171,38 @@ public class Algorithm1Test {
         }
         
     }
+    
+    @Test
+    public void shouldRunAlgo3() {
+        
+        final List<testCaseSingleOrder> tests = List.of(
+                new testCaseSingleOrder(
+                    new WorkOrderInformation.Builder("p1", "o1")
+                        .runHours(15.9D)
+                        .setupHours(2.0D)
+                        .day(Day.MONDAY)
+                        .qty(220)
+                        .build(),
+                    List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(6.5D).setupHours(2.0D).qty(90).turn(Turn.FIRST).day(Day.MONDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.1D).setupHours(0.0D).qty(112).turn(Turn.SECOND).day(Day.MONDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(1.3000000000000007D).setupHours(0.0D).qty(18).turn(Turn.THIRD).day(Day.MONDAY).build()
+                    )
+                )
+        );
+        
+        for (final testCaseSingleOrder tc : tests) {
+            
+            final Progress progress = new Progress(Turn.FIRST, 0.0D, tc.order.getDay());
+            final EfficiencyInformation efficiency = EfficiencyUtils.efficiency(tc.order, progress);
+            printDebugOrders(efficiency.getOrders());
+           
+            Assert.assertEquals(tc.want.size(), efficiency.getOrders().size());
+            Assert.assertEquals(tc.want, efficiency.getOrders());
+        }
+        
+    }
+
     
     private static void printDebugOrders(final List<WorkOrderInformation> orders) {
         System.out.println("DEBUG ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
