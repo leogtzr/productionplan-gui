@@ -17,18 +17,29 @@ import org.junit.Test;
  */
 public class Algorithm1Test {
     
+    class testCase {
+        List<WorkOrderInformation> orders;
+        List<WorkOrderInformation> want;
+        testCase(final List<WorkOrderInformation> orders, final List<WorkOrderInformation> want) {
+            this.orders = orders;
+            this.want = want;
+        }
+    }
+    
+    class testCaseSingleOrder {
+        WorkOrderInformation order;
+        List<WorkOrderInformation> want;
+
+        public testCaseSingleOrder(final WorkOrderInformation order, final List<WorkOrderInformation> want) {
+            this.order = order;
+            this.want = want;
+        }
+    }
+    
     @Test
     public void shouldRunAlgo1() {
         
-        class testCase {
-            List<WorkOrderInformation> orders;
-            List<WorkOrderInformation> want;
-            testCase(final List<WorkOrderInformation> orders, final List<WorkOrderInformation> want) {
-                this.orders = orders;
-                this.want = want;
-            }
-        }
-        
+        // PENDING: fix these tests to include the day ...
         final List<testCase> tests = List.of(
                 new testCase(
                     List.of(
@@ -81,24 +92,40 @@ public class Algorithm1Test {
     @Test
     public void shouldRunAlgo2() {
         
-        final WorkOrderInformation testOrder = new WorkOrderInformation.Builder("pt1", "wo1")
-        .runHours(53.0D)
-        .setupHours(7.2D)
-        .qty(220)
-        .build();
         
-        final Progress progress = new Progress(Turn.FIRST, 0.0D);
-        final EfficiencyInformation efficiency = EfficiencyUtils.efficiency(testOrder, progress);
+        final List<testCaseSingleOrder> tests = List.of(
+                new testCaseSingleOrder(
+                    new WorkOrderInformation.Builder("p1", "o1")
+                        .runHours(53.0D)
+                        .setupHours(7.2D)
+                        .build(),
+                    List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(1.2999999999999998D).setupHours(7.2D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.1D).setupHours(0.0D).turn(Turn.SECOND).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(5.5D).setupHours(0.0D).turn(Turn.THIRD).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.5D).setupHours(0.0D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.1D).setupHours(0.0D).turn(Turn.SECOND).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(5.5D).setupHours(0.0D).turn(Turn.THIRD).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(8.5D).setupHours(0.0D).turn(Turn.FIRST).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(7.5D).setupHours(0.0D).turn(Turn.SECOND).build()
+                    )
+                )
+        );
         
-        printDebugOrders(efficiency.getOrders());
+        for (final testCaseSingleOrder tc : tests) {
+            final Progress progress = new Progress(Turn.FIRST, 0.0D);
+            final EfficiencyInformation efficiency = EfficiencyUtils.efficiency(tc.order, progress);
+            printDebugOrders(efficiency.getOrders());
+           
+            Assert.assertEquals(tc.want.size(), efficiency.getOrders().size());
+            Assert.assertEquals(tc.want, efficiency.getOrders());
+        }
         
     }
     
     private static void printDebugOrders(final List<WorkOrderInformation> orders) {
         System.out.println("DEBUG ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
-        
         orders.forEach(System.out::println);
-        
         System.out.println("DEBUG ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/>");
     }
     

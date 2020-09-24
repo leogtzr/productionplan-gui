@@ -247,6 +247,7 @@ public class EfficiencyUtils {
         return efficiencyInformation;
     }
     
+    // PENDING: add more tests here and change the annotation here.
     @MissingTests
     public static EfficiencyInformation efficiency(
             final WorkOrderInformation ord, final Progress progress) {
@@ -304,7 +305,6 @@ public class EfficiencyUtils {
 
             final WorkOrderInformation o = OrderUtils.from(ord, xr, xs, progress.getTurn());
             debugOrderCreation("c", o);
-            // orders = append(orders, o);
             orders.add(o);
 
             if (hInTurn == 0.0) {
@@ -318,15 +318,9 @@ public class EfficiencyUtils {
             System.out.printf("1) O{r: %.2f, s: %.2f}\n", ord.getRunHours(), ord.getSetupHours());
 
             ord.setRunHours(ord.getRunHours() - xr);
-            // ord.RunHours -= xr;
             ord.setSetupHours(ord.getSetupHours() - xs);
-            // ord.Setup -= xs;
-
+            
             System.out.printf("2) O{r: %.2f, s: %.2f}\n", ord.getRunHours(), ord.getSetupHours());
-
-            xr = 0.0;
-            xs = 0.0;
-
 	}
 
         
