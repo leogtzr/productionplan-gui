@@ -31,7 +31,7 @@ public class Algorithm1Test {
         WorkOrderInformation order;
         List<WorkOrderInformation> want;
 
-        public testCaseSingleOrder(final WorkOrderInformation order, final List<WorkOrderInformation> want) {
+        testCaseSingleOrder(final WorkOrderInformation order, final List<WorkOrderInformation> want) {
             this.order = order;
             this.want = want;
         }

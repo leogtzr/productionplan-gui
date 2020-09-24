@@ -13,9 +13,10 @@ import java.util.ArrayList;
 import org.junit.Assert;
 
 import java.util.List;
+import org.junit.Ignore;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
-import org.junit.Ignore;
 
 /**
  * @author lgutierr (leogutierrezramirez@gmail.com)

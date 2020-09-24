@@ -2,15 +2,14 @@ package com.production.util;
 
 import com.production.domain.WorkOrderInformation;
 import com.production.domain.efficiency.Progress;
-import com.production.lang.MissingTests;
+import com.production.lang.Validated;
 
 /**
  * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public class OrderUtils {
     
-    // PENDING: validate this.
-    @MissingTests
+    @Validated
     public static WorkOrderInformation from(
             final WorkOrderInformation wo, 
             final double newRunHours,
