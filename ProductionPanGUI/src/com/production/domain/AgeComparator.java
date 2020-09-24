@@ -3,7 +3,7 @@ package com.production.domain;
 import java.util.Comparator;
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public class AgeComparator implements Comparator<WorkOrderInformation> {
 

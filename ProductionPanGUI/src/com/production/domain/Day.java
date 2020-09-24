@@ -1,5 +1,5 @@
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 package com.production.domain;
 

@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public final class TemplateFileUtils {
     

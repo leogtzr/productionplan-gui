@@ -53,7 +53,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public final class Utils {
     

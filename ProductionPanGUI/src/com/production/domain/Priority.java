@@ -3,7 +3,7 @@ package com.production.domain;
 import java.util.Objects;
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public class Priority {
     

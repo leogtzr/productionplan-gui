@@ -1,7 +1,7 @@
 package com.production.util.html;
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public final class HTMLConstants {
     

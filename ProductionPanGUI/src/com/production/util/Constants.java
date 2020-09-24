@@ -1,7 +1,7 @@
 package com.production.util;
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public final class Constants {
     

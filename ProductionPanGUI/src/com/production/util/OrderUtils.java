@@ -5,7 +5,7 @@ import com.production.domain.efficiency.Progress;
 import com.production.lang.MissingTests;
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public class OrderUtils {
     

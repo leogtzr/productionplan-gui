@@ -14,7 +14,7 @@ import org.junit.Test;
 
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public class Algorithm1Test {
     
@@ -40,26 +40,25 @@ public class Algorithm1Test {
     @Test
     public void shouldRunAlgo1() {
         
-        // PENDING: fix these tests to include the day ...
         final List<testCase> tests = List.of(
-                new testCase(
-                    List.of(
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).build(),
-                        new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).setupHours(0.4D).build(),
-                        new WorkOrderInformation.Builder("p3", "o3").runHours(5.4D).setupHours(0.8D).build(),
-                        new WorkOrderInformation.Builder("p4", "o4").runHours(6.8D).setupHours(3.0D).build()
-                    ),
-                    List.of(
-                        new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).turn(Turn.FIRST).build(),
-                        new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).setupHours(0.4D).turn(Turn.FIRST).build(),
-                        new WorkOrderInformation.Builder("p3", "o3").runHours(0.0D).setupHours(0.40000000000000036D).turn(Turn.FIRST).build(),
-                        new WorkOrderInformation.Builder("p3", "o3").runHours(5.4D).setupHours(0.3999999999999997D).turn(Turn.SECOND).build(),
-                        new WorkOrderInformation.Builder("p4", "o4").runHours(0.0D).setupHours(2.3D).turn(Turn.SECOND).build(),
-                        new WorkOrderInformation.Builder("p4", "o4").runHours(4.8D).setupHours(0.7000000000000002D).turn(Turn.THIRD).build(),
-                        new WorkOrderInformation.Builder("p4", "o4").runHours(2.0D).setupHours(0.0D).turn(Turn.FIRST).day(Day.TUESDAY).build()
-                            
-                    )
+            new testCase(
+                List.of(
+                    new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).build(),
+                    new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).setupHours(0.4D).build(),
+                    new WorkOrderInformation.Builder("p3", "o3").runHours(5.4D).setupHours(0.8D).build(),
+                    new WorkOrderInformation.Builder("p4", "o4").runHours(6.8D).setupHours(3.0D).build()
+                ),
+                List.of(
+                    new WorkOrderInformation.Builder("p1", "o1").runHours(4.3D).setupHours(1.2D).turn(Turn.FIRST).day(Day.MONDAY).build(),
+                    new WorkOrderInformation.Builder("p2", "o2").runHours(2.2D).setupHours(0.4D).turn(Turn.FIRST).day(Day.MONDAY).build(),
+                    new WorkOrderInformation.Builder("p3", "o3").runHours(0.0D).setupHours(0.40000000000000036D).day(Day.MONDAY).turn(Turn.FIRST).build(),
+                    new WorkOrderInformation.Builder("p3", "o3").runHours(5.4D).setupHours(0.3999999999999997D).day(Day.MONDAY).turn(Turn.SECOND).build(),
+                    new WorkOrderInformation.Builder("p4", "o4").runHours(0.0D).setupHours(2.3D).turn(Turn.SECOND).day(Day.MONDAY).build(),
+                    new WorkOrderInformation.Builder("p4", "o4").runHours(4.8D).setupHours(0.7000000000000002D).turn(Turn.THIRD).day(Day.MONDAY).build(),
+                    new WorkOrderInformation.Builder("p4", "o4").runHours(2.0D).setupHours(0.0D).turn(Turn.FIRST).day(Day.TUESDAY).build()
+
                 )
+            )
         );
         
         Progress progress = new Progress(Turn.FIRST, 0.0D, Day.MONDAY);

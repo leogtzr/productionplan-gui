@@ -10,7 +10,7 @@ import java.util.List;
 import static com.production.util.html.HTMLConstants.*;
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public final class HTMLFormat {
     

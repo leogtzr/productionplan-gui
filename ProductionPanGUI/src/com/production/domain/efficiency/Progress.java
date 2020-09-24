@@ -5,7 +5,7 @@ import com.production.domain.Turn;
 import java.util.Objects;
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public class Progress {
     

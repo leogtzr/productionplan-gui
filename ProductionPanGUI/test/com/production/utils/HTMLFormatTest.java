@@ -18,7 +18,7 @@ import static org.hamcrest.CoreMatchers.not;
 import org.junit.Ignore;
 
 /**
- * @author lgutierr <leogutierrezramirez@gmail.com>
+ * @author lgutierr (leogutierrezramirez@gmail.com)
  */
 public class HTMLFormatTest {
     
