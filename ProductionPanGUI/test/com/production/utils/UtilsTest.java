@@ -29,6 +29,7 @@ import java.util.Collections;
 import static java.util.stream.Collectors.toList;
 
 import static java.lang.Integer.parseInt;
+import java.util.Arrays;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -1313,6 +1314,7 @@ public class UtilsTest {
         
         final FileNameExtensionFilter filter = (FileNameExtensionFilter)choosableFileFilters[0];
         Assert.assertEquals(EXPECTED_DESCRIPTION, filter.getDescription());
+        Assert.assertTrue(Arrays.asList(filter.getExtensions()).contains(EXPECTED_EXTENSION));
     }
     
     @Test

@@ -12,7 +12,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-
 /**
  * @author lgutierr (leogutierrezramirez@gmail.com)
  */
@@ -38,7 +37,7 @@ public class Algorithm1Test {
     }
     
     @Test
-    public void shouldRunAlgo1() {
+    public void validateCase1() {
         
         final List<testCase> tests = List.of(
             new testCase(
@@ -89,7 +88,7 @@ public class Algorithm1Test {
     }
     
     @Test
-    public void shouldRunAlgo2() {
+    public void validateCase2() {
         
         final List<testCaseSingleOrder> tests = List.of(
                 new testCaseSingleOrder(
@@ -173,7 +172,7 @@ public class Algorithm1Test {
     }
     
     @Test
-    public void shouldRunAlgo3() {
+    public void validateCase3() {
         
         final List<testCaseSingleOrder> tests = List.of(
                 new testCaseSingleOrder(
@@ -204,7 +203,7 @@ public class Algorithm1Test {
     }
     
     @Test
-    public void shouldRunAlgo4() {
+    public void validateCase4() {
         
         final List<testCaseSingleOrder> tests = List.of(
                 new testCaseSingleOrder(

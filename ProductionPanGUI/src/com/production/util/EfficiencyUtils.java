@@ -38,8 +38,8 @@ public class EfficiencyUtils {
         
         int it = 0;
         
-        double xs = 0.0;
-        double xr = 0.0;
+        double xs;
+        double xr;
         
         System.out.printf("Before to work: %s\n", ord);
         
