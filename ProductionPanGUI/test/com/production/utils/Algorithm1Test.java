@@ -202,6 +202,37 @@ public class Algorithm1Test {
         }
         
     }
+    
+    @Test
+    public void shouldRunAlgo4() {
+        
+        final List<testCaseSingleOrder> tests = List.of(
+                new testCaseSingleOrder(
+                    new WorkOrderInformation.Builder("p1", "o1")
+                        .runHours(7.5D)
+                        .setupHours(14.3D)
+                        .day(Day.MONDAY)
+                        .qty(60)
+                        .build(),
+                    List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(0.0D).setupHours(8.5D).qty(0).turn(Turn.FIRST).day(Day.MONDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(2.299999999999999D).setupHours(5.800000000000001D).qty(18).turn(Turn.SECOND).day(Day.MONDAY).build(),
+                        new WorkOrderInformation.Builder("p1", "o1").runHours(5.200000000000001D).setupHours(0.0D).qty(42).turn(Turn.THIRD).day(Day.MONDAY).build()
+                    )
+                )
+        );
+        
+        for (final testCaseSingleOrder tc : tests) {
+            
+            final Progress progress = new Progress(Turn.FIRST, 0.0D, tc.order.getDay());
+            final EfficiencyInformation efficiency = EfficiencyUtils.efficiency(tc.order, progress);
+            printDebugOrders(efficiency.getOrders());
+           
+            Assert.assertEquals(tc.want.size(), efficiency.getOrders().size());
+            Assert.assertEquals(tc.want, efficiency.getOrders());
+        }
+        
+    }
 
     
     private static void printDebugOrders(final List<WorkOrderInformation> orders) {
