@@ -320,11 +320,13 @@ public final class Utils {
         } else {
             final List<WorkOrderInformation> planItems = buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
             final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("turns-template.html");
-
+            
             if (templateHTMLPath.toFile().exists()) {
                 final String templateHTMLContent = Files.readString(templateHTMLPath);
                 final String htmlPlan = HTMLFormat.generateHTMLContentForTwoTurns(templateHTMLContent, workCenter, planItems);
                 return htmlPlan;
+            } else {
+                throw new IOException("Template HTML files not found");
             }
         }
         return "";
@@ -416,14 +418,25 @@ public final class Utils {
         return joined;
     }
     
-    @Validated
-    public static List<WorkOrderInformation> buildPlanForTwoTurns(
+    @MissingTests
+    public static List<WorkOrderInformation> buildPlan(
         final String workCenter
         , List<WorkOrderInformation> workOrderItems
         , final List<Priority> priorities
     ) {
-        
+        // PENDING: here the old algorithm is used, it needs to be fixed.
         // Before sorting ... 
+        /*
+            En el siguiente código, de las prioridades que el cliente provee (la tabla a la derecha) 
+            tomamos esos items y los guardamos en una lista.
+        
+            Como tenemos esos mismos items en "workOrderItems" (el cual recibimos como argumento), necesitamos removerlo de ahí.
+        
+            Ver el código a continuación: 
+            for (final WorkOrderInformation wo : priorityWorkOrderItems) {
+                removePrioritizedItemsFromWorkOrderItems(wo, workOrderItems);
+            }
+        */
         List<WorkOrderInformation> priorityWorkOrderItems = new ArrayList<>();
         for (final Priority priority : priorities) {
             priorityWorkOrderItems.addAll(
@@ -448,6 +461,72 @@ public final class Utils {
         
         Day day = MONDAY;
         // The following variable will be used to accumulate
+        // PENDING: Use the algorithm here, check how to adapt it.
+        
+        double turnHours = 0.0D;
+        for (final WorkOrderInformation woInfo : joined) {
+            
+            woInfo.setDay(day);
+            
+            final String partNumber = woInfo.getPartNumber();
+            final List<WorkOrderInformation> partNumbers = workOrderItemsPerPartNumber.get(partNumber);
+            // Check if a part number has more than one element so we can adjust the setup time after the first element.
+            if (partNumbers.size() > 1) {
+                for (int i = 1; i < partNumbers.size(); i++) {
+                    final WorkOrderInformation wo = partNumbers.get(i);
+                    wo.setSetupHours(0.0D);
+                }
+            }
+        }
+        
+        return joined;
+    }
+    
+    @Validated
+    public static List<WorkOrderInformation> buildPlanForTwoTurns(
+        final String workCenter
+        , List<WorkOrderInformation> workOrderItems
+        , final List<Priority> priorities
+    ) {
+        // PENDING: here the old algorithm is used, it needs to be fixed.
+        // Before sorting ... 
+        /*
+            En el siguiente código, de las prioridades que el cliente provee (la tabla a la derecha) 
+            tomamos esos items y los guardamos en una lista.
+        
+            Como tenemos esos mismos items en "workOrderItems" (el cual recibimos como argumento), necesitamos removerlo de ahí.
+        
+            Ver el código a continuación: 
+            for (final WorkOrderInformation wo : priorityWorkOrderItems) {
+                removePrioritizedItemsFromWorkOrderItems(wo, workOrderItems);
+            }
+        */
+        List<WorkOrderInformation> priorityWorkOrderItems = new ArrayList<>();
+        for (final Priority priority : priorities) {
+            priorityWorkOrderItems.addAll(
+                workOrderItems.stream()
+                    .filter(wo -> wo.getPartNumber().equalsIgnoreCase(priority.getPartNumber()))
+                    .collect(Collectors.toList())
+            );
+        }
+        
+        for (final WorkOrderInformation wo : priorityWorkOrderItems) {
+            removePrioritizedItemsFromWorkOrderItems(wo, workOrderItems);
+        }
+        
+        priorityWorkOrderItems = sortAndGroup(priorityWorkOrderItems, new AgeComparator());
+        workOrderItems = sortAndGroup(workOrderItems, new AgeComparator());
+        
+        final List<WorkOrderInformation> joined = new ArrayList<>(priorityWorkOrderItems);
+        joined.addAll(workOrderItems);
+        
+        // Before this the lists have to be joined.
+        final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(joined);
+        
+        Day day = MONDAY;
+        // The following variable will be used to accumulate
+        // PENDING: Use the algorithm here, check how to adapt it.
+        
         double turnHours = 0.0D;
         for (final WorkOrderInformation woInfo : joined) {
             
@@ -638,8 +717,8 @@ public final class Utils {
         List<WorkOrderInformation> lst = new ArrayList<>();
         
         for (int i = 0; i < (items.size() - 1); i++) {
-            WorkOrderInformation c = items.get(i);
-            WorkOrderInformation nxt = items.get(i + 1);
+            final WorkOrderInformation c = items.get(i);
+            final WorkOrderInformation nxt = items.get(i + 1);
             lst.add(c);
             
             if (!c.getDay().equals(nxt.getDay())) {

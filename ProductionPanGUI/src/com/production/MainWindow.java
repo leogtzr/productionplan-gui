@@ -34,6 +34,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import static com.production.util.Constants.DOBLADO_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
+import com.production.util.TemplateFileUtils;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -148,6 +149,7 @@ public class MainWindow extends JFrame {
         toolsMenu = new javax.swing.JMenu();
         optionsMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
+        aboutMenuItem = new javax.swing.JMenuItem();
 
         optionsDialog.setTitle("Options");
         optionsDialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
@@ -340,6 +342,16 @@ public class MainWindow extends JFrame {
 
     helpMenu.setMnemonic('H');
     helpMenu.setText("Help");
+
+    aboutMenuItem.setMnemonic('A');
+    aboutMenuItem.setText("About");
+    aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            aboutMenuItemActionPerformed(evt);
+        }
+    });
+    helpMenu.add(aboutMenuItem);
+
     menuBar.add(helpMenu);
 
     setJMenuBar(menuBar);
@@ -618,6 +630,7 @@ public class MainWindow extends JFrame {
                     .collect(Collectors.toList());
             try {
                 final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
+                // PENDING: Make the following configurable:
                 showSaveDialog(wcDescription, htmlContent);
             } catch (final IOException ex) {
                 showErrorMessage(ex.getMessage(), "ERROR");
@@ -634,9 +647,23 @@ public class MainWindow extends JFrame {
  
         if (option == JFileChooser.APPROVE_OPTION) {
             final File fileToSave = saveFileChooser.getSelectedFile();
+            
+            // Write the file
             try (final BufferedWriter newBufferedWriter = Files.newBufferedWriter(fileToSave.toPath(), StandardCharsets.UTF_8)) {
                 newBufferedWriter.write(htmlContent);
             }
+
+            final File parentOutputDirectory = fileToSave.getParentFile();
+            List.of("bootstrap.min.css", "bootstrap.min.js", "jquery-3.3.1.min.js").
+            forEach(file -> {
+                try {
+                    final Path staticFilePathToCopyToUserDirectory = TemplateFileUtils.getTemplateFilePath(file);
+                    TemplateFileUtils.copyFileFromTemplatesDirectoryTo(parentOutputDirectory, staticFilePathToCopyToUserDirectory.toFile());
+                } catch (final IOException ex) {
+                    ex.printStackTrace();
+                    showErrorMessage(ex.getMessage(), "ERROR");
+                }
+            });
         }
     }
     
@@ -652,9 +679,12 @@ public class MainWindow extends JFrame {
     }//GEN-LAST:event_optionsMenuItemActionPerformed
 
     private void saveOptionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOptionsButtonActionPerformed
-        // TODO:
         this.optionsDialog.setVisible(false);
     }//GEN-LAST:event_saveOptionsButtonActionPerformed
+
+    private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
+        /// TODO: ...
+    }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -684,6 +714,7 @@ public class MainWindow extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton clearButton;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
