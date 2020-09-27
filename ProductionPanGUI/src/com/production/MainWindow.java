@@ -129,6 +129,7 @@ public class MainWindow extends JFrame {
 
         optionsDialog = new javax.swing.JDialog();
         saveOptionsButton = new javax.swing.JButton();
+        aboutDialog = new javax.swing.JDialog();
         statusLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         workOrderTable = new javax.swing.JTable();
@@ -179,6 +180,23 @@ public class MainWindow extends JFrame {
                 .addContainerGap(362, Short.MAX_VALUE)
                 .addComponent(saveOptionsButton)
                 .addGap(16, 16, 16))
+        );
+
+        aboutDialog.setTitle("About");
+        aboutDialog.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        aboutDialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        aboutDialog.setResizable(false);
+        aboutDialog.setSize(new java.awt.Dimension(500, 500));
+
+        javax.swing.GroupLayout aboutDialogLayout = new javax.swing.GroupLayout(aboutDialog.getContentPane());
+        aboutDialog.getContentPane().setLayout(aboutDialogLayout);
+        aboutDialogLayout.setHorizontalGroup(
+            aboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 741, Short.MAX_VALUE)
+        );
+        aboutDialogLayout.setVerticalGroup(
+            aboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 471, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -693,7 +711,7 @@ public class MainWindow extends JFrame {
     }//GEN-LAST:event_saveOptionsButtonActionPerformed
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
-        /// TODO: ...
+        aboutDialog.setVisible(true);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     /**
@@ -724,6 +742,7 @@ public class MainWindow extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDialog aboutDialog;
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JButton clearButton;
     private javax.swing.JMenu editMenu;
