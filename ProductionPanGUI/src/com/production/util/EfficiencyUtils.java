@@ -47,9 +47,10 @@ public class EfficiencyUtils {
 
             it++;
             // PENDING: What would be a good limit for this?
-            if (it >= 50) {
-                // System.out.printf("MAX point reached. ord.RunHours(%.3f), ord.Setup(%.3f)\n", ord.getRunHours(), ord.getSetupHours());
-                throw new RuntimeException(String.format("MAX point reached. ord.RunHours(%.3f), ord.Setup(%.3f)\n", ord.getRunHours(), ord.getSetupHours()));
+            if (it >= 13) {
+                // PENDING: logging here?
+                throw new RuntimeException(String.format("MAX point reached (%d) for (%s). ord.RunHours(%.3f), ord.Setup(%.3f)\n", 
+                        it, ord.getPartNumber() + "-" + ord.getWorkOrder(), ord.getRunHours(), ord.getSetupHours()));
                 // break;
             }
 

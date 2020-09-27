@@ -420,6 +420,10 @@ public class MainWindow extends JFrame {
         JOptionPane.showMessageDialog(this, message, title, ERROR_MESSAGE);
     }
     
+    private void showInfoMessage(final String message, final String title) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+    
     private void showWarningMessage(final String message, final String title) {
         JOptionPane.showMessageDialog(this, message, title, WARNING_MESSAGE);
     }
@@ -640,6 +644,19 @@ public class MainWindow extends JFrame {
         });
     }//GEN-LAST:event_generatePlanBtnActionPerformed
 
+    private void copyStaticFilesToOutputDirectory(final File outputDirectory) {
+        List.of("bootstrap.min.css", "bootstrap.min.js", "jquery-3.3.1.min.js").
+            forEach(file -> {
+                try {
+                    final Path staticFilePathToCopyToUserDirectory = TemplateFileUtils.getTemplateFilePath(file);
+                    TemplateFileUtils.copyFileFromTemplatesDirectoryTo(outputDirectory, staticFilePathToCopyToUserDirectory.toFile());
+                } catch (final IOException ex) {
+                    ex.printStackTrace();
+                    showErrorMessage(ex.getMessage(), "ERROR");
+                }
+            });
+    }
+    
     private void showSaveDialog(final String workCenter, final String htmlContent) throws IOException {
         final JFileChooser saveFileChooser = Utils
                 .createFileChooser(String.format("Save plan for '%s'", workCenter), "HTML files", ".html");
@@ -654,16 +671,9 @@ public class MainWindow extends JFrame {
             }
 
             final File parentOutputDirectory = fileToSave.getParentFile();
-            List.of("bootstrap.min.css", "bootstrap.min.js", "jquery-3.3.1.min.js").
-            forEach(file -> {
-                try {
-                    final Path staticFilePathToCopyToUserDirectory = TemplateFileUtils.getTemplateFilePath(file);
-                    TemplateFileUtils.copyFileFromTemplatesDirectoryTo(parentOutputDirectory, staticFilePathToCopyToUserDirectory.toFile());
-                } catch (final IOException ex) {
-                    ex.printStackTrace();
-                    showErrorMessage(ex.getMessage(), "ERROR");
-                }
-            });
+            copyStaticFilesToOutputDirectory(parentOutputDirectory);
+            
+            showInfoMessage("Plan saved correctly", "Plan generated correctly");
         }
     }
     

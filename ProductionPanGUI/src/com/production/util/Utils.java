@@ -434,7 +434,7 @@ public final class Utils {
         , List<WorkOrderInformation> workOrderItems
         , final List<Priority> priorities
     ) {
-        
+       
         // PENDING: here the old algorithm is used, it needs to be fixed.
         // Before sorting ... 
         /*
@@ -448,6 +448,7 @@ public final class Utils {
                 removePrioritizedItemsFromWorkOrderItems(wo, workOrderItems);
             }
         */
+        
         List<WorkOrderInformation> priorityWorkOrderItems = new ArrayList<>();
         for (final Priority priority : priorities) {
             priorityWorkOrderItems.addAll(
@@ -470,7 +471,6 @@ public final class Utils {
         // Before this the lists have to be joined.
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(joined);
         
-        // Day day = MONDAY;
         // The following variable will be used to accumulate
         // PENDING: Use the algorithm here, check how to adapt it.
         
