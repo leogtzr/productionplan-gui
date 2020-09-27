@@ -46,9 +46,11 @@ public class EfficiencyUtils {
         while (ord.getRunHours() != 0.0 || ord.getSetupHours() != 0.0) {
 
             it++;
-            if (it >= 10) {
-                System.out.printf("MAX point reached. ord.RunHours(%.3f), ord.Setup(%.3f)\n", ord.getRunHours(), ord.getSetupHours());
-                break;
+            // PENDING: What would be a good limit for this?
+            if (it >= 50) {
+                // System.out.printf("MAX point reached. ord.RunHours(%.3f), ord.Setup(%.3f)\n", ord.getRunHours(), ord.getSetupHours());
+                throw new RuntimeException(String.format("MAX point reached. ord.RunHours(%.3f), ord.Setup(%.3f)\n", ord.getRunHours(), ord.getSetupHours()));
+                // break;
             }
 
             if ((hInTurn - ord.getSetupHours()) >= 0.0) {
@@ -107,7 +109,6 @@ public class EfficiencyUtils {
             System.out.printf("2) O{r: %.2f, s: %.2f}\n", ord.getRunHours(), ord.getSetupHours());
 	}
 
-        
         efficiencyInformation.setOrders(orders);
         return efficiencyInformation;
     }
@@ -117,13 +118,6 @@ public class EfficiencyUtils {
                 ord.getRunHours(), ord.getSetupHours(), ord.getTurn());
     }
     
-    /**
-     *
-     * @param qty
-     * @param hoursWithEfficiency
-     * @param totalHours
-     * @return
-     */
     @Validated
     public static long qtyGoalPerTurn(final int qty, final double hoursWithEfficiency, final double totalHours) {
         return Math.round((double)qty * hoursWithEfficiency / totalHours);

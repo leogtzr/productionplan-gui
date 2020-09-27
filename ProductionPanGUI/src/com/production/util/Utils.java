@@ -44,6 +44,8 @@ import static com.production.util.Constants.THIRD_TURN_LENGTH;
 
 import static com.production.domain.Turn.*;
 import static com.production.domain.Day.*;
+import com.production.domain.efficiency.EfficiencyInformation;
+import com.production.domain.efficiency.Progress;
 import com.production.util.html.HTMLFormat;
 import java.nio.file.Path;
 
@@ -309,6 +311,7 @@ public final class Utils {
         final int numberOfTurns = numberOfTurnsFromWorkCenter(workCenter);
         
         if (numberOfTurns == 0) {
+            
             final List<WorkOrderInformation> planItems = buildPlanList(workCenter, workOrderItems, priorities);
             final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("list-template.html");
 
@@ -318,7 +321,14 @@ public final class Utils {
                 return htmlPlan;
             }
         } else {
-            final List<WorkOrderInformation> planItems = buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
+            // PENDING: analyze this.
+            // final List<WorkOrderInformation> planItems = buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
+            final List<WorkOrderInformation> planItems = Utils.buildPlan(workCenter, workOrderItems, priorities);
+            
+            System.out.printf("DEBUG HTML PLAN - begin\n");
+            planItems.forEach(System.out::println);
+            System.out.printf("DEBUG HTML PLAN - end\n");
+            
             final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("turns-template.html");
             
             if (templateHTMLPath.toFile().exists()) {
@@ -326,7 +336,7 @@ public final class Utils {
                 final String htmlPlan = HTMLFormat.generateHTMLContentForTwoTurns(templateHTMLContent, workCenter, planItems);
                 return htmlPlan;
             } else {
-                throw new IOException("Template HTML files not found");
+                throw new IOException("Template HTML files not found.");
             }
         }
         return "";
@@ -424,6 +434,7 @@ public final class Utils {
         , List<WorkOrderInformation> workOrderItems
         , final List<Priority> priorities
     ) {
+        
         // PENDING: here the old algorithm is used, it needs to be fixed.
         // Before sorting ... 
         /*
@@ -459,14 +470,17 @@ public final class Utils {
         // Before this the lists have to be joined.
         final Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber = workOrderItemsPerPartNumber(joined);
         
-        Day day = MONDAY;
+        // Day day = MONDAY;
         // The following variable will be used to accumulate
         // PENDING: Use the algorithm here, check how to adapt it.
         
-        double turnHours = 0.0D;
+        final Progress progress = new Progress(Turn.FIRST, 0.0D, Day.MONDAY);
+        
+        final List<WorkOrderInformation> result = new ArrayList<>();
+        
         for (final WorkOrderInformation woInfo : joined) {
-            
-            woInfo.setDay(day);
+            // PENDING: analyze if the following line is necessary or not.
+            // PENDING: woInfo.setDay(day);
             
             final String partNumber = woInfo.getPartNumber();
             final List<WorkOrderInformation> partNumbers = workOrderItemsPerPartNumber.get(partNumber);
@@ -477,9 +491,23 @@ public final class Utils {
                     wo.setSetupHours(0.0D);
                 }
             }
+            
+            // Call the algo here:
+            final EfficiencyInformation ordersWithEfficiency = EfficiencyUtils.efficiency(woInfo, progress);
+            printDebugOrders(ordersWithEfficiency.getOrders());
+            result.addAll(ordersWithEfficiency.getOrders());
+            final int numberOfOrdersInResult = ordersWithEfficiency.getOrders().size();
+            final Turn lastTurn = ordersWithEfficiency.getOrders().get(numberOfOrdersInResult - 1).getTurn();
+
+            System.out.printf("lastTu/rn to use is: %s\n", lastTurn);
+            System.out.printf("Calculating factor with: %s\n", result);
+            final double factor = Utils.progressFactor(result);
+
+            progress.setTurn(lastTurn);
+            progress.setFactor(factor);
         }
         
-        return joined;
+        return result;
     }
     
     @Validated
@@ -529,7 +557,6 @@ public final class Utils {
         
         double turnHours = 0.0D;
         for (final WorkOrderInformation woInfo : joined) {
-            
             woInfo.setDay(day);
             
             final String partNumber = woInfo.getPartNumber();
@@ -816,6 +843,12 @@ public final class Utils {
         }
         
         return sum;
+    }
+    
+    public static void printDebugOrders(final List<WorkOrderInformation> orders) {
+        System.out.println("DEBUG ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~>");
+        orders.forEach(System.out::println);
+        System.out.println("DEBUG ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/>");
     }
     
     private Utils() {}
