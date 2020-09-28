@@ -294,7 +294,6 @@ public final class Utils {
             , final String partNumber
             , final String workCenter
     ) {
-        // Nasty code ...
         final String machine = 
                 workCenter.toUpperCase().trim().equalsIgnoreCase(DOBLADO)
                 ? doblado.getOrDefault(partNumber, "")

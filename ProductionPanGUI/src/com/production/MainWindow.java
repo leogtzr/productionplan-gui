@@ -623,29 +623,10 @@ public class MainWindow extends JFrame {
         
         final DefaultTableModel model = (DefaultTableModel) table.getModel();
         
-        /*
-@Validated
-public static String getMachineFromWorkCenter(
-    final Map<String, String> doblado
-    , final Map<String, String> laserAndPunch
-    , final String partNumber
-    , final String workCenter
-) {
-    // Nasty code ...
-    final String machine = 
-            workCenter.toUpperCase().trim().equalsIgnoreCase(DOBLADO)
-            ? doblado.getOrDefault(partNumber, "")
-            : laserAndPunch.getOrDefault(partNumber, "");
-    return machine;
-}
-        */
-        
          workOrderItems
                  .stream()
                  .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                  .forEach(item -> {
-                     // TODO: invoke the new method here ... which new method?
-                     // TODO: fix this.
                     // final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
                     final String machine = Utils.getMachineFromWorkCenter(
                         this.dobladoPartMachineInfo
@@ -665,8 +646,6 @@ public static String getMachineFromWorkCenter(
                         };
                         model.addRow(data);
                     }
-                    // PENDING: What should we do if the result is empty?
-                    // PENDING: Ask Miriam about this.
                     
                  });
     }
@@ -688,7 +667,7 @@ public static String getMachineFromWorkCenter(
         
         final List<Priority> priorities = buildPrioritiesFromTable(model);
         
-        // PENDING: separate per machine
+        // PENDING: separate per machine and generate N files.
         this.workOrderInformationItems.ifPresentOrElse(workOrderItems -> {
             final List<WorkOrderInformation> workOrderItemsByWCDescription = workOrderItems
                     .stream()
