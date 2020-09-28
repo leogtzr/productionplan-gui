@@ -627,6 +627,7 @@ public class MainWindow extends JFrame {
                  .stream()
                  .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                  .forEach(item -> {
+                    // Old code.
                     // final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
                     final String machine = Utils.getMachineFromWorkCenter(
                         this.dobladoPartMachineInfo
@@ -673,24 +674,36 @@ public class MainWindow extends JFrame {
         // PENDING: separate per machine and generate N files.
         this.workOrderInformationItems.ifPresentOrElse(workOrderItems -> {
             
-            final Map<String, List<WorkOrderInformation>> workOrderItemsPerMachine = Utils.workOrderItemsPerMachine(workOrderItems);
-            workOrderItemsPerMachine.forEach(
-                (machine, woItems) -> {
-                    // PENDING: invoke the algorithm here per machine ...
-                }
-            );
             
             final List<WorkOrderInformation> workOrderItemsByWCDescription = workOrderItems
                     .stream()
                     .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                     .collect(Collectors.toList());
-            try {
-                final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
-                // PENDING: Make the following configurable:
-                showSaveDialog(wcDescription, htmlContent);
-            } catch (final IOException ex) {
-                showErrorMessage(ex.getMessage(), "ERROR");
-            }
+            
+            final Map<String, List<WorkOrderInformation>> workOrderItemsPerMachine = 
+                    Utils.workOrderItemsPerMachine(workOrderItemsByWCDescription);
+            
+            workOrderItemsPerMachine.forEach(
+                (machine, woItemsPerMachine) -> {
+                    // PENDING: invoke the algorithm here per machine ...
+                    /* 
+                        PENDING: the name of the machine needs to be included in the output file
+                        the showSaveDialog() method will need some changes.
+                    */
+                    
+                    System.out.printf("DEBUG-save About to save for: %s -(%d)\n\tItems: ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n", machine, woItemsPerMachine.size());
+                    woItemsPerMachine.forEach(System.out::println);
+                    System.out.println("DEBUG-save bye ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                    
+                    try {
+                        final String htmlContent = Utils.buildHtmlContent(wcDescription, woItemsPerMachine, priorities);
+                        // PENDING: Make the following configurable:
+                        showSaveDialog(wcDescription, machine, htmlContent);
+                    } catch (final IOException ex) {
+                        showErrorMessage(ex.getMessage(), "ERROR");
+                    }
+                }
+            );
         }, () -> {
             showErrorMessage("There are no Work Order information to build the plan", "ERROR");
         });
@@ -709,9 +722,9 @@ public class MainWindow extends JFrame {
             });
     }
     
-    private void showSaveDialog(final String workCenter, final String htmlContent) throws IOException {
+    private void showSaveDialog(final String workCenter, final String machine, final String htmlContent) throws IOException {
         final JFileChooser saveFileChooser = Utils
-                .createFileChooser(String.format("Save plan for '%s'", workCenter), "HTML files", ".html");
+                .createFileChooser(String.format("Save plan for '%s', machine: '%s'", workCenter, machine), "HTML files", ".html");
         final int option = saveFileChooser.showSaveDialog(this);
  
         if (option == JFileChooser.APPROVE_OPTION) {
@@ -725,7 +738,7 @@ public class MainWindow extends JFrame {
             final File parentOutputDirectory = fileToSave.getParentFile();
             copyStaticFilesToOutputDirectory(parentOutputDirectory);
             
-            showInfoMessage("Plan saved correctly", "Plan generated correctly");
+            // showInfoMessage("Plan saved correctly", "Plan generated correctly");
         }
     }
     
