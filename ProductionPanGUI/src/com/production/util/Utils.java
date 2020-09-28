@@ -287,7 +287,7 @@ public final class Utils {
         }
     }
     
-    @MissingTests
+    @Validated
     public static String getMachineFromWorkCenter(
             final Map<String, String> doblado
             , final Map<String, String> laserAndPunch

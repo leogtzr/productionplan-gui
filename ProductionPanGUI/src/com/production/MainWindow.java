@@ -36,6 +36,7 @@ import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NA
 import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
 import com.production.util.TemplateFileUtils;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
+import com.production.util.logging.Logging;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -622,21 +623,51 @@ public class MainWindow extends JFrame {
         
         final DefaultTableModel model = (DefaultTableModel) table.getModel();
         
+        /*
+@Validated
+public static String getMachineFromWorkCenter(
+    final Map<String, String> doblado
+    , final Map<String, String> laserAndPunch
+    , final String partNumber
+    , final String workCenter
+) {
+    // Nasty code ...
+    final String machine = 
+            workCenter.toUpperCase().trim().equalsIgnoreCase(DOBLADO)
+            ? doblado.getOrDefault(partNumber, "")
+            : laserAndPunch.getOrDefault(partNumber, "");
+    return machine;
+}
+        */
+        
          workOrderItems
                  .stream()
                  .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                  .forEach(item -> {
                      // TODO: invoke the new method here ... which new method?
                      // TODO: fix this.
-                    final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
-                    final Object[] data = {
-                        item.getPartNumber()
-                        , item.getRunHours()
-                        , item.getSetupHours()
-                        , item.getQty()
-                        , machine
-                    };
-                    model.addRow(data);
+                    // final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
+                    final String machine = Utils.getMachineFromWorkCenter(
+                        this.dobladoPartMachineInfo
+                        , this.laserAndPunchPartMachineInfo
+                        , item.getPartNumber()
+                        , wcDescription
+                    );
+                    // PENDING: check this with Miriam.
+                    if (!machine.isBlank()) {
+                        Logging.warn("Couldn't find machine for: %s with %s workCenter", item.getPartNumber(), wcDescription);
+                        final Object[] data = {
+                            item.getPartNumber()
+                            , item.getRunHours()
+                            , item.getSetupHours()
+                            , item.getQty()
+                            , machine
+                        };
+                        model.addRow(data);
+                    }
+                    // PENDING: What should we do if the result is empty?
+                    // PENDING: Ask Miriam about this.
+                    
                  });
     }
     

@@ -1501,6 +1501,12 @@ public class UtilsTest {
                  "lsr2",
                  "LASER",
                  "2"
+             ),
+            new testCase(
+                 Map.of("d1", "3", "d2", "2", "d3", "4"), Map.of("lsr1", "4", "lsr2", "2", "lsr3", "3"), // maps
+                 "lsr3",
+                 "LASER",
+                 "3"
              )
         );
         
