@@ -264,14 +264,13 @@ public final class Utils {
     }
     
     /**
-     * @param workOrderItems
+     * @param workOrderItems items
      * @return a map containing a list of WorkOrderInformation items as values, and the machine as key.
      */
     @Validated
     public static Map<String, List<WorkOrderInformation>> workOrderItemsPerMachine(
             final List<WorkOrderInformation> workOrderItems) {
         final Map<String, List<WorkOrderInformation>> machines = new LinkedHashMap<>();
-        
         workOrderItems.stream()
                 .filter(woInfo -> !woInfo.getMachine().isBlank())
                 .forEach(woInfo -> machines.computeIfAbsent(woInfo.getMachine(), items -> new ArrayList<>()).add(woInfo));

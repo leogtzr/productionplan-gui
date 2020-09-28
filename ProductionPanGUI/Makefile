@@ -16,3 +16,9 @@ r:
 
 b:
 	ant -Dnb.internal.action.name=rebuild clean jar
+
+check:
+	ant -Dnb.internal.action.name=test
+
+javadoc:
+	ant -Dnb.internal.action.name=javadoc
