@@ -673,7 +673,12 @@ public class MainWindow extends JFrame {
         // PENDING: separate per machine and generate N files.
         this.workOrderInformationItems.ifPresentOrElse(workOrderItems -> {
             
-            
+            final Map<String, List<WorkOrderInformation>> workOrderItemsPerMachine = Utils.workOrderItemsPerMachine(workOrderItems);
+            workOrderItemsPerMachine.forEach(
+                (machine, woItems) -> {
+                    // PENDING: invoke the algorithm here per machine ...
+                }
+            );
             
             final List<WorkOrderInformation> workOrderItemsByWCDescription = workOrderItems
                     .stream()

@@ -281,11 +281,8 @@ public final class Utils {
     @Validated
     public static Map<String, List<WorkOrderInformation>> workOrderItemsPerPartNumber(
             final List<WorkOrderInformation> workOrderItems) {
-        
         final Map<String, List<WorkOrderInformation>> parts = new LinkedHashMap<>();
-        
         workOrderItems.forEach(woInfo -> parts.computeIfAbsent(woInfo.getPartNumber(), items -> new ArrayList<>()).add(woInfo));
-        
         return parts;
     }
     

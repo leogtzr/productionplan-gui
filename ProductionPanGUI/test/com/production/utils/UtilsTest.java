@@ -1510,10 +1510,8 @@ public class UtilsTest {
              )
         );
         
-        for (final testCase tc : tests) {
-            final String got = Utils.getMachineFromWorkCenter(tc.doblado, tc.laserAndPunch, tc.partNumber, tc.workCenter);
-            Assert.assertEquals(tc.want, got);
-        }
+        tests.forEach(tc -> Assert.assertEquals(tc.want, 
+                Utils.getMachineFromWorkCenter(tc.doblado, tc.laserAndPunch, tc.partNumber, tc.workCenter)));
         
     }
     
@@ -1559,10 +1557,7 @@ public class UtilsTest {
             )
         );
         
-        for (final testCase tc : tests) {
-            final Map<String, List<WorkOrderInformation>> got = Utils.workOrderItemsPerMachine(tc.workOrderInformationItems);
-            Assert.assertEquals(tc.want, got);
-        }
+        tests.forEach(tc -> Assert.assertEquals(tc.want, Utils.workOrderItemsPerMachine(tc.workOrderInformationItems)));
         
     }
 
