@@ -1516,5 +1516,54 @@ public class UtilsTest {
         }
         
     }
+    
+    @Test
+    public void shouldReturnWorkOrderItemsPerMachine() {
+        class testCase {
+            List<WorkOrderInformation> workOrderInformationItems;
+            Map<String, List<WorkOrderInformation>> want;
+
+            testCase(List<WorkOrderInformation> workOrderInformationItems, Map<String, List<WorkOrderInformation>> want) {
+                this.workOrderInformationItems = workOrderInformationItems;
+                this.want = want;
+            }
+            
+        }
+        
+        final List<testCase> tests = List.of(
+            new testCase(
+                List.of(
+                    new WorkOrderInformation.Builder("p1", "o1").machine("1").build(),
+                    new WorkOrderInformation.Builder("p2", "o2").machine("1").build(),
+                    new WorkOrderInformation.Builder("p3", "o3").machine("2").build(),
+                    new WorkOrderInformation.Builder("p4", "o4").machine("2").build(),
+                    new WorkOrderInformation.Builder("p5", "o5").machine("2").build(),
+                    new WorkOrderInformation.Builder("p6", "o6").machine("3").build()
+                ),
+                Map.of(
+                    "1", List.of(
+                        new WorkOrderInformation.Builder("p1", "o1").machine("1").build(),
+                        new WorkOrderInformation.Builder("p2", "o2").machine("1").build()
+                    ),
+                    "2", List.of(
+                        new WorkOrderInformation.Builder("p3", "o3").machine("2").build(),
+                        new WorkOrderInformation.Builder("p4", "o4").machine("2").build(),
+                        new WorkOrderInformation.Builder("p5", "o5").machine("2").build()
+                    ),
+                    "3", List.of(new WorkOrderInformation.Builder("p6", "o6").machine("3").build())
+                )
+            ),
+            new testCase(
+                List.of(),
+                Map.of()
+            )
+        );
+        
+        for (final testCase tc : tests) {
+            final Map<String, List<WorkOrderInformation>> got = Utils.workOrderItemsPerMachine(tc.workOrderInformationItems);
+            Assert.assertEquals(tc.want, got);
+        }
+        
+    }
 
 }

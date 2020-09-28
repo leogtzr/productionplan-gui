@@ -659,7 +659,10 @@ public class MainWindow extends JFrame {
             this.updateTableWithWCDescription(selectedWorkCenter, workOrderItems, this.workOrderTable);
         });
     }//GEN-LAST:event_wcDescriptionsActionPerformed
-
+    
+    //          partNumber, 
+    // private Map<String, List<WorkOrderInformation>> 
+    
     private void generatePlanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePlanBtnActionPerformed
         final DefaultTableModel model = (DefaultTableModel) selectedPrioritiesTable.getModel();
         
@@ -669,6 +672,9 @@ public class MainWindow extends JFrame {
         
         // PENDING: separate per machine and generate N files.
         this.workOrderInformationItems.ifPresentOrElse(workOrderItems -> {
+            
+            
+            
             final List<WorkOrderInformation> workOrderItemsByWCDescription = workOrderItems
                     .stream()
                     .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
