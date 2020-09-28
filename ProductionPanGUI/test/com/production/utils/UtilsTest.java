@@ -1463,5 +1463,52 @@ public class UtilsTest {
         tests.forEach(tc -> Assert.assertEquals(Utils.progressFactor(tc.orders), tc.want, 0.00001));
         
     }
+    
+    @Test
+    public void shouldGetMachineFromWorkCenter() {
+        
+        class testCase {
+            Map<String, String> doblado;
+            Map<String, String> laserAndPunch;
+            String partNumber;
+            String workCenter;
+            String want;
+
+            testCase(Map<String, String> doblado, Map<String, String> laserAndPunch, String partNumber, String workCenter, String want) {
+                this.doblado = doblado;
+                this.laserAndPunch = laserAndPunch;
+                this.partNumber = partNumber;
+                this.workCenter = workCenter;
+                this.want = want;
+            }
+        }
+        
+        final List<testCase> tests = List.of(
+             new testCase(
+                     Map.of("d1", "3", "d2", "2"), Map.of("lsr1", "4", "lsr2", "2"), // maps
+                     "d1",
+                     "doblado",
+                     "3"
+             ),
+            new testCase(
+                 Map.of("d1", "3", "d2", "2"), Map.of("lsr1", "4", "lsr2", "2"), // maps
+                 "x",
+                 "laser",
+                 ""
+             ),
+            new testCase(
+                 Map.of("d1", "3", "d2", "2"), Map.of("lsr1", "4", "lsr2", "2"), // maps
+                 "lsr2",
+                 "LASER",
+                 "2"
+             )
+        );
+        
+        for (final testCase tc : tests) {
+            final String got = Utils.getMachineFromWorkCenter(tc.doblado, tc.laserAndPunch, tc.partNumber, tc.workCenter);
+            Assert.assertEquals(tc.want, got);
+        }
+        
+    }
 
 }

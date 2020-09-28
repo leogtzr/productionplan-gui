@@ -47,6 +47,7 @@ import static com.production.domain.Day.*;
 import com.production.domain.efficiency.EfficiencyInformation;
 import com.production.domain.efficiency.Progress;
 import com.production.util.html.HTMLFormat;
+import com.production.util.logging.Logging;
 import java.nio.file.Path;
 
 import java.util.Collections;
@@ -722,17 +723,18 @@ public final class Utils {
     public static String getMachineFromMachineInfoMaps(
             final String workCenter
             , final String partNumber
-            , final Map<String, String> doblado
-            , final Map<String, String> laserAndPunch
+            , final Map<String, String> dobladoPartInformation
+            , final Map<String, String> laserAndPunchPartInformation
     ) {
         final String sanitizedWorkCenter = sanitizeWorkCenterName(workCenter);
         String result = "";
         switch (sanitizedWorkCenter) {
             case Constants.DOBLADO:
-                result = doblado.getOrDefault(partNumber, "");
+                result = dobladoPartInformation.getOrDefault(partNumber, "");
                 break;
             case Constants.PUNZONADO:
-                result = laserAndPunch.getOrDefault(partNumber, "");
+            case Constants.LASER:
+                result = laserAndPunchPartInformation.getOrDefault(partNumber, "");
                 break;
         }
         return result;

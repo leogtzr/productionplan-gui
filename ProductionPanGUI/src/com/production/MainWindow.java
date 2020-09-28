@@ -53,6 +53,7 @@ public class MainWindow extends JFrame {
     private File fabLoadFilePath = null;
     private File ageByWCFilePath = null;
     private String jarPath = null;
+    // TODO: is HashMap the right implementation? or should I use an ordered one?
     private Map<String, String> dobladoPartMachineInfo = new HashMap<>();
     private Map<String, String> laserAndPunchPartMachineInfo = new HashMap<>();
     private Optional<List<WorkOrderInformation>> workOrderInformationItems = Optional.empty();
@@ -130,6 +131,7 @@ public class MainWindow extends JFrame {
         optionsDialog = new javax.swing.JDialog();
         saveOptionsButton = new javax.swing.JButton();
         aboutDialog = new javax.swing.JDialog();
+        jLabel1 = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         workOrderTable = new javax.swing.JTable();
@@ -186,17 +188,26 @@ public class MainWindow extends JFrame {
         aboutDialog.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         aboutDialog.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
         aboutDialog.setResizable(false);
-        aboutDialog.setSize(new java.awt.Dimension(500, 500));
+        aboutDialog.setSize(new java.awt.Dimension(384, 391));
+
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel1.setText("Production Plan v.1.0");
 
         javax.swing.GroupLayout aboutDialogLayout = new javax.swing.GroupLayout(aboutDialog.getContentPane());
         aboutDialog.getContentPane().setLayout(aboutDialogLayout);
         aboutDialogLayout.setHorizontalGroup(
             aboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 741, Short.MAX_VALUE)
+            .addGroup(aboutDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(216, Short.MAX_VALUE))
         );
         aboutDialogLayout.setVerticalGroup(
             aboutDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 471, Short.MAX_VALUE)
+            .addGroup(aboutDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(361, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -616,6 +627,7 @@ public class MainWindow extends JFrame {
                  .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                  .forEach(item -> {
                      // TODO: invoke the new method here ... which new method?
+                     // TODO: fix this.
                     final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
                     final Object[] data = {
                         item.getPartNumber()
@@ -634,7 +646,7 @@ public class MainWindow extends JFrame {
         final String selectedWorkCenter = this.wcDescriptions.getSelectedItem().toString();
         this.workOrderInformationItems.ifPresent(workOrderItems -> {
             this.cleanTable(this.workOrderTable);
-            updateTableWithWCDescription(selectedWorkCenter, workOrderItems, this.workOrderTable);
+            this.updateTableWithWCDescription(selectedWorkCenter, workOrderItems, this.workOrderTable);
         });
     }//GEN-LAST:event_wcDescriptionsActionPerformed
 
@@ -645,6 +657,7 @@ public class MainWindow extends JFrame {
         
         final List<Priority> priorities = buildPrioritiesFromTable(model);
         
+        // PENDING: separate per machine
         this.workOrderInformationItems.ifPresentOrElse(workOrderItems -> {
             final List<WorkOrderInformation> workOrderItemsByWCDescription = workOrderItems
                     .stream()
@@ -724,7 +737,7 @@ public class MainWindow extends JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (final javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
@@ -750,6 +763,7 @@ public class MainWindow extends JFrame {
     private javax.swing.JMenuItem findFilesInCurrentPathMenuItem;
     private javax.swing.JButton generatePlanBtn;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenuBar menuBar;
