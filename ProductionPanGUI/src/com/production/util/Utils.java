@@ -7,7 +7,7 @@ import com.production.domain.FabLoadByWCFields;
 import com.production.domain.Priority;
 import com.production.domain.SimpleWorkOrderInformation;
 import com.production.domain.Turn;
-import com.production.domain.WorkCenterTurns;
+import com.production.domain.WorkCenter;
 import com.production.domain.WorkOrderInformation;
 import com.production.lang.MissingTests;
 import com.production.lang.Validated;
@@ -224,7 +224,7 @@ public final class Utils {
     
     @Validated
     public static int numberOfTurnsFromWorkCenter(final String workCenterName) {
-        final WorkCenterTurns wc = WorkCenterTurns.valueOf(sanitizeWorkCenterName(workCenterName));
+        final WorkCenter wc = WorkCenter.valueOf(sanitizeWorkCenterName(workCenterName));
         return wc.turns();
     }
     
@@ -861,6 +861,8 @@ public final class Utils {
         orders.forEach(System.out::println);
         System.out.println("DEBUG ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/>");
     }
+    
+    
     
     private Utils() {}
     

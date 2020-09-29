@@ -678,38 +678,51 @@ public class MainWindow extends JFrame {
         final DefaultTableModel model = (DefaultTableModel) table.getModel();
         
         final StringBuilder warnText = new StringBuilder();
+        final boolean usesTurns = Utils.numberOfTurnsFromWorkCenter(wcDescription) > 0;
         
-         workOrderItems
-                 .stream()
-                 .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
-                 .forEach(item -> {
-                    // Old code.
-                    // final String machine = this.dobladoPartMachineInfo.getOrDefault(item.getPartNumber(), "");
-                    final String machine = Utils.getMachineFromWorkCenter(
-                        this.dobladoPartMachineInfo
-                        , this.laserAndPunchPartMachineInfo
-                        , item.getPartNumber()
-                        , wcDescription
-                    );
-                    // PENDING: check this with Miriam.
-                    if (!machine.isBlank()) {
-                        final Object[] data = {
-                            item.getPartNumber()
-                            , item.getRunHours()
-                            , item.getSetupHours()
-                            , item.getQty()
-                            , machine
-                        };
-                        model.addRow(data);
-                    } else {
-                        if (warnText.toString().isEmpty()) {
-                            warnText.append("The following part numbers will NOT show up in the report, they don't");
-                            warnText.append(" have a machine associated for its work center\n\n");
-                        }
-                        Logging.warn("Couldn't find machine for: %s part with %s work center, it will not show up in the report", item.getPartNumber(), wcDescription);
-                        warnText.append(String.format("%s, %s\n", item.getPartNumber(), wcDescription));
-                    }
-                 });
+        // PENDING: the following code can be improved....
+        workOrderItems
+            .stream()
+            .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
+            .forEach(item -> {
+
+               if (usesTurns) {
+                   final String machine = Utils.getMachineFromWorkCenter(
+                       this.dobladoPartMachineInfo
+                       , this.laserAndPunchPartMachineInfo
+                       , item.getPartNumber()
+                       , wcDescription
+                   );
+                   if (!machine.isBlank()) {
+                       final Object[] data = {
+                           item.getPartNumber()
+                           , item.getRunHours()
+                           , item.getSetupHours()
+                           , item.getQty()
+                           , machine
+                       };
+                       model.addRow(data);
+                   } else {
+                       if (warnText.toString().isEmpty()) {
+                           warnText.append("The following part numbers will NOT show up in the report, they don't");
+                           warnText.append(" have a machine associated for its work center\n\n");
+                       }
+                       Logging.warn("Couldn't find machine for: %s part with %s work center, it will not show up in the report", item.getPartNumber(), wcDescription);
+                       warnText.append(String.format("%s, %s\n", item.getPartNumber(), wcDescription));
+                   }
+               } else {
+                   final Object[] data = {
+                       item.getPartNumber()
+                       , item.getRunHours()
+                       , item.getSetupHours()
+                       , item.getQty()
+                       , ""
+                   };
+                   model.addRow(data);
+               }
+
+
+            });
          if (!warnText.toString().isEmpty()) {
              warnText.append("\n\nPlease make sure these part have a machine associated in the CSV files.\n");
          }
@@ -730,19 +743,14 @@ public class MainWindow extends JFrame {
         }
     }//GEN-LAST:event_wcDescriptionsActionPerformed
     
-    //          partNumber, 
-    // private Map<String, List<WorkOrderInformation>> 
-    
     private void generatePlanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePlanBtnActionPerformed
         final DefaultTableModel model = (DefaultTableModel) selectedPrioritiesTable.getModel();
         
         final String wcDescription = this.wcDescriptions.getSelectedItem().toString();
-        
         final List<Priority> priorities = buildPrioritiesFromTable(model);
         
-        // PENDING: separate per machine and generate N files.
+        // PENDING: separate per machine and generate N files if the file handles machines.
         this.workOrderInformationItems.ifPresentOrElse(workOrderItems -> {
-            
             
             final List<WorkOrderInformation> workOrderItemsByWCDescription = workOrderItems
                     .stream()
@@ -785,7 +793,6 @@ public class MainWindow extends JFrame {
                     final Path staticFilePathToCopyToUserDirectory = TemplateFileUtils.getTemplateFilePath(file);
                     TemplateFileUtils.copyFileFromTemplatesDirectoryTo(outputDirectory, staticFilePathToCopyToUserDirectory.toFile());
                 } catch (final IOException ex) {
-                    ex.printStackTrace();
                     showErrorMessage(ex.getMessage(), "ERROR");
                 }
             });
