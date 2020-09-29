@@ -35,7 +35,6 @@ import static com.production.util.Constants.DOBLADO_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
 import com.production.util.TemplateFileUtils;
-import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import com.production.util.logging.Logging;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -43,6 +42,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Properties;
+
+import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
+
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 
@@ -95,7 +97,8 @@ public class MainWindow extends JFrame {
     private void loadDobladoPartMachineInformation() {
         final File partMachineCSVFile = new File(DOBLADO_PART_MACHINE_FILE_NAME);
         if (!partMachineCSVFile.exists()) {
-            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", DOBLADO_PART_MACHINE_FILE_NAME), "Warning ... ");
+            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", 
+                    DOBLADO_PART_MACHINE_FILE_NAME), "Warning ... ");
             return;
         }
             
@@ -109,7 +112,8 @@ public class MainWindow extends JFrame {
     private void loadLaserAndPunchPartMachineInformation() {
         final File partMachineCSVFile = new File(LASER_AND_PUNCH_PART_MACHINE_FILE_NAME);
         if (!partMachineCSVFile.exists()) {
-            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", LASER_AND_PUNCH_PART_MACHINE_FILE_NAME), "Warning ... ");
+            showWarningMessage(String.format("El archivo '%s' no fue encontrado, los comentarios o máquinas no serán cargados.", 
+                    LASER_AND_PUNCH_PART_MACHINE_FILE_NAME), "Warning ... ");
             return;
         }
             
@@ -133,6 +137,11 @@ public class MainWindow extends JFrame {
         saveOptionsButton = new javax.swing.JButton();
         aboutDialog = new javax.swing.JDialog();
         jLabel1 = new javax.swing.JLabel();
+        infoDialog = new javax.swing.JDialog();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        infoTextPane = new javax.swing.JTextPane();
+        okInfoDialogButton = new javax.swing.JButton();
+        infoLabel = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         workOrderTable = new javax.swing.JTable();
@@ -209,6 +218,52 @@ public class MainWindow extends JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addContainerGap(361, Short.MAX_VALUE))
+        );
+
+        infoDialog.setTitle("Warning");
+        infoDialog.setResizable(false);
+        infoDialog.setSize(new java.awt.Dimension(888, 493));
+
+        infoTextPane.setEditable(false);
+        infoTextPane.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        jScrollPane3.setViewportView(infoTextPane);
+
+        okInfoDialogButton.setMnemonic('O');
+        okInfoDialogButton.setText("OK");
+        okInfoDialogButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okInfoDialogButtonActionPerformed(evt);
+            }
+        });
+
+        infoLabel.setText("Warning:");
+
+        javax.swing.GroupLayout infoDialogLayout = new javax.swing.GroupLayout(infoDialog.getContentPane());
+        infoDialog.getContentPane().setLayout(infoDialogLayout);
+        infoDialogLayout.setHorizontalGroup(
+            infoDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(infoDialogLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(infoDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, infoDialogLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(okInfoDialogButton))
+                    .addGroup(infoDialogLayout.createSequentialGroup()
+                        .addComponent(infoLabel)
+                        .addGap(0, 803, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        infoDialogLayout.setVerticalGroup(
+            infoDialogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(infoDialogLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(infoLabel)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(okInfoDialogButton)
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -475,9 +530,8 @@ public class MainWindow extends JFrame {
         Utils.updateStatusBar(this.statusLabel, this.fabLoadFilePath, this.ageByWCFilePath);
     }//GEN-LAST:event_openFabLoadByWCMenuItemActionPerformed
 
-    private void reconcileInformationAndUpdateTable(
-            final File file
-            , final List<WorkOrderInformation> workOrderItems) throws IOException, InvalidFormatException {
+    private void reconcileInformationAndUpdateTable(final File file, final List<WorkOrderInformation> workOrderItems) 
+            throws IOException, InvalidFormatException {
         Utils.reconcileInformationFromAgeFile(file.getAbsolutePath(), workOrderItems);
         this.updateTable(workOrderItems, this.workOrderTable);
         Utils.copyWorkOrderItems(this.backupWorkOrderItems, workOrderItems);
@@ -623,6 +677,8 @@ public class MainWindow extends JFrame {
         
         final DefaultTableModel model = (DefaultTableModel) table.getModel();
         
+        final StringBuilder warnText = new StringBuilder();
+        
          workOrderItems
                  .stream()
                  .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
@@ -637,7 +693,6 @@ public class MainWindow extends JFrame {
                     );
                     // PENDING: check this with Miriam.
                     if (!machine.isBlank()) {
-                        Logging.warn("Couldn't find machine for: %s with %s workCenter", item.getPartNumber(), wcDescription);
                         final Object[] data = {
                             item.getPartNumber()
                             , item.getRunHours()
@@ -646,19 +701,33 @@ public class MainWindow extends JFrame {
                             , machine
                         };
                         model.addRow(data);
+                    } else {
+                        if (warnText.toString().isEmpty()) {
+                            warnText.append("The following part numbers will NOT show up in the report, they don't");
+                            warnText.append(" have a machine associated for its work center\n\n");
+                        }
+                        Logging.warn("Couldn't find machine for: %s part with %s work center, it will not show up in the report", item.getPartNumber(), wcDescription);
+                        warnText.append(String.format("%s, %s\n", item.getPartNumber(), wcDescription));
                     }
-                    
                  });
+         if (!warnText.toString().isEmpty()) {
+             warnText.append("\n\nPlease make sure these part have a machine associated in the CSV files.\n");
+         }
+         infoTextPane.setText(warnText.toString());
     }
     
     private void wcDescriptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wcDescriptionsActionPerformed
         this.cleanTable(this.selectedPrioritiesTable);
+        this.infoTextPane.setText("");
         
         final String selectedWorkCenter = this.wcDescriptions.getSelectedItem().toString();
         this.workOrderInformationItems.ifPresent(workOrderItems -> {
             this.cleanTable(this.workOrderTable);
             this.updateTableWithWCDescription(selectedWorkCenter, workOrderItems, this.workOrderTable);
         });
+        if (!this.infoTextPane.getText().isEmpty()) {
+            this.infoDialog.setVisible(true);
+        }
     }//GEN-LAST:event_wcDescriptionsActionPerformed
     
     //          partNumber, 
@@ -761,6 +830,10 @@ public class MainWindow extends JFrame {
         aboutDialog.setVisible(true);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
+    private void okInfoDialogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okInfoDialogButtonActionPerformed
+        this.infoDialog.setVisible(false);
+    }//GEN-LAST:event_okInfoDialogButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -797,11 +870,16 @@ public class MainWindow extends JFrame {
     private javax.swing.JMenuItem findFilesInCurrentPathMenuItem;
     private javax.swing.JButton generatePlanBtn;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JDialog infoDialog;
+    private javax.swing.JLabel infoLabel;
+    private javax.swing.JTextPane infoTextPane;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JButton moveToSelectedPrioritiesButton;
+    private javax.swing.JButton okInfoDialogButton;
     private javax.swing.JMenuItem openAgeByWCFileItem;
     private javax.swing.JMenuItem openFabLoadByWCMenuItem;
     private javax.swing.JMenu operationsMenu;

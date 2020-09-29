@@ -47,7 +47,6 @@ import static com.production.domain.Day.*;
 import com.production.domain.efficiency.EfficiencyInformation;
 import com.production.domain.efficiency.Progress;
 import com.production.util.html.HTMLFormat;
-import com.production.util.logging.Logging;
 import java.nio.file.Path;
 
 import java.util.Collections;
