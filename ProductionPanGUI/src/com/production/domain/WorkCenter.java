@@ -15,11 +15,11 @@ public enum WorkCenter {
     ;
 
     private final int turns;
-    private boolean usesCSV = false;
+    private boolean usesMachines = false;
 
-    WorkCenter(int turns, boolean usesCSV) {
+    WorkCenter(int turns, boolean usesMachines) {
         this.turns = turns;
-        this.usesCSV = usesCSV;
+        this.usesMachines = usesMachines;
     }
 
     WorkCenter(final int turns) {
@@ -30,8 +30,8 @@ public enum WorkCenter {
         return this.turns;
     }
 
-    public boolean usesCSV() {
-        return usesCSV;
+    public boolean usesMachines() {
+        return this.usesMachines;
     }
 
 }

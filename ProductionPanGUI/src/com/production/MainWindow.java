@@ -44,6 +44,8 @@ import java.nio.file.Files;
 import java.util.Properties;
 
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
+import static com.production.util.Utils.numberOfTurnsFromWorkCenter;
+import static com.production.util.Utils.createFileChooser;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -56,22 +58,21 @@ public class MainWindow extends JFrame {
     private File fabLoadFilePath = null;
     private File ageByWCFilePath = null;
     private String jarPath = null;
-    // TODO: is HashMap the right implementation? or should I use an ordered one?
     private Map<String, String> dobladoPartMachineInfo = new HashMap<>();
     private Map<String, String> laserAndPunchPartMachineInfo = new HashMap<>();
     private Optional<List<WorkOrderInformation>> workOrderInformationItems = Optional.empty();
     private final List<WorkOrderInformation> backupWorkOrderItems = new ArrayList<>();
     private final Properties configProps = new Properties();
     
-    public MainWindow() {
+    public MainWindow(final String saveDirectory) {
         initComponents();
         Utils.updateStatusBar(this.statusLabel, this.fabLoadFilePath, this.ageByWCFilePath);
         loadDobladoPartMachineInformation();
         loadLaserAndPunchPartMachineInformation();
-        loadPropertiesFile(configProps);
+        loadPropertiesFile(configProps, saveDirectory);
     }
     
-    private void loadPropertiesFile(final Properties properties) {
+    private void loadPropertiesFile(final Properties properties, final String saveDirectory) {
         try {
             final String jarFilepath = MainWindow.class.getProtectionDomain().getCodeSource().getLocation().getPath();
             final File jf = new File(jarFilepath);
@@ -84,6 +85,7 @@ public class MainWindow extends JFrame {
                 try (final InputStream inputStream = new FileInputStream(configFile.getAbsolutePath())) {
                     properties.load(inputStream);
                 }
+                properties.put("saveDirectory", saveDirectory);
             } else {
                 showErrorMessage(
                     String.format("%s not found", Constants.CONFIG_PROPERTIES_FILE_NAME), "ERROR loading configuration."
@@ -757,30 +759,38 @@ public class MainWindow extends JFrame {
                     .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
                     .collect(Collectors.toList());
             
-            final Map<String, List<WorkOrderInformation>> workOrderItemsPerMachine = 
-                    Utils.workOrderItemsPerMachine(workOrderItemsByWCDescription);
+            final int numberOfTurns = numberOfTurnsFromWorkCenter(wcDescription);
             
-            workOrderItemsPerMachine.forEach(
-                (machine, woItemsPerMachine) -> {
-                    // PENDING: invoke the algorithm here per machine ...
-                    /* 
-                        PENDING: the name of the machine needs to be included in the output file
-                        the showSaveDialog() method will need some changes.
-                    */
-                    
-                    System.out.printf("DEBUG-save About to save for: %s -(%d)\n\tItems: ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n", machine, woItemsPerMachine.size());
-                    woItemsPerMachine.forEach(System.out::println);
-                    System.out.println("DEBUG-save bye ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                    
-                    try {
-                        final String htmlContent = Utils.buildHtmlContent(wcDescription, woItemsPerMachine, priorities);
-                        // PENDING: Make the following configurable:
-                        showSaveDialog(wcDescription, machine, htmlContent);
-                    } catch (final IOException ex) {
-                        showErrorMessage(ex.getMessage(), "ERROR");
-                    }
+            try {
+                // PENDING: wrap the following code in a try-catch...
+                if (numberOfTurns == 0) {
+                    final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
+                    saveFiles(wcDescription, htmlContent);
+                } else {
+                    final Map<String, List<WorkOrderInformation>> workOrderItemsPerMachine = Utils.workOrderItemsPerMachine(workOrderItemsByWCDescription);
+
+                    workOrderItemsPerMachine.forEach(
+                        (machine, woItemsPerMachine) -> {
+                            
+                            System.out.printf("DEBUG-save About to save for: %s -(%d)\n\tItems: ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n", machine, woItemsPerMachine.size());
+                            woItemsPerMachine.forEach(System.out::println);
+                            System.out.println("DEBUG-save bye ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+                            try {
+                                final String htmlContent = Utils.buildHtmlContent(wcDescription, woItemsPerMachine, priorities);
+                                saveFiles(wcDescription, machine, htmlContent);
+                            } catch (final IOException ex) {
+                                showErrorMessage(ex.getMessage(), "ERROR");
+                            }
+                        }
+                    );
                 }
-            );
+            } catch (final IOException ex) {
+                showErrorMessage(ex.getMessage(), "ERROR");
+            }
+            
+            
+            
         }, () -> {
             showErrorMessage("There are no Work Order information to build the plan", "ERROR");
         });
@@ -798,23 +808,48 @@ public class MainWindow extends JFrame {
             });
     }
     
-    private void showSaveDialog(final String workCenter, final String machine, final String htmlContent) throws IOException {
-        final JFileChooser saveFileChooser = Utils
-                .createFileChooser(String.format("Save plan for '%s', machine: '%s'", workCenter, machine), "HTML files", ".html");
+    private void saveFiles(final File fileToSave, final String htmlContent) throws IOException {
+        System.out.printf("1) File to save: [%s]\n", fileToSave); 
+        try (final BufferedWriter newBufferedWriter = Files.newBufferedWriter(fileToSave.toPath(), StandardCharsets.UTF_8)) {
+            newBufferedWriter.write(htmlContent);
+        }
+
+        final File parentOutputDirectory = fileToSave.getParentFile();
+        copyStaticFilesToOutputDirectory(parentOutputDirectory);
+    }
+    
+    private void saveFiles(final File fileToSave, final String machine, final String htmlContent) throws IOException {
+        System.out.printf("2) File to save: [%s]\n", fileToSave);
+        try (final BufferedWriter newBufferedWriter = Files.newBufferedWriter(fileToSave.toPath(), StandardCharsets.UTF_8)) {
+            newBufferedWriter.write(htmlContent);
+        }
+
+        final File parentOutputDirectory = fileToSave.getParentFile();
+        copyStaticFilesToOutputDirectory(parentOutputDirectory);
+    }
+    
+    private void saveFiles(final String workCenter, final String htmlContent) 
+            throws IOException {
+        final JFileChooser saveFileChooser = createFileChooser(String.format("Save plan for '%s'", workCenter), "HTML files", ".html");
         final int option = saveFileChooser.showSaveDialog(this);
  
         if (option == JFileChooser.APPROVE_OPTION) {
             final File fileToSave = saveFileChooser.getSelectedFile();
-            
-            // Write the file
-            try (final BufferedWriter newBufferedWriter = Files.newBufferedWriter(fileToSave.toPath(), StandardCharsets.UTF_8)) {
-                newBufferedWriter.write(htmlContent);
-            }
-
-            final File parentOutputDirectory = fileToSave.getParentFile();
-            copyStaticFilesToOutputDirectory(parentOutputDirectory);
-            
-            // showInfoMessage("Plan saved correctly", "Plan generated correctly");
+            saveFiles(fileToSave, htmlContent);
+            showInfoMessage("Plan saved correctly", "Plan generated correctly");
+        }
+    }
+        
+    private void saveFiles(final String workCenter, final String machine, final String htmlContent) 
+            throws IOException {
+        final JFileChooser saveFileChooser = createFileChooser(
+                String.format("Save plan for '%s', machine: '%s'", workCenter, machine), "HTML files", ".html");
+        final int option = saveFileChooser.showSaveDialog(this);
+ 
+        if (option == JFileChooser.APPROVE_OPTION) {
+            final File fileToSave = saveFileChooser.getSelectedFile();
+            saveFiles(fileToSave, htmlContent);
+            showInfoMessage("Plan saved correctly", "Plan generated correctly");
         }
     }
     
@@ -845,6 +880,15 @@ public class MainWindow extends JFrame {
      * @param args the command line arguments
      */
     public static void main(final String[] args) {
+        
+        if (args.length == 0) {
+            throw new RuntimeException("error: report file directory missing");
+        }
+        
+        final String saveDirectory = args[0];
+        
+        Logging.info("Reports will be saved to: %s", saveDirectory);
+        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -865,7 +909,7 @@ public class MainWindow extends JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MainWindow().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new MainWindow(saveDirectory).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

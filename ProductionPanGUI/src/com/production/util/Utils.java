@@ -321,7 +321,6 @@ public final class Utils {
         final int numberOfTurns = numberOfTurnsFromWorkCenter(workCenter);
         
         if (numberOfTurns == 0) {
-            
             final List<WorkOrderInformation> planItems = buildPlanList(workCenter, workOrderItems, priorities);
             final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("list-template.html");
 
