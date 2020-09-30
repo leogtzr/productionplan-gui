@@ -31,9 +31,6 @@ import java.util.stream.Collectors;
 import java.util.Collections;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
-import static com.production.util.Constants.DOBLADO_PART_MACHINE_FILE_NAME;
-import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME;
-import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
 import com.production.util.TemplateFileUtils;
 import com.production.util.logging.Logging;
 import java.io.BufferedWriter;
@@ -42,11 +39,14 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Properties;
+import java.util.Date;
 
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import static com.production.util.Utils.numberOfTurnsFromWorkCenter;
 import static com.production.util.Utils.createFileChooser;
-import java.util.Date;
+import static com.production.util.Constants.DOBLADO_PART_MACHINE_FILE_NAME;
+import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME;
+import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -517,8 +517,6 @@ public class MainWindow extends JFrame {
     }
     
     private void openFabLoadByWCMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFabLoadByWCMenuItemActionPerformed
-        // Note, the following code can be changed to use something like:
-        // new JFileChooser(System.getProperty("user.home"))
         final JFileChooser jfc = Utils.genericXLSFileChooser();
         int returnValue = jfc.showOpenDialog(null);
         
@@ -724,7 +722,6 @@ public class MainWindow extends JFrame {
                    model.addRow(data);
                }
 
-
             });
          if (!warnText.toString().isEmpty()) {
              warnText.append("\n\nPlease make sure these part have a machine associated in the CSV files.\n");
@@ -755,21 +752,20 @@ public class MainWindow extends JFrame {
         
         if (autoSave) {
             final Path outputDirectoryPlan = Paths.get(saveDirectory);
-            Files.createDirectory(outputDirectoryPlan);
+            outputDirectoryPlan.toFile().mkdir();
             final Path planFile = Utils.buildOutputPlanFile(workCenter, saveDirectory, new Date());
             saveFiles(planFile.toFile(), htmlContent);
             showInfoMessage("Plan saved correctly", "Plan generated correctly");
         } else {
-            final JFileChooser saveFileChooser = 
-                createFileChooser(String.format("Save plan for '%s'", workCenter), configProps.getProperty("saveDirectory"));
-            
+            final JFileChooser saveFileChooser = createFileChooser(String.format("Save plan for '%s'", workCenter), saveDirectory);
             final int option = saveFileChooser.showSaveDialog(this);
  
             if (option == JFileChooser.APPROVE_OPTION) {
-                final File fileToSave = saveFileChooser.getSelectedFile();
-                final Path outputDirectoryPlan = fileToSave.toPath();
+                final File directoryToSaveReports = saveFileChooser.getSelectedFile();
+                final Path outputDirectoryPlan = directoryToSaveReports.toPath();
                 outputDirectoryPlan.toFile().mkdir();
-                final Path planFile = Utils.buildOutputPlanFile(workCenter, saveDirectory, new Date());
+                final Path planFile = 
+                        Utils.buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date());
                 saveFiles(planFile.toFile(), htmlContent);
                 showInfoMessage("Plan saved correctly", "Plan generated correctly");
             }
@@ -809,19 +805,18 @@ public class MainWindow extends JFrame {
 
                             try {
                                 final String htmlContent = Utils.buildHtmlContent(wcDescription, woItemsPerMachine, priorities);
-                                saveFiles(wcDescription, machine, htmlContent);
+                                this.saveTurnWithMachinesPlan(wcDescription, machine, htmlContent);
                             } catch (final IOException ex) {
                                 showErrorMessage(ex.getMessage(), "ERROR");
                             }
                         }
                     );
+                    showInfoMessage("Plans saved correctly", "Plans generated correctly");
                 }
             } catch (final IOException ex) {
                 ex.printStackTrace();
                 showErrorMessage(ex.getMessage(), "ERROR");
             }
-            
-            
             
         }, () -> {
             showErrorMessage("There are no Work Order information to build the plan", "ERROR");
@@ -849,53 +844,32 @@ public class MainWindow extends JFrame {
         copyStaticFilesToOutputDirectory(parentOutputDirectory);
     }
     
-    private void saveFiles(final File fileToSave, final String machine, final String htmlContent) throws IOException {
-        try (final BufferedWriter newBufferedWriter = Files.newBufferedWriter(fileToSave.toPath(), StandardCharsets.UTF_8)) {
-            newBufferedWriter.write(htmlContent);
-        }
-
-        final File parentOutputDirectory = fileToSave.getParentFile();
-        copyStaticFilesToOutputDirectory(parentOutputDirectory);
-    }
-    
-    private void saveFiles(
-        final String workCenter
-        , final String htmlContent
-    ) 
+    private void saveTurnWithMachinesPlan(final String workCenter, final String machine, final String htmlContent) 
             throws IOException {
         
         final String saveDirectory = this.configProps.getProperty("saveDirectory", System.getProperty("user.home"));
         final boolean autoSave = Boolean.valueOf(configProps.getProperty("autoSavePlans", "false"));
         
         if (autoSave) {
-            // TODO: create the necessary directories ... 
-            
+            final Path outputDirectoryPlan = Paths.get(saveDirectory, machine);
+            Files.createDirectory(outputDirectoryPlan);
+            final Path planFile = Utils.buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date());
+            saveFiles(planFile.toFile(), htmlContent);
+            showInfoMessage("Plan saved correctly", "Plan generated correctly");
         } else {
-            
+            final JFileChooser saveFileChooser = createFileChooser(
+                String.format("Save plan for '%s', machine: '%s'", workCenter, machine), saveDirectory);
+            final int option = saveFileChooser.showSaveDialog(this);
+
+            if (option == JFileChooser.APPROVE_OPTION) {
+                final File directoryToSaveReports = saveFileChooser.getSelectedFile();
+                final Path outputDirectoryPlan = Paths.get(directoryToSaveReports.getAbsolutePath(), machine);
+                Files.createDirectory(outputDirectoryPlan);
+                final Path planFile = Utils.buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date());
+                saveFiles(planFile.toFile(), htmlContent);
+            }
         }
         
-        final JFileChooser saveFileChooser = 
-                createFileChooser(String.format("Save plan for '%s'", workCenter), configProps.getProperty("saveDirectory"));
-        final int option = saveFileChooser.showSaveDialog(this);
- 
-        if (option == JFileChooser.APPROVE_OPTION) {
-            final File fileToSave = saveFileChooser.getSelectedFile();
-            saveFiles(fileToSave, htmlContent);
-            showInfoMessage("Plan saved correctly", "Plan generated correctly");
-        }
-    }
-        
-    private void saveFiles(final String workCenter, final String machine, final String htmlContent) 
-            throws IOException {
-        final JFileChooser saveFileChooser = createFileChooser(
-                String.format("Save plan for '%s', machine: '%s'", workCenter, machine), configProps.getProperty("saveDirectory"));
-        final int option = saveFileChooser.showSaveDialog(this);
- 
-        if (option == JFileChooser.APPROVE_OPTION) {
-            final File fileToSave = saveFileChooser.getSelectedFile();
-            saveFiles(fileToSave, htmlContent);
-            showInfoMessage("Plan saved correctly", "Plan generated correctly");
-        }
     }
     
     private void rollbackMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rollbackMenuItemActionPerformed
