@@ -29,7 +29,11 @@ import java.util.Collections;
 import static java.util.stream.Collectors.toList;
 
 import static java.lang.Integer.parseInt;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -1202,19 +1206,10 @@ public class UtilsTest {
     @Test
     public void shouldCreateFileChooser() {
         final String EXPECTED_DIALOG_TITLE = "Save list plan for PINTURA";
-        final String EXPECTED_DESCRIPTION = "HTML files";
-        final String EXPECTED_EXTENSION = ".html";
-        
-        final JFileChooser fileChooser = Utils.createFileChooser(EXPECTED_DIALOG_TITLE, EXPECTED_DESCRIPTION, EXPECTED_EXTENSION);
+        final JFileChooser fileChooser = Utils.createFileChooser(EXPECTED_DIALOG_TITLE, System.getenv("HOME"));
         Assert.assertEquals(EXPECTED_DIALOG_TITLE, fileChooser.getDialogTitle());
-        
-        final FileFilter[] choosableFileFilters = fileChooser.getChoosableFileFilters();
-        Assert.assertEquals(1, choosableFileFilters.length);
-        
-        final FileNameExtensionFilter filter = (FileNameExtensionFilter)choosableFileFilters[0];
-        Assert.assertEquals(EXPECTED_DESCRIPTION, filter.getDescription());
-        
-        Assert.assertEquals(EXPECTED_EXTENSION, filter.getExtensions()[0]);
+        Assert.assertEquals(Paths.get(System.getenv("HOME")).toFile(), fileChooser.getCurrentDirectory());
+        Assert.assertEquals(JFileChooser.DIRECTORIES_ONLY, fileChooser.getFileSelectionMode());
     }
     
     @Test
@@ -1558,6 +1553,15 @@ public class UtilsTest {
         );
         
         tests.forEach(tc -> Assert.assertEquals(tc.want, Utils.workOrderItemsPerMachine(tc.workOrderInformationItems)));
+    }
+    
+    @Test
+    public void playground() {
+        final DateFormat df = new SimpleDateFormat("yyyy.MM.dd");
+        final Date now = new Date();
+        
+        //System.out.printf("Date is: [%s]\n");
+        System.out.printf("The date is: [%s]\n", df.format(now));
         
     }
 

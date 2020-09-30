@@ -48,9 +48,12 @@ import com.production.domain.efficiency.EfficiencyInformation;
 import com.production.domain.efficiency.Progress;
 import com.production.util.html.HTMLFormat;
 import java.nio.file.Path;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import java.util.LinkedHashMap;
 
@@ -59,11 +62,13 @@ import java.util.LinkedHashMap;
  */
 public final class Utils {
     
+    public static DateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy.MM.dd");
+    
     /**
      * "factory" method to build a FileChooser for .XLS files.
      * @return a JFileChooser to select .XLS files
      */
-    @MissingTests
+    @Validated
     public static JFileChooser genericXLSFileChooser() {
         final JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
         jfc.setDialogTitle("Select a .XLS file");
@@ -74,16 +79,11 @@ public final class Utils {
     }
     
     @Validated
-    public static JFileChooser createFileChooser(
-            final String dialogTitle
-            , final String fileNameDescription
-            , final String fileExtensions
-    ) {
-        final JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+    public static JFileChooser createFileChooser(final String dialogTitle, final String saveDirectory) {
+        final JFileChooser jfc = new JFileChooser(saveDirectory);
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         jfc.setDialogTitle(dialogTitle);
         jfc.setAcceptAllFileFilterUsed(false);
-        final FileNameExtensionFilter filter = new FileNameExtensionFilter(fileNameDescription, fileExtensions);
-        jfc.addChoosableFileFilter(filter);
         return jfc;
     }
     
@@ -861,7 +861,13 @@ public final class Utils {
         System.out.println("DEBUG ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/>");
     }
     
-    
+    @MissingTests
+    public static Path buildOutputPlanFile(final String workCenter, final String saveDirectory, final Date date) {
+        final String today = Utils.DATE_FORMATTER.format(date);
+        final String listOutputPlanFileName = String.format("%s-%s.html", workCenter, today);
+        final Path planFile = Paths.get(saveDirectory, listOutputPlanFileName);
+        return planFile;
+    }
     
     private Utils() {}
     

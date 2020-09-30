@@ -46,6 +46,7 @@ import java.util.Properties;
 import static com.production.util.Utils.extractWorkOrdersFromSheetFile;
 import static com.production.util.Utils.numberOfTurnsFromWorkCenter;
 import static com.production.util.Utils.createFileChooser;
+import java.util.Date;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -745,6 +746,37 @@ public class MainWindow extends JFrame {
         }
     }//GEN-LAST:event_wcDescriptionsActionPerformed
     
+    // PENDING: we might need a suffix or date for the output/final file to avoid overriding files.
+    @MissingTests
+    private void saveListPlan(final String workCenter, final String htmlContent) throws IOException {
+        
+        final String saveDirectory = this.configProps.getProperty("saveDirectory", System.getProperty("user.home"));
+        final boolean autoSave = Boolean.valueOf(configProps.getProperty("autoSavePlans", "false"));
+        
+        if (autoSave) {
+            final Path outputDirectoryPlan = Paths.get(saveDirectory);
+            Files.createDirectory(outputDirectoryPlan);
+            final Path planFile = Utils.buildOutputPlanFile(workCenter, saveDirectory, new Date());
+            saveFiles(planFile.toFile(), htmlContent);
+            showInfoMessage("Plan saved correctly", "Plan generated correctly");
+        } else {
+            final JFileChooser saveFileChooser = 
+                createFileChooser(String.format("Save plan for '%s'", workCenter), configProps.getProperty("saveDirectory"));
+            
+            final int option = saveFileChooser.showSaveDialog(this);
+ 
+            if (option == JFileChooser.APPROVE_OPTION) {
+                final File fileToSave = saveFileChooser.getSelectedFile();
+                final Path outputDirectoryPlan = fileToSave.toPath();
+                outputDirectoryPlan.toFile().mkdir();
+                final Path planFile = Utils.buildOutputPlanFile(workCenter, saveDirectory, new Date());
+                saveFiles(planFile.toFile(), htmlContent);
+                showInfoMessage("Plan saved correctly", "Plan generated correctly");
+            }
+        }
+        
+    }
+    
     private void generatePlanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePlanBtnActionPerformed
         final DefaultTableModel model = (DefaultTableModel) selectedPrioritiesTable.getModel();
         
@@ -762,10 +794,9 @@ public class MainWindow extends JFrame {
             final int numberOfTurns = numberOfTurnsFromWorkCenter(wcDescription);
             
             try {
-                // PENDING: wrap the following code in a try-catch...
-                if (numberOfTurns == 0) {
+                if (numberOfTurns == 0) {               // List
                     final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
-                    saveFiles(wcDescription, htmlContent);
+                    saveListPlan(wcDescription, htmlContent);
                 } else {
                     final Map<String, List<WorkOrderInformation>> workOrderItemsPerMachine = Utils.workOrderItemsPerMachine(workOrderItemsByWCDescription);
 
@@ -786,6 +817,7 @@ public class MainWindow extends JFrame {
                     );
                 }
             } catch (final IOException ex) {
+                ex.printStackTrace();
                 showErrorMessage(ex.getMessage(), "ERROR");
             }
             
@@ -809,7 +841,6 @@ public class MainWindow extends JFrame {
     }
     
     private void saveFiles(final File fileToSave, final String htmlContent) throws IOException {
-        System.out.printf("1) File to save: [%s]\n", fileToSave); 
         try (final BufferedWriter newBufferedWriter = Files.newBufferedWriter(fileToSave.toPath(), StandardCharsets.UTF_8)) {
             newBufferedWriter.write(htmlContent);
         }
@@ -819,7 +850,6 @@ public class MainWindow extends JFrame {
     }
     
     private void saveFiles(final File fileToSave, final String machine, final String htmlContent) throws IOException {
-        System.out.printf("2) File to save: [%s]\n", fileToSave);
         try (final BufferedWriter newBufferedWriter = Files.newBufferedWriter(fileToSave.toPath(), StandardCharsets.UTF_8)) {
             newBufferedWriter.write(htmlContent);
         }
@@ -828,9 +858,24 @@ public class MainWindow extends JFrame {
         copyStaticFilesToOutputDirectory(parentOutputDirectory);
     }
     
-    private void saveFiles(final String workCenter, final String htmlContent) 
+    private void saveFiles(
+        final String workCenter
+        , final String htmlContent
+    ) 
             throws IOException {
-        final JFileChooser saveFileChooser = createFileChooser(String.format("Save plan for '%s'", workCenter), "HTML files", ".html");
+        
+        final String saveDirectory = this.configProps.getProperty("saveDirectory", System.getProperty("user.home"));
+        final boolean autoSave = Boolean.valueOf(configProps.getProperty("autoSavePlans", "false"));
+        
+        if (autoSave) {
+            // TODO: create the necessary directories ... 
+            
+        } else {
+            
+        }
+        
+        final JFileChooser saveFileChooser = 
+                createFileChooser(String.format("Save plan for '%s'", workCenter), configProps.getProperty("saveDirectory"));
         final int option = saveFileChooser.showSaveDialog(this);
  
         if (option == JFileChooser.APPROVE_OPTION) {
@@ -843,7 +888,7 @@ public class MainWindow extends JFrame {
     private void saveFiles(final String workCenter, final String machine, final String htmlContent) 
             throws IOException {
         final JFileChooser saveFileChooser = createFileChooser(
-                String.format("Save plan for '%s', machine: '%s'", workCenter, machine), "HTML files", ".html");
+                String.format("Save plan for '%s', machine: '%s'", workCenter, machine), configProps.getProperty("saveDirectory"));
         final int option = saveFileChooser.showSaveDialog(this);
  
         if (option == JFileChooser.APPROVE_OPTION) {
