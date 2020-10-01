@@ -123,6 +123,7 @@ public class MainWindow extends JFrame {
         try {
             this.laserAndPunchPartMachineInfo = Utils.loadCSVFile(LASER_AND_PUNCH_PART_MACHINE_FILE_NAME);
         } catch (final IOException ex) {
+            ex.printStackTrace();
             showErrorMessage(String.format("error: %s", ex.getMessage()), "Error");
         }
     }
@@ -271,7 +272,6 @@ public class MainWindow extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Production Plan Priorities");
-        setMaximumSize(new java.awt.Dimension(1000, 625));
         setMinimumSize(new java.awt.Dimension(1000, 625));
         setResizable(false);
 
@@ -623,8 +623,8 @@ public class MainWindow extends JFrame {
         
         final String selectedWCDescription = this.wcDescriptions.getSelectedItem().toString();
         this.workOrderInformationItems.ifPresent(workOrderItems -> {
-            cleanTable(this.workOrderTable);
-            updateTableWithWCDescription(selectedWCDescription, workOrderItems, this.workOrderTable);
+            this.cleanTable(this.workOrderTable);
+            this.updateTableWithWCDescription(selectedWCDescription, workOrderItems, this.workOrderTable);
         });
     }//GEN-LAST:event_clearButtonActionPerformed
 
@@ -688,6 +688,7 @@ public class MainWindow extends JFrame {
             .forEach(item -> {
 
                if (usesTurns) {
+                   // Check this...
                    final String machine = Utils.getMachineFromWorkCenter(
                        this.dobladoPartMachineInfo
                        , this.laserAndPunchPartMachineInfo
@@ -807,6 +808,7 @@ public class MainWindow extends JFrame {
                                 final String htmlContent = Utils.buildHtmlContent(wcDescription, woItemsPerMachine, priorities);
                                 this.saveTurnWithMachinesPlan(wcDescription, machine, htmlContent);
                             } catch (final IOException ex) {
+                                ex.printStackTrace();
                                 showErrorMessage(ex.getMessage(), "ERROR");
                             }
                         }
@@ -852,10 +854,9 @@ public class MainWindow extends JFrame {
         
         if (autoSave) {
             final Path outputDirectoryPlan = Paths.get(saveDirectory, machine);
-            Files.createDirectory(outputDirectoryPlan);
+            outputDirectoryPlan.toFile().mkdirs();
             final Path planFile = Utils.buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date());
             saveFiles(planFile.toFile(), htmlContent);
-            showInfoMessage("Plan saved correctly", "Plan generated correctly");
         } else {
             final JFileChooser saveFileChooser = createFileChooser(
                 String.format("Save plan for '%s', machine: '%s'", workCenter, machine), saveDirectory);
@@ -892,6 +893,7 @@ public class MainWindow extends JFrame {
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void okInfoDialogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okInfoDialogButtonActionPerformed
+        this.infoTextPane.setText("");
         this.infoDialog.setVisible(false);
     }//GEN-LAST:event_okInfoDialogButtonActionPerformed
 

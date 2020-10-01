@@ -240,13 +240,14 @@ public final class Utils {
             }
             final String line = lines.get(i);
             final String[] tokens = line.split(",");
-            String workCenter = workCenterName(tokens[1].trim());
+            String workCenter = tokens[1].trim();
             machineInfo.put(tokens[0], workCenter);
         }
             return machineInfo;
     }
     
     @Validated
+    // PENDING: this might not be needed.
     public static String workCenterName(final String wc) {
         final String[] possibleTokens = wc.trim().toUpperCase().split("\\s+");
         return possibleTokens[0];
@@ -503,10 +504,23 @@ public final class Utils {
             
             // Call the algo here:
             final EfficiencyInformation ordersWithEfficiency = EfficiencyUtils.efficiency(woInfo, progress);
+            
+            if (ordersWithEfficiency.getOrders().isEmpty()) {
+                System.out.println("Analysis for: [%s] was empty ..., moving on");
+                continue;
+            }
+            
+            System.out.printf("Efficiency for: [%s]\n", woInfo);
+            System.out.printf("With progress: %s\n", progress);
             printDebugOrders(ordersWithEfficiency.getOrders());
             result.addAll(ordersWithEfficiency.getOrders());
-            final int numberOfOrdersInResult = ordersWithEfficiency.getOrders().size();
-            final Turn lastTurn = ordersWithEfficiency.getOrders().get(numberOfOrdersInResult - 1).getTurn();
+            int numberOfOrdersInResult = ordersWithEfficiency.getOrders().size();
+            
+            numberOfOrdersInResult = numberOfOrdersInResult == 0 ? 0 : numberOfOrdersInResult - 1;
+            
+            System.out.printf("CHECK: The size is: %d\n", numberOfOrdersInResult);
+            
+            final Turn lastTurn = ordersWithEfficiency.getOrders().get(numberOfOrdersInResult).getTurn();
 
             System.out.printf("lastTu/rn to use is: %s\n", lastTurn);
             System.out.printf("Calculating factor with: %s\n", result);
@@ -524,7 +538,7 @@ public final class Utils {
         final String workCenter
         , List<WorkOrderInformation> workOrderItems
         , final List<Priority> priorities
-    ) {
+    ) { 
         // PENDING: here the old algorithm is used, it needs to be fixed.
         // Before sorting ... 
         /*

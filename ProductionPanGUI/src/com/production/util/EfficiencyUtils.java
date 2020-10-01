@@ -34,7 +34,8 @@ public class EfficiencyUtils {
         hInTurn -= whereWeAre;
         
         System.out.printf("\tWhat we have left: %f (%s)\n", hInTurn, progress.getTurn());
-	System.out.printf("\tWorking with: O('%s'), rh: %f, stp: %f\n", ord.getWorkOrder(), ord.getRunHours(), ord.getSetupHours());
+	System.out.printf("\tWorking with: O('%s'-'%s'-'%s'), rh: %f, stp: %f\n", 
+                ord.getWorkOrder(), ord.getPartNumber(), ord.getMachine(), ord.getRunHours(), ord.getSetupHours());
         
         int it = 0;
         
@@ -42,6 +43,10 @@ public class EfficiencyUtils {
         double xr;
         
         System.out.printf("Before to work: %s\n", ord);
+        
+        if (ord.getRunHours() == 0.0 && ord.getSetupHours() == 0.0) {
+            System.out.printf("We were already done with: O('%s'-'%s'-'%s')\n", ord.getWorkOrder(), ord.getPartNumber(), ord.getMachine());
+        }
         
         while (ord.getRunHours() != 0.0 || ord.getSetupHours() != 0.0) {
 
