@@ -63,6 +63,7 @@ public class MainWindow extends JFrame {
     private Map<String, String> laserAndPunchPartMachineInfo = new HashMap<>();
     private Optional<List<WorkOrderInformation>> workOrderInformationItems = Optional.empty();
     private final List<WorkOrderInformation> backupWorkOrderItems = new ArrayList<>();
+    private boolean planAlreadyGenerated = false;
     private final Properties configProps = new Properties();
     
     public MainWindow(final String saveDirectory) {
@@ -535,6 +536,7 @@ public class MainWindow extends JFrame {
             throws IOException, InvalidFormatException {
         Utils.reconcileInformationFromAgeFile(file.getAbsolutePath(), workOrderItems);
         this.updateTable(workOrderItems, this.workOrderTable);
+        // Backup the orders...
         Utils.copyWorkOrderItems(this.backupWorkOrderItems, workOrderItems);
     }
     
@@ -775,6 +777,12 @@ public class MainWindow extends JFrame {
     }
     
     private void generatePlanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePlanBtnActionPerformed
+        
+        // Check the backup list and if it is not empty.
+        if (this.planAlreadyGenerated && !this.backupWorkOrderItems.isEmpty()) {
+            this.workOrderInformationItems.ifPresent(items -> Utils.copyWorkOrderItems(items, this.backupWorkOrderItems));
+        }
+        
         final DefaultTableModel model = (DefaultTableModel) selectedPrioritiesTable.getModel();
         
         final String wcDescription = this.wcDescriptions.getSelectedItem().toString();
@@ -815,6 +823,7 @@ public class MainWindow extends JFrame {
                     );
                     showInfoMessage("Plans saved correctly", "Plans generated correctly");
                 }
+                this.planAlreadyGenerated = true;
             } catch (final IOException ex) {
                 ex.printStackTrace();
                 showErrorMessage(ex.getMessage(), "ERROR");
@@ -823,6 +832,7 @@ public class MainWindow extends JFrame {
         }, () -> {
             showErrorMessage("There are no Work Order information to build the plan", "ERROR");
         });
+        
     }//GEN-LAST:event_generatePlanBtnActionPerformed
 
     private void copyStaticFilesToOutputDirectory(final File outputDirectory) {

@@ -126,11 +126,11 @@ public final class Utils {
                 final Cell qtyCell = row.getCell(FabLoadByWCFields.QTY_CELL_INDEX.get());
 
                 final WorkOrderInformation wo = to(wcDescription, partCell, workOrderCell, runCell, setupCell, qtyCell);
-                // PENDING: discuss this with Miriam.
-                if (wo.getRunHours() != 0.0 && wo.getSetupHours() != 0.0) {
+                
+                if (wo.getRunHours() != 0.0 || wo.getSetupHours() != 0.0) {
                     workOrderInfoItems.add(wo);
                 } else {                // ERROR handling or logging
-                    
+                    System.out.printf("[%s] has been filtered due to the 0.0 restriction.\n", wo);
                 }
                 
             }
