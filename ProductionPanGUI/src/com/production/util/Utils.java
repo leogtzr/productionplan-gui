@@ -125,7 +125,14 @@ public final class Utils {
                 final Cell setupCell = row.getCell(FabLoadByWCFields.SETUP_CELL_INDEX.get());
                 final Cell qtyCell = row.getCell(FabLoadByWCFields.QTY_CELL_INDEX.get());
 
-                workOrderInfoItems.add(to(wcDescription, partCell, workOrderCell, runCell, setupCell, qtyCell));
+                final WorkOrderInformation wo = to(wcDescription, partCell, workOrderCell, runCell, setupCell, qtyCell);
+                // PENDING: discuss this with Miriam.
+                if (wo.getRunHours() != 0.0 && wo.getSetupHours() != 0.0) {
+                    workOrderInfoItems.add(wo);
+                } else {                // ERROR handling or logging
+                    
+                }
+                
             }
         }
         return workOrderInfoItems;
