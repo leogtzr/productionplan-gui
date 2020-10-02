@@ -28,21 +28,21 @@ public class EfficiencyUtils {
         
         final double whereWeAre = progress.getFactor();
         
-        System.out.printf("\t@@@@@@@ Progress received (%s turn): %f\n", progress.getTurn(), whereWeAre);        
+        //System.out.printf("\t@@@@@@@ Progress received (%s turn): %f\n", progress.getTurn(), whereWeAre);        
         double hInTurn = Utils.turnHours(progress.getTurn());
         
         hInTurn -= whereWeAre;
         
-        System.out.printf("\tWhat we have left: %f (%s)\n", hInTurn, progress.getTurn());
-	System.out.printf("\tWorking with: O('%s'-'%s'-'%s'), rh: %f, stp: %f\n", 
-                ord.getWorkOrder(), ord.getPartNumber(), ord.getMachine(), ord.getRunHours(), ord.getSetupHours());
+        //System.out.printf("\tWhat we have left: %f (%s)\n", hInTurn, progress.getTurn());
+	//System.out.printf("\tWorking with: O('%s'-'%s'-'%s'), rh: %f, stp: %f\n", 
+        //        ord.getWorkOrder(), ord.getPartNumber(), ord.getMachine(), ord.getRunHours(), ord.getSetupHours());
         
         int it = 0;
         
         double xs;
         double xr;
         
-        System.out.printf("Before to work: %s\n", ord);
+        //System.out.printf("Before to work: %s\n", ord);
         
         if (ord.getRunHours() == 0.0 && ord.getSetupHours() == 0.0) {
             System.out.printf("We were already done with: O('%s'-'%s'-'%s')\n", ord.getWorkOrder(), ord.getPartNumber(), ord.getMachine());
@@ -56,11 +56,10 @@ public class EfficiencyUtils {
                 // PENDING: logging here?
                 throw new RuntimeException(String.format("MAX point reached (%d) for (%s). ord.RunHours(%.3f), ord.Setup(%.3f)\n", 
                         it, ord.getPartNumber() + "-" + ord.getWorkOrder(), ord.getRunHours(), ord.getSetupHours()));
-                // break;
             }
 
             if ((hInTurn - ord.getSetupHours()) >= 0.0) {
-                System.out.printf("d1. hInTurn(%.2f) - ord.Setup(%.2f) (= %.2f) > 0.0\n", hInTurn, ord.getSetupHours(), hInTurn-ord.getSetupHours());
+                // System.out.printf("d1. hInTurn(%.2f) - ord.Setup(%.2f) (= %.2f) > 0.0\n", hInTurn, ord.getSetupHours(), hInTurn-ord.getSetupHours());
                 xs = ord.getSetupHours();
                 hInTurn -= ord.getSetupHours();
             } else {
@@ -68,10 +67,10 @@ public class EfficiencyUtils {
                 hInTurn = 0.0;
             }
 
-            System.out.printf("d2. hInTurn=%.2f\n", hInTurn);
+            // System.out.printf("d2. hInTurn=%.2f\n", hInTurn);
 
             if ((hInTurn - ord.getRunHours()) >= 0.0) {
-                System.out.printf("d3. hInTurn(%.2f) - ord.RunHours(%.2f) (= %.2f) > 0.0\n", hInTurn, ord.getRunHours(), hInTurn-ord.getRunHours());
+                // System.out.printf("d3. hInTurn(%.2f) - ord.RunHours(%.2f) (= %.2f) > 0.0\n", hInTurn, ord.getRunHours(), hInTurn-ord.getRunHours());
                 hInTurn -= ord.getRunHours();
                 xr = ord.getRunHours();
             } else {
@@ -79,40 +78,40 @@ public class EfficiencyUtils {
                 hInTurn = 0.0;
             }
 
-            System.out.printf("d4. hInTurn=%.2f\n", hInTurn);
+            // System.out.printf("d4. hInTurn=%.2f\n", hInTurn);
 
             final WorkOrderInformation o = OrderUtils.from(ord, xr, xs, progress);
             final long qtyGoalPerTurn = qtyGoalPerTurn(qty, xr, totalHours);
             o.setQty((int)qtyGoalPerTurn);
-            debugOrderCreation("c", o);
+            // debugOrderCreation("c", o);
             orders.add(o);
 
             if (hInTurn == 0.0) {
-                System.out.println("d5 -> hInTurn is 0.0, changing turn.");
+                // System.out.println("d5 -> hInTurn is 0.0, changing turn.");
                 final Turn beforeTurn = progress.getTurn();
                 final Turn nextTurn = Utils.nextTurn(progress.getTurn(), numberOfTurns);
                 progress.setTurn(nextTurn);
                 
                 if (nextTurn.equals(Turn.FIRST) && beforeTurn.equals(Turn.THIRD)) {
-                    System.out.printf("A change of day!\n");
+                    //System.out.printf("A change of day!\n");
                     final Day day = progress.getDay();
                     final Day nextDay = Utils.nextDay(day);
-                    System.out.printf("Day change (turns): %s:beforeTurn, nextTurn:%s!\n", beforeTurn, nextTurn);
-                    System.out.printf("Day change: %s:before, next:%s!\n", day, nextDay);
+                    //System.out.printf("Day change (turns): %s:beforeTurn, nextTurn:%s!\n", beforeTurn, nextTurn);
+                    //System.out.printf("Day change: %s:before, next:%s!\n", day, nextDay);
                     o.setDay(day);
                     progress.setDay(nextDay);
                 }
                 
                 hInTurn = Utils.turnHours(progress.getTurn());
-                System.out.printf("d6. Turn is now: %.1f\n", hInTurn);
+                //System.out.printf("d6. Turn is now: %.1f\n", hInTurn);
             }
 
-            System.out.printf("1) O{r: %.2f, s: %.2f}\n", ord.getRunHours(), ord.getSetupHours());
+            // System.out.printf("1) O{r: %.2f, s: %.2f}\n", ord.getRunHours(), ord.getSetupHours());
 
             ord.setRunHours(ord.getRunHours() - xr);
             ord.setSetupHours(ord.getSetupHours() - xs);
             
-            System.out.printf("2) O{r: %.2f, s: %.2f}\n", ord.getRunHours(), ord.getSetupHours());
+            // System.out.printf("2) O{r: %.2f, s: %.2f}\n", ord.getRunHours(), ord.getSetupHours());
 	}
 
         efficiencyInformation.setOrders(orders);

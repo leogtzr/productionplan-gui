@@ -130,7 +130,7 @@ public final class Utils {
                 if (wo.getRunHours() != 0.0 || wo.getSetupHours() != 0.0) {
                     workOrderInfoItems.add(wo);
                 } else {                // ERROR handling or logging
-                    System.out.printf("[%s] has been filtered due to the 0.0 restriction.\n", wo);
+                    // System.out.printf("[%s] has been filtered due to the 0.0 restriction.\n", wo);
                 }
                 
             }
@@ -301,7 +301,7 @@ public final class Utils {
         } else if (fabLoadFilePath != null && ageByWCFilePath == null) {
             statusLabel.setText("Please open the file containing the 'Age  by WC' information.");
         } else if (fabLoadFilePath != null && ageByWCFilePath != null) {
-            statusLabel.setText("Files ready.");
+             statusLabel.setText("Files ready.");
         }
     }
     
@@ -342,9 +342,9 @@ public final class Utils {
             // final List<WorkOrderInformation> planItems = buildPlanForTwoTurns(workCenter, workOrderItems, priorities);
             final List<WorkOrderInformation> planItems = Utils.buildPlan(workCenter, workOrderItems, priorities);
             
-            System.out.printf("DEBUG HTML PLAN - begin\n");
-            planItems.forEach(System.out::println);
-            System.out.printf("DEBUG HTML PLAN - end\n");
+            //System.out.printf("DEBUG HTML PLAN - begin\n");
+            //planItems.forEach(System.out::println);
+            //System.out.printf("DEBUG HTML PLAN - end\n");
             
             final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("turns-template.html");
             
@@ -513,24 +513,24 @@ public final class Utils {
             final EfficiencyInformation ordersWithEfficiency = EfficiencyUtils.efficiency(woInfo, progress);
             
             if (ordersWithEfficiency.getOrders().isEmpty()) {
-                System.out.println("Analysis for: [%s] was empty ..., moving on");
+                // System.out.println("Analysis for: [%s] was empty ..., moving on");
                 continue;
             }
             
-            System.out.printf("Efficiency for: [%s]\n", woInfo);
-            System.out.printf("With progress: %s\n", progress);
-            printDebugOrders(ordersWithEfficiency.getOrders());
+            //System.out.printf("Efficiency for: [%s]\n", woInfo);
+            //System.out.printf("With progress: %s\n", progress);
+            //printDebugOrders(ordersWithEfficiency.getOrders());
             result.addAll(ordersWithEfficiency.getOrders());
             int numberOfOrdersInResult = ordersWithEfficiency.getOrders().size();
             
             numberOfOrdersInResult = numberOfOrdersInResult == 0 ? 0 : numberOfOrdersInResult - 1;
             
-            System.out.printf("CHECK: The size is: %d\n", numberOfOrdersInResult);
+            //System.out.printf("CHECK: The size is: %d\n", numberOfOrdersInResult);
             
             final Turn lastTurn = ordersWithEfficiency.getOrders().get(numberOfOrdersInResult).getTurn();
 
-            System.out.printf("lastTu/rn to use is: %s\n", lastTurn);
-            System.out.printf("Calculating factor with: %s\n", result);
+            //System.out.printf("lastTu/rn to use is: %s\n", lastTurn);
+            //System.out.printf("Calculating factor with: %s\n", result);
             final double factor = Utils.progressFactor(result);
 
             progress.setTurn(lastTurn);
@@ -719,7 +719,7 @@ public final class Utils {
             updated = true;
         }
         
-        return updated;        
+        return updated;       
     }
     
     @Validated

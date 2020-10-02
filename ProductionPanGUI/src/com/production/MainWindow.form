@@ -400,7 +400,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="workOrderTable.getModel().addTableModelListener(&#xd;&#xa;    new TableModelListener() {&#xd;&#xa;        public void tableChanged(final TableModelEvent evt) {&#xd;&#xa;&#xd;&#xa;            if (evt.getColumn() != ALLOWED_COLUMN_NUMBER_TO_BE_EDITED) {&#xd;&#xa;                return;&#xd;&#xa;            }&#xd;&#xa;&#xd;&#xa;            if (evt.getType() == TableModelEvent.UPDATE) {&#xd;&#xa;                final int row = evt.getFirstRow();&#xd;&#xa;                final int col = evt.getColumn();&#xd;&#xa;                final Object newMachineValue = workOrderTable.getValueAt(row, col);&#xd;&#xa;                final String currentWorkCenter = wcDescriptions.getSelectedItem().toString();&#xd;&#xa;                workOrderInformationItems&#xd;&#xa;                    .ifPresent(items -&gt; &#xd;&#xa;                        Utils.updateMachine(row, newMachineValue.toString(), currentWorkCenter, items));&#xd;&#xa;            }&#xd;&#xa;        }&#xd;&#xa;    }&#xd;&#xa;);&#xd;&#xa;"/>
+            <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="workOrderTable.getModel().addTableModelListener(updateRowListener());&#xd;&#xa;"/>
           </AuxValues>
         </Component>
       </SubComponents>

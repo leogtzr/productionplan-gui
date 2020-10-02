@@ -296,26 +296,7 @@ public class MainWindow extends JFrame {
     );
     workOrderTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
     workOrderTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-    workOrderTable.getModel().addTableModelListener(
-        new TableModelListener() {
-            public void tableChanged(final TableModelEvent evt) {
-
-                if (evt.getColumn() != ALLOWED_COLUMN_NUMBER_TO_BE_EDITED) {
-                    return;
-                }
-
-                if (evt.getType() == TableModelEvent.UPDATE) {
-                    final int row = evt.getFirstRow();
-                    final int col = evt.getColumn();
-                    final Object newMachineValue = workOrderTable.getValueAt(row, col);
-                    final String currentWorkCenter = wcDescriptions.getSelectedItem().toString();
-                    workOrderInformationItems
-                    .ifPresent(items -> 
-                        Utils.updateMachine(row, newMachineValue.toString(), currentWorkCenter, items));
-                }
-            }
-        }
-    );
+    workOrderTable.getModel().addTableModelListener(updateRowListener());
     jScrollPane1.setViewportView(workOrderTable);
 
     selectedPrioritiesTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -776,19 +757,49 @@ public class MainWindow extends JFrame {
         
     }
     
+    private TableModelListener updateRowListener() {
+        return new TableModelListener() {
+            @Override
+            public void tableChanged(final TableModelEvent evt) {
+
+                if (evt.getColumn() != ALLOWED_COLUMN_NUMBER_TO_BE_EDITED) {
+                    return;
+                }
+
+                if (evt.getType() == TableModelEvent.UPDATE) {
+                    System.out.println("Updating value in table.");
+                    final int row = evt.getFirstRow();
+                    final int col = evt.getColumn();
+                    final Object newMachineValue = workOrderTable.getValueAt(row, col);
+                    final String currentWorkCenter = wcDescriptions.getSelectedItem().toString();
+                    workOrderInformationItems
+                        .ifPresent(items -> {
+                            boolean updated = Utils.updateMachine(row, newMachineValue.toString(), currentWorkCenter, items);
+                            if (updated) {
+                                System.out.println("Row has been updated");
+                            } else {
+                                System.out.println("The row WAS Not updated");
+                            }
+                        });
+                }
+            }
+        };
+    }
+    
     private void generatePlanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePlanBtnActionPerformed
         
         // Check the backup list and if it is not empty.
-        if (this.planAlreadyGenerated && !this.backupWorkOrderItems.isEmpty()) {
-            this.workOrderInformationItems.ifPresent(items -> Utils.copyWorkOrderItems(items, this.backupWorkOrderItems));
-        }
+//        if (this.planAlreadyGenerated && !this.backupWorkOrderItems.isEmpty()) {
+//            System.out.println("Restoring....");
+//            this.workOrderInformationItems.ifPresent(items -> Utils.copyWorkOrderItems(items, this.backupWorkOrderItems));
+//            // PENDING: restore the table too.
+//        }
         
         final DefaultTableModel model = (DefaultTableModel) selectedPrioritiesTable.getModel();
         
         final String wcDescription = this.wcDescriptions.getSelectedItem().toString();
         final List<Priority> priorities = buildPrioritiesFromTable(model);
         
-        // PENDING: separate per machine and generate N files if the file handles machines.
         this.workOrderInformationItems.ifPresentOrElse(workOrderItems -> {
             
             final List<WorkOrderInformation> workOrderItemsByWCDescription = workOrderItems
@@ -808,9 +819,9 @@ public class MainWindow extends JFrame {
                     workOrderItemsPerMachine.forEach(
                         (machine, woItemsPerMachine) -> {
                             
-                            System.out.printf("DEBUG-save About to save for: %s -(%d)\n\tItems: ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n", machine, woItemsPerMachine.size());
-                            woItemsPerMachine.forEach(System.out::println);
-                            System.out.println("DEBUG-save bye ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                            //System.out.printf("DEBUG-save About to save for: %s -(%d)\n\tItems: ~~~~~~~~~~~~~~~~~~~~~~~~~~~\n", machine, woItemsPerMachine.size());
+                            //woItemsPerMachine.forEach(System.out::println);
+                            //System.out.println("DEBUG-save bye ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
                             try {
                                 final String htmlContent = Utils.buildHtmlContent(wcDescription, woItemsPerMachine, priorities);
@@ -835,6 +846,7 @@ public class MainWindow extends JFrame {
         
     }//GEN-LAST:event_generatePlanBtnActionPerformed
 
+    // PENDING: this could be configurable.
     private void copyStaticFilesToOutputDirectory(final File outputDirectory) {
         List.of("bootstrap.min.css", "bootstrap.min.js", "jquery-3.3.1.min.js").
             forEach(file -> {
