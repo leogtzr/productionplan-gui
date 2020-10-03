@@ -769,7 +769,7 @@ public final class Utils {
         
     }
     
-    @MissingTests
+    @Validated
     public static Optional<Map<String, String>> machineMapByWorkCenter(
         final String workCenter
         , final Map<String, String> dobladoPartInformation
@@ -886,17 +886,6 @@ public final class Utils {
         newWorkOrderInfo.setSetupHours(newSetupHours);
         
         return newWorkOrderInfo;
-    }
-    
-    @MissingTests
-    public static double availableHoursInTurn(final Turn turn, final double initHours) {
-        double available;
-        if (initHours == 0.0D) {
-            available = Utils.turnHours(turn);
-        } else {
-            available = Utils.turnHours(turn) - initHours;
-        }
-        return available;
     }
     
     @Validated

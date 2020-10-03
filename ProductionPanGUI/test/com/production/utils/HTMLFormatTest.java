@@ -358,4 +358,30 @@ public class HTMLFormatTest {
         
     }
     
+    // getTableDayTemplateContent
+    
+    @Test
+    public void shouldGetTableDayTemplateContent() {
+        
+        class testCase {
+            Day day;
+            String want;
+            testCase(Day day, String want) {
+                this.day = day;
+                this.want = want;
+            }
+        }
+        
+        final List<testCase> tests = List.of(
+            new testCase(Day.MONDAY, "<h2>MONDAY</h2>"),
+            new testCase(Day.WEDNESDAY, "<h2>WEDNESDAY</h2>")
+        );
+        
+        for (final testCase tc : tests) {
+            final var got = HTMLFormat.getTableDayTemplateContent(tc.day);
+            Assert.assertTrue(got.contains(tc.want));
+        }
+        
+    }
+    
 }

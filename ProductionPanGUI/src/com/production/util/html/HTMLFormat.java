@@ -62,7 +62,7 @@ public final class HTMLFormat {
         return sb.toString();
     }
     
-    @MissingTests
+    @Validated
     public static String getTurnTDWithCSSTurnClass(final WorkOrderInformation wo) {
         switch (wo.getTurn()) {
             case FIRST -> {
@@ -149,7 +149,7 @@ public final class HTMLFormat {
         return htmlTemplate;
     }
     
-    @MissingTests
+    @Validated
     public static String getTableDayTemplateContent(final Day day) {
         String dayContent = HTMLConstants.DAY_CONTENT;
         dayContent = dayContent.replace(HTMLConstants.DAY_MARK, String.format("<h2>%s</h2>", day.toString()));
