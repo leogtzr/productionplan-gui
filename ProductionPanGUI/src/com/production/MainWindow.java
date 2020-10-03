@@ -785,6 +785,7 @@ public class MainWindow extends JFrame {
                     final int col = evt.getColumn();
                     final Object newMachineValue = workOrderTable.getValueAt(row, col);
                     final String currentWorkCenter = wcDescriptions.getSelectedItem().toString();
+                    final String partNumber = workOrderTable.getValueAt(row, 0).toString();
                     workOrderInformationItems
                         .ifPresent(items -> {
                             final boolean updated = Utils.updateMachine(row, newMachineValue.toString(), currentWorkCenter, items);
@@ -793,6 +794,13 @@ public class MainWindow extends JFrame {
                             } else {
                                 System.out.println("The row WAS Not updated");
                             }
+                            Utils.updateMachineInMaps(
+                                currentWorkCenter
+                                , partNumber
+                                , newMachineValue.toString()
+                                , dobladoPartMachineInfo
+                                , laserAndPunchPartMachineInfo
+                            );
                         });
                 }
             }
@@ -818,6 +826,7 @@ public class MainWindow extends JFrame {
             final List<WorkOrderInformation> workOrderItemsByWCDescription = workOrderItems
                     .stream()
                     .filter(wo -> wo.getWcDescription().equalsIgnoreCase(wcDescription))
+                    .filter(wo -> !wo.getMachine().isBlank())
                     .collect(Collectors.toList());
             
             final int numberOfTurns = numberOfTurnsFromWorkCenter(wcDescription);

@@ -47,6 +47,7 @@ import static com.production.domain.Day.*;
 import com.production.domain.efficiency.EfficiencyInformation;
 import com.production.domain.efficiency.Progress;
 import com.production.util.html.HTMLFormat;
+import com.production.util.logging.Logging;
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -56,6 +57,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 /**
  * @author lgutierr (leogutierrezramirez@gmail.com)
@@ -699,7 +701,7 @@ public final class Utils {
         return items.stream().mapToDouble(wo -> wo.getRunHours() + wo.getSetupHours()).sum();
     }
     
-    @MissingTests
+    @Validated
     public static boolean updateMachine(
             final int row
             , final String newMachine
@@ -746,6 +748,42 @@ public final class Utils {
         final String sanitizedWorkCenter = sanitizeWorkCenterName(workCenter);
         return sanitizedWorkCenter.equalsIgnoreCase(Constants.DOBLADO) ||
                 sanitizedWorkCenter.equalsIgnoreCase(Constants.PUNZONADO);
+    }
+    
+    @MissingTests
+    // TODO: call this method.
+    public static void updateMachineInMaps(
+        final String workCenter
+        , final String partNumber
+        , final String machine
+        , final Map<String, String> dobladoPartInformation
+        , final Map<String, String> laserAndPunchPartInformation
+    ) {
+        machineMapByWorkCenter(workCenter, dobladoPartInformation, laserAndPunchPartInformation)
+            .ifPresentOrElse(machines -> {
+                Logging.info("Updating %s part number with %s as machine.", partNumber, machine);
+                machines.put(partNumber, machine);
+            }, () -> {
+                // Logging ... 
+            });
+        
+    }
+    
+    @MissingTests
+    public static Optional<Map<String, String>> machineMapByWorkCenter(
+        final String workCenter
+        , final Map<String, String> dobladoPartInformation
+        , final Map<String, String> laserAndPunchPartInformation
+    ) {
+        final String sanitizedWorkCenter = sanitizeWorkCenterName(workCenter);
+        switch (sanitizedWorkCenter) {
+            case Constants.DOBLADO:
+                return Optional.of(dobladoPartInformation);
+            case Constants.PUNZONADO:
+            case Constants.LASER:
+                return Optional.of(laserAndPunchPartInformation);
+        }
+        return Optional.empty();
     }
     
     @Validated
