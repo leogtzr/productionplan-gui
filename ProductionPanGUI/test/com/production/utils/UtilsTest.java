@@ -34,6 +34,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Optional;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -1562,6 +1563,48 @@ public class UtilsTest {
         
         //System.out.printf("Date is: [%s]\n");
         System.out.printf("The date is: [%s]\n", df.format(now));
+        
+    }
+    
+    @Test
+    public void shouldReturnMachineMapByWorkCenter() {
+        class testCase {
+            String workCenter;
+            Map<String, String> dobladoPartInformation;
+            Map<String, String> laserAndPunchPartInformation;
+            Optional<Map<String, String>> want;
+
+            testCase(
+                    String workCenter
+                    , Map<String, String> dobladoPartInformation
+                    , Map<String, String> laserAndPunchPartInformation
+                    , Optional<Map<String, String>> want) {
+                this.workCenter = workCenter;
+                this.dobladoPartInformation = dobladoPartInformation;
+                this.laserAndPunchPartInformation = laserAndPunchPartInformation;
+                this.want = want;
+            }
+        }
+        
+        final List<testCase> tests = List.of(
+            new testCase(
+                "doblado", Map.of("p1", "m1"), Map.of("p2", "m2"), Optional.of(Map.of("p1", "m1"))
+            ),
+            new testCase(
+                "other", Map.of("p1", "m1"), Map.of("p2", "m2"), Optional.empty()
+            ),
+            new testCase(
+                "laser", Map.of("p1", "m1"), Map.of("p2", "m2"), Optional.of(Map.of("p2", "m2"))
+            ),
+            new testCase(
+                "punzonado", Map.of("p1", "m1"), Map.of("p2", "m2"), Optional.of(Map.of("p2", "m2"))
+            )
+        );
+
+        for (final testCase tc : tests) {
+            final var got = Utils.machineMapByWorkCenter(tc.workCenter, tc.dobladoPartInformation, tc.laserAndPunchPartInformation);
+            Assert.assertEquals(tc.want, got);
+        }
         
     }
 
