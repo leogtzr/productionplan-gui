@@ -166,6 +166,7 @@ public class MainWindow extends JFrame {
         rollbackMenuItem = new javax.swing.JMenuItem();
         toolsMenu = new javax.swing.JMenu();
         optionsMenuItem = new javax.swing.JMenuItem();
+        viewLogMenuItem = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         aboutMenuItem = new javax.swing.JMenuItem();
 
@@ -241,7 +242,7 @@ public class MainWindow extends JFrame {
             }
         });
 
-        infoLabel.setText("Warning:");
+        infoLabel.setText("Important information:");
 
         javax.swing.GroupLayout infoDialogLayout = new javax.swing.GroupLayout(infoDialog.getContentPane());
         infoDialog.getContentPane().setLayout(infoDialogLayout);
@@ -256,7 +257,7 @@ public class MainWindow extends JFrame {
                         .addComponent(okInfoDialogButton))
                     .addGroup(infoDialogLayout.createSequentialGroup()
                         .addComponent(infoLabel)
-                        .addGap(0, 803, Short.MAX_VALUE)))
+                        .addGap(0, 707, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         infoDialogLayout.setVerticalGroup(
@@ -407,6 +408,15 @@ public class MainWindow extends JFrame {
         }
     });
     toolsMenu.add(optionsMenuItem);
+
+    viewLogMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+    viewLogMenuItem.setText("View Log");
+    viewLogMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            viewLogMenuItemActionPerformed(evt);
+        }
+    });
+    toolsMenu.add(viewLogMenuItem);
 
     menuBar.add(toolsMenu);
 
@@ -678,15 +688,18 @@ public class MainWindow extends JFrame {
                        , item.getPartNumber()
                        , wcDescription
                    );
+                   
+                   final Object[] data = {
+                        item.getPartNumber()
+                        , item.getRunHours()
+                        , item.getSetupHours()
+                        , item.getQty()
+                        , machine
+                    };
+                    model.addRow(data);
+                   
                    if (!machine.isBlank()) {
-                       final Object[] data = {
-                           item.getPartNumber()
-                           , item.getRunHours()
-                           , item.getSetupHours()
-                           , item.getQty()
-                           , machine
-                       };
-                       model.addRow(data);
+                       
                    } else {
                        if (warnText.toString().isEmpty()) {
                            warnText.append("The following part numbers will NOT show up in the report, they don't");
@@ -774,7 +787,7 @@ public class MainWindow extends JFrame {
                     final String currentWorkCenter = wcDescriptions.getSelectedItem().toString();
                     workOrderInformationItems
                         .ifPresent(items -> {
-                            boolean updated = Utils.updateMachine(row, newMachineValue.toString(), currentWorkCenter, items);
+                            final boolean updated = Utils.updateMachine(row, newMachineValue.toString(), currentWorkCenter, items);
                             if (updated) {
                                 System.out.println("Row has been updated");
                             } else {
@@ -915,9 +928,14 @@ public class MainWindow extends JFrame {
     }//GEN-LAST:event_aboutMenuItemActionPerformed
 
     private void okInfoDialogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okInfoDialogButtonActionPerformed
-        this.infoTextPane.setText("");
         this.infoDialog.setVisible(false);
     }//GEN-LAST:event_okInfoDialogButtonActionPerformed
+
+    private void viewLogMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewLogMenuItemActionPerformed
+        if (!this.infoDialog.isVisible()) {
+            this.infoDialog.setVisible(true);
+        }
+    }//GEN-LAST:event_viewLogMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -984,6 +1002,7 @@ public class MainWindow extends JFrame {
     private javax.swing.JTable selectedPrioritiesTable;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JMenu toolsMenu;
+    private javax.swing.JMenuItem viewLogMenuItem;
     private javax.swing.JComboBox<String> wcDescriptions;
     private javax.swing.JTable workOrderTable;
     // End of variables declaration//GEN-END:variables
