@@ -322,6 +322,18 @@ public final class Utils {
     }
     
     @MissingTests
+    public static List<WorkOrderInformation> createPlan(
+            final String workCenter
+            , final List<WorkOrderInformation> workOrderItems
+            , final List<Priority> priorities) throws IOException {
+        
+        return numberOfTurnsFromWorkCenter(workCenter) == 0 ? 
+            buildPlanList(workCenter, workOrderItems, priorities) : buildPlan(workCenter, workOrderItems, priorities);
+    }
+    
+    
+    
+    @MissingTests
     public static String buildHtmlContent(
             final String workCenter
             , final List<WorkOrderInformation> workOrderItems

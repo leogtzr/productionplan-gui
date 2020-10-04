@@ -4,10 +4,15 @@ import com.production.domain.Day;
 import com.production.domain.WorkOrderInformation;
 import com.production.lang.MissingTests;
 import com.production.lang.Validated;
+import com.production.util.TemplateFileUtils;
 import com.production.util.Utils;
+import static com.production.util.Utils.buildPlanList;
 import java.util.List;
 
 import static com.production.util.html.HTMLConstants.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * @author lgutierr (leogutierrezramirez@gmail.com)
@@ -156,6 +161,32 @@ public final class HTMLFormat {
         dayContent = dayContent.replace(HTMLConstants.DAY_CONTENT_MARK, HTMLConstants.TABLE_DAY_CONTENT);
         dayContent = dayContent.replace(HTMLConstants.TABLE_HEAD_MARK, HTMLConstants.TR_HEAD_TURNS_PLAN);
         return dayContent;
+    }
+    
+    @MissingTests
+    public static String createContentNoTurns(final List<WorkOrderInformation> planItems, final String workCenter) throws IOException {
+        final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("list-template.html");
+
+        if (templateHTMLPath.toFile().exists()) {
+            final String templateHTMLContent = Files.readString(templateHTMLPath);
+            final String htmlPlan = HTMLFormat.generateHTMLContentForListPlan(templateHTMLContent, workCenter, planItems);
+            return htmlPlan;
+        } else {
+            throw new IOException("Template HTML files not found.");
+        }
+    }
+    
+    @MissingTests
+    public static String createContentTurns(final List<WorkOrderInformation> planItems, final String workCenter) throws IOException {
+        final Path templateHTMLPath = TemplateFileUtils.getTemplateFilePath("turns-template.html");
+            
+        if (templateHTMLPath.toFile().exists()) {
+            final String templateHTMLContent = Files.readString(templateHTMLPath);
+            final String htmlPlan = HTMLFormat.generateHTMLContentForTwoTurns(templateHTMLContent, workCenter, planItems);
+            return htmlPlan;
+        } else {
+            throw new IOException("Template HTML files not found.");
+        }
     }
     
 }

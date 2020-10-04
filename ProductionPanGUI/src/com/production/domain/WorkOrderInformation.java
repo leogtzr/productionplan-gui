@@ -1,5 +1,7 @@
 package com.production.domain;
 
+import com.production.lang.MissingTests;
+import com.production.lang.Validated;
 import java.util.Objects;
 
 /**
@@ -303,6 +305,16 @@ public final class WorkOrderInformation implements Cloneable {
         public WorkOrderInformation build() {
             return new WorkOrderInformation(this);
         }
+    }
+    
+    @Validated
+    public String toCSVWithoutTurns() {
+        return String.format("%s, %s, %.2f, %.2f, %d, %s", partNumber, workOrder, runHours, setupHours, qty, machine);
+    }
+    
+    @MissingTests
+    public String toCSVWithTurns() {
+        return String.format("%s, %s, %s, %.2f, %.2f, %d, %s", turn, partNumber, workOrder, runHours, setupHours, qty, machine);
     }
 
 }

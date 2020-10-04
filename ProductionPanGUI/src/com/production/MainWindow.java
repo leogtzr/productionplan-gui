@@ -47,6 +47,7 @@ import static com.production.util.Utils.createFileChooser;
 import static com.production.util.Constants.DOBLADO_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
+import com.production.util.html.HTMLFormat;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -818,13 +819,6 @@ public class MainWindow extends JFrame {
     
     private void generatePlanBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generatePlanBtnActionPerformed
         
-        // Check the backup list and if it is not empty.
-//        if (this.planAlreadyGenerated && !this.backupWorkOrderItems.isEmpty()) {
-//            System.out.println("Restoring....");
-//            this.workOrderInformationItems.ifPresent(items -> Utils.copyWorkOrderItems(items, this.backupWorkOrderItems));
-//            // PENDING: restore the table too.
-//        }
-        
         final DefaultTableModel model = (DefaultTableModel) selectedPrioritiesTable.getModel();
         
         final String wcDescription = this.wcDescriptions.getSelectedItem().toString();
@@ -842,8 +836,11 @@ public class MainWindow extends JFrame {
             
             try {
                 if (numberOfTurns == 0) {               // List
-                    final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
-                    saveListPlan(wcDescription, htmlContent);
+                    final List<WorkOrderInformation> planNoTurns = 
+                            Utils.createPlan(wcDescription, workOrderItemsByWCDescription, priorities);
+                    final String html = HTMLFormat.createContentNoTurns(planNoTurns, wcDescription);
+                    // final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
+                    saveListPlan(wcDescription, html);
                 } else {
                     final Map<String, List<WorkOrderInformation>> workOrderItemsPerMachine = Utils.workOrderItemsPerMachine(workOrderItemsByWCDescription);
 
@@ -855,8 +852,11 @@ public class MainWindow extends JFrame {
                             //System.out.println("DEBUG-save bye ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
                             try {
-                                final String htmlContent = Utils.buildHtmlContent(wcDescription, woItemsPerMachine, priorities);
-                                this.saveTurnWithMachinesPlan(wcDescription, machine, htmlContent);
+                                final List<WorkOrderInformation> planWithTurns = 
+                                        Utils.createPlan(wcDescription, woItemsPerMachine, priorities);
+                                final String html = HTMLFormat.createContentTurns(planWithTurns, machine);
+                                // final String htmlContent = Utils.buildHtmlContent(wcDescription, woItemsPerMachine, priorities);
+                                this.saveTurnWithMachinesPlan(wcDescription, machine, html);
                             } catch (final IOException ex) {
                                 ex.printStackTrace();
                                 showErrorMessage(ex.getMessage(), "ERROR");
