@@ -63,7 +63,6 @@ public class MainWindow extends JFrame {
     private Map<String, String> laserAndPunchPartMachineInfo = new HashMap<>();
     private Optional<List<WorkOrderInformation>> workOrderInformationItems = Optional.empty();
     private final List<WorkOrderInformation> backupWorkOrderItems = new ArrayList<>();
-    private boolean planAlreadyGenerated = false;
     private final Properties configProps = new Properties();
     
     public MainWindow(final String saveDirectory) {
@@ -613,12 +612,22 @@ public class MainWindow extends JFrame {
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         ((DefaultTableModel) this.selectedPrioritiesTable.getModel()).setRowCount(0);
         this.workOrderTable.clearSelection();
+        this.cleanTable(this.workOrderTable);
+        
+        this.workOrderInformationItems.ifPresent(items -> Utils.copyWorkOrderItems(items, this.backupWorkOrderItems));
+        
+        this.dobladoPartMachineInfo.clear();
+        this.laserAndPunchPartMachineInfo.clear();
+        
+        loadDobladoPartMachineInformation();
+        loadLaserAndPunchPartMachineInformation();
         
         final String selectedWCDescription = this.wcDescriptions.getSelectedItem().toString();
         this.workOrderInformationItems.ifPresent(workOrderItems -> {
             this.cleanTable(this.workOrderTable);
             this.updateTableWithWCDescription(selectedWCDescription, workOrderItems, this.workOrderTable);
         });
+        this.infoTextPane.setText("");
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void findFilesInCurrentPathMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_findFilesInCurrentPathMenuItemActionPerformed
@@ -856,7 +865,6 @@ public class MainWindow extends JFrame {
                     );
                     showInfoMessage("Plans saved correctly", "Plans generated correctly");
                 }
-                this.planAlreadyGenerated = true;
             } catch (final IOException ex) {
                 ex.printStackTrace();
                 showErrorMessage(ex.getMessage(), "ERROR");
