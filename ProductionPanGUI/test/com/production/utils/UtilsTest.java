@@ -19,14 +19,7 @@ import javax.swing.table.TableModel;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.production.util.Utils.sumTurnHoursFromWorkOrderItems;
-import static com.production.util.Utils.workOrderItemsPerPartNumber;
-
-import static com.production.domain.WorkOrderInformation.Builder;
-import static com.production.util.Constants.DOBLADO;
 import java.util.Collections;
-
-import static java.util.stream.Collectors.toList;
 
 import static java.lang.Integer.parseInt;
 import java.nio.file.Paths;
@@ -39,6 +32,14 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.hamcrest.CoreMatchers;
+
+import static com.production.util.Utils.sumTurnHoursFromWorkOrderItems;
+import static com.production.util.Utils.workOrderItemsPerPartNumber;
+
+import static com.production.domain.WorkOrderInformation.Builder;
+import static com.production.util.Constants.DOBLADO;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author lgutierr <leogutierrezramirez@gmail.com>

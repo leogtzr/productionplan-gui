@@ -6,13 +6,13 @@ import com.production.lang.MissingTests;
 import com.production.lang.Validated;
 import com.production.util.TemplateFileUtils;
 import com.production.util.Utils;
-import static com.production.util.Utils.buildPlanList;
 import java.util.List;
 
-import static com.production.util.html.HTMLConstants.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import static com.production.util.html.HTMLConstants.*;
 
 /**
  * @author lgutierr (leogutierrezramirez@gmail.com)
