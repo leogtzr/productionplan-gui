@@ -390,14 +390,14 @@ public final class Utils {
                 return FRIDAY;
             }
             case FRIDAY -> {
-                return SATURDAY;
-            }
-            case SATURDAY -> {
-                return SUNDAY;
-            }
-            case SUNDAY -> {
                 return MONDAY;
             }
+//            case SATURDAY -> {
+//                return SUNDAY;
+//            }
+//            case SUNDAY -> {
+//                return MONDAY;
+//            }
         }
         return MONDAY;
     }

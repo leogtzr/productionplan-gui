@@ -1053,9 +1053,7 @@ public class UtilsTest {
             {Day.TUESDAY, Day.WEDNESDAY},
             {Day.WEDNESDAY, Day.THURSDAY},
             {Day.THURSDAY, Day.FRIDAY},
-            {Day.FRIDAY, Day.SATURDAY},
-            {Day.SATURDAY, Day.SUNDAY},
-            {Day.SUNDAY, Day.MONDAY}
+            {Day.FRIDAY, Day.MONDAY},
         };
         
         for (final Object[] test : tests) {
