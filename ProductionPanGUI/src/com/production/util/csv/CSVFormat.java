@@ -5,11 +5,12 @@ package com.production.util.csv;
 
 import com.production.domain.WorkOrderInformation;
 import com.production.lang.MissingTests;
+import com.production.lang.Validated;
 import java.util.List;
 
 public class CSVFormat {
     
-    @MissingTests
+    @Validated
     public static String createWithoutTurns(final List<WorkOrderInformation> items) {
         if (items == null || items.isEmpty()) {
             return "";
@@ -21,7 +22,7 @@ public class CSVFormat {
         return sb.toString();
     }
     
-    @MissingTests
+    @Validated
     public static String createWithTurns(final List<WorkOrderInformation> items) {
         if (items == null || items.isEmpty()) {
             return "";
