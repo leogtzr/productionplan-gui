@@ -44,6 +44,7 @@ import static com.production.util.Constants.THIRD_TURN_LENGTH;
 
 import static com.production.domain.Turn.*;
 import static com.production.domain.Day.*;
+import com.production.domain.FormatType;
 import com.production.domain.efficiency.EfficiencyInformation;
 import com.production.domain.efficiency.Progress;
 import com.production.util.html.HTMLFormat;
@@ -922,9 +923,13 @@ public final class Utils {
     }
     
     @MissingTests
-    public static Path buildOutputPlanFile(final String workCenter, final String saveDirectory, final Date date) {
+    public static Path buildOutputPlanFile(
+            final String workCenter
+            , final String saveDirectory
+            , final Date date
+            , final FormatType formatType) {
         final String today = Utils.DATE_FORMATTER.format(date);
-        final String listOutputPlanFileName = String.format("%s-%s.html", workCenter, today);
+        final String listOutputPlanFileName = String.format("%s-%s.%s", workCenter, today, formatType.get());
         final Path planFile = Paths.get(saveDirectory, listOutputPlanFileName);
         return planFile;
     }

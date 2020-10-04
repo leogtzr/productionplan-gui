@@ -1,6 +1,7 @@
 // TODO: Plan acumulativo ..., es decir, si aparecen nuevas órdenes ... que cotinue en el día que se quedó ...
 package com.production;
 
+import com.production.domain.FormatType;
 import com.production.domain.Priority;
 import com.production.domain.WorkOrderInformation;
 import com.production.lang.MissingTests;
@@ -47,6 +48,7 @@ import static com.production.util.Utils.createFileChooser;
 import static com.production.util.Constants.DOBLADO_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.LASER_AND_PUNCH_PART_MACHINE_FILE_NAME;
 import static com.production.util.Constants.ALLOWED_COLUMN_NUMBER_TO_BE_EDITED;
+import com.production.util.csv.CSVFormat;
 import com.production.util.html.HTMLFormat;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
@@ -752,7 +754,7 @@ public class MainWindow extends JFrame {
     
     // PENDING: we might need a suffix or date for the output/final file to avoid overriding files.
     @MissingTests
-    private void saveListPlan(final String workCenter, final String htmlContent) throws IOException {
+    private void saveListPlan(final String workCenter, final String htmlContent, final String csvContent) throws IOException {
         
         final String saveDirectory = this.configProps.getProperty("saveDirectory", System.getProperty("user.home"));
         final boolean autoSave = Boolean.valueOf(configProps.getProperty("autoSavePlans", "false"));
@@ -760,8 +762,10 @@ public class MainWindow extends JFrame {
         if (autoSave) {
             final Path outputDirectoryPlan = Paths.get(saveDirectory);
             outputDirectoryPlan.toFile().mkdir();
-            final Path planFile = Utils.buildOutputPlanFile(workCenter, saveDirectory, new Date());
-            saveFiles(planFile.toFile(), htmlContent);
+            final Path planHTMLFile = Utils.buildOutputPlanFile(workCenter, saveDirectory, new Date(), FormatType.HTML);
+            final Path planCSVFile = Utils.buildOutputPlanFile(workCenter, saveDirectory, new Date(), FormatType.CSV);
+            saveFiles(planHTMLFile.toFile(), htmlContent);
+            saveFiles(planCSVFile.toFile(), csvContent);
             showInfoMessage("Plan saved correctly", "Plan generated correctly");
         } else {
             final JFileChooser saveFileChooser = createFileChooser(String.format("Save plan for '%s'", workCenter), saveDirectory);
@@ -771,9 +775,12 @@ public class MainWindow extends JFrame {
                 final File directoryToSaveReports = saveFileChooser.getSelectedFile();
                 final Path outputDirectoryPlan = directoryToSaveReports.toPath();
                 outputDirectoryPlan.toFile().mkdir();
-                final Path planFile = 
-                        Utils.buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date());
-                saveFiles(planFile.toFile(), htmlContent);
+                final Path planHTMLFile = 
+                        Utils.buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date(), FormatType.HTML);
+                final Path planCSVFile = 
+                        Utils.buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date(), FormatType.CSV);
+                saveFiles(planHTMLFile.toFile(), htmlContent);
+                saveFiles(planCSVFile.toFile(), htmlContent);
                 showInfoMessage("Plan saved correctly", "Plan generated correctly");
             }
         }
@@ -838,11 +845,13 @@ public class MainWindow extends JFrame {
                 if (numberOfTurns == 0) {               // List
                     final List<WorkOrderInformation> planNoTurns = 
                             Utils.createPlan(wcDescription, workOrderItemsByWCDescription, priorities);
+                    final String csv = CSVFormat.createWithoutTurns(planNoTurns);
                     final String html = HTMLFormat.createContentNoTurns(planNoTurns, wcDescription);
                     // final String htmlContent = Utils.buildHtmlContent(wcDescription, workOrderItemsByWCDescription, priorities);
-                    saveListPlan(wcDescription, html);
+                    saveListPlan(wcDescription, html, csv);
                 } else {
-                    final Map<String, List<WorkOrderInformation>> workOrderItemsPerMachine = Utils.workOrderItemsPerMachine(workOrderItemsByWCDescription);
+                    final Map<String, List<WorkOrderInformation>> workOrderItemsPerMachine = 
+                            Utils.workOrderItemsPerMachine(workOrderItemsByWCDescription);
 
                     workOrderItemsPerMachine.forEach(
                         (machine, woItemsPerMachine) -> {
@@ -854,9 +863,10 @@ public class MainWindow extends JFrame {
                             try {
                                 final List<WorkOrderInformation> planWithTurns = 
                                         Utils.createPlan(wcDescription, woItemsPerMachine, priorities);
+                                final String csv = CSVFormat.createWithTurns(planWithTurns);
                                 final String html = HTMLFormat.createContentTurns(planWithTurns, machine);
                                 // final String htmlContent = Utils.buildHtmlContent(wcDescription, woItemsPerMachine, priorities);
-                                this.saveTurnWithMachinesPlan(wcDescription, machine, html);
+                                this.saveTurnWithMachinesPlan(wcDescription, machine, html, csv);
                             } catch (final IOException ex) {
                                 ex.printStackTrace();
                                 showErrorMessage(ex.getMessage(), "ERROR");
@@ -898,7 +908,11 @@ public class MainWindow extends JFrame {
         copyStaticFilesToOutputDirectory(parentOutputDirectory);
     }
     
-    private void saveTurnWithMachinesPlan(final String workCenter, final String machine, final String htmlContent) 
+    private void saveTurnWithMachinesPlan(
+            final String workCenter
+            , final String machine
+            , final String htmlContent
+            , final String csvContent) 
             throws IOException {
         
         final String saveDirectory = this.configProps.getProperty("saveDirectory", System.getProperty("user.home"));
@@ -907,8 +921,12 @@ public class MainWindow extends JFrame {
         if (autoSave) {
             final Path outputDirectoryPlan = Paths.get(saveDirectory, machine);
             outputDirectoryPlan.toFile().mkdirs();
-            final Path planFile = Utils.buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date());
-            saveFiles(planFile.toFile(), htmlContent);
+            final Path planHTMLFile = Utils.
+                    buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date(), FormatType.HTML);
+            final Path planCSVFile = Utils.
+                    buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date(), FormatType.CSV);
+            saveFiles(planHTMLFile.toFile(), csvContent);
+            saveFiles(planCSVFile.toFile(), csvContent);
         } else {
             final JFileChooser saveFileChooser = createFileChooser(
                 String.format("Save plan for '%s', machine: '%s'", workCenter, machine), saveDirectory);
@@ -918,8 +936,12 @@ public class MainWindow extends JFrame {
                 final File directoryToSaveReports = saveFileChooser.getSelectedFile();
                 final Path outputDirectoryPlan = Paths.get(directoryToSaveReports.getAbsolutePath(), machine);
                 Files.createDirectory(outputDirectoryPlan);
-                final Path planFile = Utils.buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date());
-                saveFiles(planFile.toFile(), htmlContent);
+                final Path planHTMLFile = Utils.
+                        buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date(), FormatType.HTML);
+                final Path planCSVFile = Utils.
+                        buildOutputPlanFile(workCenter, outputDirectoryPlan.toAbsolutePath().toString(), new Date(), FormatType.CSV);
+                saveFiles(planHTMLFile.toFile(), htmlContent);
+                saveFiles(planCSVFile.toFile(), csvContent);
             }
         }
         
