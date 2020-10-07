@@ -511,7 +511,7 @@ public class MainWindow extends JFrame {
     }
     
     private void openFabLoadByWCMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFabLoadByWCMenuItemActionPerformed
-        final JFileChooser jfc = Utils.genericXLSFileChooser();
+        final JFileChooser jfc = Utils.genericXLSFileChooser(String.format("Select the '%s' file.", Constants.FAB_LOAD_FILE_NAME));
         int returnValue = jfc.showOpenDialog(null);
         
         if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -523,6 +523,7 @@ public class MainWindow extends JFrame {
             }
         }
         Utils.updateStatusBar(this.statusLabel, this.fabLoadFilePath, this.ageByWCFilePath);
+        fillUpTablesInformation();
     }//GEN-LAST:event_openFabLoadByWCMenuItemActionPerformed
 
     private void reconcileInformationAndUpdateTable(final File file, final List<WorkOrderInformation> workOrderItems) 
@@ -534,7 +535,7 @@ public class MainWindow extends JFrame {
     }
     
     private void openAgeByWCFileItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openAgeByWCFileItemActionPerformed
-        final JFileChooser jfc = Utils.genericXLSFileChooser();
+        final JFileChooser jfc = Utils.genericXLSFileChooser(String.format("Select the '%s' file.", Constants.AGE_BY_WC_FILE_NAME));
 
         int returnValue = jfc.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -548,8 +549,31 @@ public class MainWindow extends JFrame {
             });
         }
         Utils.updateStatusBar(this.statusLabel, this.fabLoadFilePath, this.ageByWCFilePath);
+        fillUpTablesInformation();
     }//GEN-LAST:event_openAgeByWCFileItemActionPerformed
 
+    private void fillUpTablesInformation() {
+        if (this.fabLoadFilePath != null && this.ageByWCFilePath != null) {
+            // Clean the tables ... 
+            this.cleanTable(this.workOrderTable);
+            this.cleanTable(this.selectedPrioritiesTable);
+            
+            try {
+                this.extractWorkOrderItemsFromFile(this.fabLoadFilePath);
+                this.workOrderInformationItems.ifPresent(workOrderItems -> {
+                    try {
+                        this.reconcileInformationAndUpdateTable(this.ageByWCFilePath, workOrderItems);
+                        this.wcDescriptions.setSelectedIndex(0);
+                    } catch (IOException | InvalidFormatException ex) {
+                        showErrorMessage(String.format("error loading Age file: %s", ex.getMessage()), "Error");
+                    }
+                });
+            } catch (IOException | InvalidFormatException ex) {
+                showErrorMessage(String.format("error loading Age file: %s", ex.getMessage()), "Error");
+            }
+        }
+    }
+    
     @MissingTests
     private void updateTable(final List<WorkOrderInformation> workOrderItems, final JTable table) {        
         final DefaultTableModel workOrdersModel = (DefaultTableModel) table.getModel();

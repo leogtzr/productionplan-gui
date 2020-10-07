@@ -10,8 +10,7 @@ public final class Constants {
     public static final String DOBLADO_PART_MACHINE_FILE_NAME = "doblado-part-machines.csv";
     public static final String LASER_AND_PUNCH_PART_MACHINE_FILE_NAME = "laserpunch-part-machines.csv";
     
-    // TODO: the value of following constant will have to be changed eventually:
-    public static final String FAB_LOAD_FILE_NAME = "FAB Load by WC Leo.xls";
+    public static final String FAB_LOAD_FILE_NAME = "FAB Load by WC.xls";
     public static final String AGE_BY_WC_FILE_NAME = "Age  by WC.xls";
     
     public static final double RUN_EFFICIENCY = 0.8;

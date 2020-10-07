@@ -1298,8 +1298,8 @@ public class UtilsTest {
     
     @Test
     public void shouldGetXLSFileChooser() {
-        final JFileChooser genericXLSFileChooser = Utils.genericXLSFileChooser();
-        Assert.assertEquals("Select a .XLS file", genericXLSFileChooser.getDialogTitle());
+        final JFileChooser genericXLSFileChooser = Utils.genericXLSFileChooser("abc");
+        Assert.assertEquals("abc", genericXLSFileChooser.getDialogTitle());
         
         final String EXPECTED_DESCRIPTION = "XLS files";
         final String EXPECTED_EXTENSION = "xls";

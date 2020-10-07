@@ -72,9 +72,9 @@ public final class Utils {
      * @return a JFileChooser to select .XLS files
      */
     @Validated
-    public static JFileChooser genericXLSFileChooser() {
+    public static JFileChooser genericXLSFileChooser(final String title) {
         final JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-        jfc.setDialogTitle("Select a .XLS file");
+        jfc.setDialogTitle(title);
         jfc.setAcceptAllFileFilterUsed(false);
         final FileNameExtensionFilter filter = new FileNameExtensionFilter("XLS files", "xls");
         jfc.addChoosableFileFilter(filter);
