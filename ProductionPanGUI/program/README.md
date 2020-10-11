@@ -1,4 +1,4 @@
-## Cómo correr el programa
+# Cómo correr el programa
 
 1) Descargar este repositorio y descomprime el archivo .ZIP
 
@@ -25,3 +25,11 @@ Una vez que tienes esta estructura de directorios puedes borrar el archivo "open
 ![script](install-imgs/i5.png)
 ![running the program](install-imgs/i6.png)
 
+## Cómo y dónde usar los archivos de entrada
+
+El program por medio del menú "File" puede explorar los dos archivos que necesita para trabajar.
+Puedes usar el atajo o la combinación de teclado "Control+1" y luego "Control+2".
+
+### Control+3 - "Find Files"
+Si colocas los dos archivos que necesita el programa para funcionar en el directorio "program" y usas "Control+3" el
+programa los enontrará y los usará automáticamente.
