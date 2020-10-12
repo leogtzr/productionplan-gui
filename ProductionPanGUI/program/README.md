@@ -33,3 +33,6 @@ Puedes usar el atajo o la combinación de teclado "Control+1" y luego "Control+2
 ### Control+3 - "Find Files"
 Si colocas los dos archivos que necesita el programa para funcionar en el directorio "program" y usas "Control+3" el
 programa los enontrará y los usará automáticamente.
+
+## CSV
+El programa genera HTML y CSV, CSV para que pueda ser fácilmente manipulado con Excel en caso de que así lo desees.
