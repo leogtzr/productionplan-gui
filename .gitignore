@@ -29,3 +29,7 @@ crap/
 ProductionPanGUI/debug.log
 
 ProductionPanGUI/output
+
+ProductionPanGUI/program/jdk-14.0.2
+ProductionPanGUI/program/output
+ProductionPanGUI/program/run
